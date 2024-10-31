@@ -40,4 +40,13 @@ public class PortfolioController {
         return ResponseEntity.ok(response);
     }
 
+    // (포트폴리오 수정) 포트폴리오 세부 내용 수정
+    @PutMapping("/{portfolio_id}")
+    public ResponseEntity<PortfolioResponseDto> updatePortfolio(
+            @PathVariable("portfolio_id") Long portfolioId,
+            @RequestBody PortfolioRequestDto portfolioRequestDto) {
+        PortfolioResponseDto response = portfolioService.updatePortfolio(portfolioId, portfolioRequestDto);
+        return ResponseEntity.ok(response);
+    }
+
 }

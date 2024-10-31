@@ -47,7 +47,7 @@ public class PortfolioService {
                 .orElseThrow(() -> new IllegalArgumentException("Template not found"));
         portfolio.setTemplate(template);
 
-        // Survey에도 Portfolio 설정
+        // Survey 에도 Portfolio 설정
         Portfolio savedPortfolio = portfolioRepository.save(portfolio);
         survey.setPortfolio(savedPortfolio);
         surveyRepository.save(survey);
@@ -74,6 +74,18 @@ public class PortfolioService {
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
         return convertToResponseDto(portfolio);    }
 
+    @Transactional
+    public PortfolioResponseDto updatePortfolio(Long portfolioId, PortfolioRequestDto portfolioRequestDto) {
+        Portfolio portfolio = portfolioRepository.findById(portfolioId)
+                .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
+
+        // 포트폴리오 필드 업데이트
+        portfolio.setTitle(portfolioRequestDto.getTitle());
+        portfolio.setDescription(portfolioRequestDto.getDescription());
+        portfolio.setUpdatedAt(LocalDateTime.now());  // 수정 시간 갱신
+
+        return convertToResponseDto(portfolioRepository.save(portfolio));
+    }
 
     @Transactional
     public void deletePortfolio(Long portfolioId) {
