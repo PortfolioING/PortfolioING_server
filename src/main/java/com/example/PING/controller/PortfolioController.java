@@ -21,9 +21,9 @@ public class PortfolioController {
 
     // (포트폴리오 생성) 설문 기반 새 포트폴리오 생성
     @PostMapping
-    public ResponseEntity<PortfolioResponseDto> createPortfolio(@Valid @RequestBody PortfolioRequestDto portfolioRequestDto) {
-        PortfolioResponseDto responseDto = portfolioService.createPortfolio(portfolioRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    public ResponseEntity<PortfolioResponseDto> createPortfolio(@RequestBody PortfolioRequestDto portfolioRequestDto) {
+        PortfolioResponseDto response = portfolioService.createPortfolio(portfolioRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // (마이페이지_포트폴리오 조회) 특정 사용자의 포트폴리오 목록 조회
@@ -46,6 +46,14 @@ public class PortfolioController {
             @PathVariable("portfolio_id") Long portfolioId,
             @RequestBody PortfolioRequestDto portfolioRequestDto) {
         PortfolioResponseDto response = portfolioService.updatePortfolio(portfolioId, portfolioRequestDto);
+        return ResponseEntity.ok(response);
+    }
+
+    // (포트폴리오 삭제) 특정 포트폴리오 삭제
+    @DeleteMapping("/{portfolio_id}")
+    public ResponseEntity<String> deletePortfolio(@PathVariable("portfolio_id") Long portfolioId) {
+        portfolioService.deletePortfolio(portfolioId);
+        String response = "Portfolio deleted successfully";
         return ResponseEntity.ok(response);
     }
 

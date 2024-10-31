@@ -30,25 +30,46 @@ public class PortfolioService {
     @Transactional
     public PortfolioResponseDto createPortfolio(PortfolioRequestDto portfolioRequestDto) {
 
-        Portfolio portfolio = new Portfolio();
-        portfolio.setTitle(portfolioRequestDto.getTitle());
-        portfolio.setDescription(portfolioRequestDto.getDescription());
+//        Portfolio portfolio = new Portfolio();
+//        portfolio.setTitle(portfolioRequestDto.getTitle());
+//        portfolio.setDescription(portfolioRequestDto.getDescription());
+//        User user = userRepository.findById(portfolioRequestDto.getUserId())
+//                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + portfolioRequestDto.getUserId()));
+//        portfolio.setUser(user);
+//
+//        Survey survey = surveyRepository.findById(portfolioRequestDto.getSurveyId())
+//                .orElseThrow(() -> new IllegalArgumentException("Survey not found"));
+//        portfolio.setSurvey(survey);
+//
+//        Template template = templateRepository.findById(portfolioRequestDto.getTemplateId())
+//                .orElseThrow(() -> new IllegalArgumentException("Template not found"));
+//        portfolio.setTemplate(template);
 
-        // 사용자 및 템플릿 설정은 추가적인 로직 필요
+        System.out.println("user : " + portfolioRequestDto.getUserId());
+        System.out.println("survey : " + portfolioRequestDto.getSurveyId());
+        System.out.println("template : " + portfolioRequestDto.getSurveyId());
+
+        // User, Survey, Template 엔티티 조회
         User user = userRepository.findById(portfolioRequestDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + portfolioRequestDto.getUserId()));
-        portfolio.setUser(user);
-
         Survey survey = surveyRepository.findById(portfolioRequestDto.getSurveyId())
-                .orElseThrow(() -> new IllegalArgumentException("Survey not found"));
-        portfolio.setSurvey(survey);
-
+                .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + portfolioRequestDto.getSurveyId()));
         Template template = templateRepository.findById(portfolioRequestDto.getTemplateId())
-                .orElseThrow(() -> new IllegalArgumentException("Template not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + portfolioRequestDto.getTemplateId()));
+
+        // Portfolio 생성 및 설정
+        Portfolio portfolio = new Portfolio();
+        portfolio.setUser(user);
+        portfolio.setSurvey(survey);
         portfolio.setTemplate(template);
+        portfolio.setTitle(portfolioRequestDto.getTitle());
+        portfolio.setDescription(portfolioRequestDto.getDescription());
+        portfolio.setCreatedAt(LocalDateTime.now());
+        portfolio.setUpdatedAt(LocalDateTime.now());
+
+        Portfolio savedPortfolio = portfolioRepository.save(portfolio);
 
         // Survey 에도 Portfolio 설정
-        Portfolio savedPortfolio = portfolioRepository.save(portfolio);
         survey.setPortfolio(savedPortfolio);
         surveyRepository.save(survey);
 
@@ -89,6 +110,9 @@ public class PortfolioService {
 
     @Transactional
     public void deletePortfolio(Long portfolioId) {
+        if (!portfolioRepository.existsById(portfolioId)) {
+            throw new IllegalArgumentException("Portfolio not found with ID: " + portfolioId);
+        }
         portfolioRepository.deleteById(portfolioId);
     }
 
