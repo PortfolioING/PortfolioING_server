@@ -79,7 +79,7 @@ public class PortfolioService {
 
     // 특정 사용자의 포트폴리오 리스트 조회
     @Transactional(readOnly = true)
-    public UserPortfoliosResponse getPortfoliosByUserId(Long userId) {
+    public UserPortfoliosResponse getAllPortfolios(Long userId) {
 
         List<PortfolioResponseDto> portfolios = portfolioRepository.findAll().stream()
                 .filter(portfolio -> portfolio.getUser().getUserId().equals(userId))

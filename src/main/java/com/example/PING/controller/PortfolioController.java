@@ -29,7 +29,7 @@ public class PortfolioController {
     // (마이페이지_포트폴리오 조회) 특정 사용자의 포트폴리오 목록 조회
     @GetMapping
     public ResponseEntity<UserPortfoliosResponse> getUserPortfolios(@RequestParam("user_id") Long userId) {
-        UserPortfoliosResponse response = portfolioService.getPortfoliosByUserId(userId);
+        UserPortfoliosResponse response = portfolioService.getAllPortfolios(userId);
         return ResponseEntity.ok(response);
     }
 
