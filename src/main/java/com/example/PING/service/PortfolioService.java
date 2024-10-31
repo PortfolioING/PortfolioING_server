@@ -70,8 +70,10 @@ public class PortfolioService {
 
     @Transactional(readOnly = true)
     public PortfolioResponseDto getPortfolioById(Long portfolioId) {
-        return convertToResponseDto(portfolioRepository.findById(portfolioId).orElse(null));
-    }
+        Portfolio portfolio = portfolioRepository.findById(portfolioId)
+                .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
+        return convertToResponseDto(portfolio);    }
+
 
     @Transactional
     public void deletePortfolio(Long portfolioId) {

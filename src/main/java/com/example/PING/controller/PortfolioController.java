@@ -33,4 +33,11 @@ public class PortfolioController {
         return ResponseEntity.ok(response);
     }
 
+    // (포트폴리오 상세 조회) 특정 포트폴리오의 세부 내용 조회
+    @GetMapping("/{portfolio_id}")
+    public ResponseEntity<PortfolioResponseDto> getPortfolioById(@PathVariable("portfolio_id") Long portfolioId) {
+        PortfolioResponseDto response = portfolioService.getPortfolioById(portfolioId);
+        return ResponseEntity.ok(response);
+    }
+
 }
