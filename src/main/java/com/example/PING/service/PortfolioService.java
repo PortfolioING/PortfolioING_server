@@ -2,6 +2,7 @@ package com.example.PING.service;
 
 import com.example.PING.dto.PortfolioRequestDto;
 import com.example.PING.dto.PortfolioResponseDto;
+import com.example.PING.dto.UserPortfoliosResponse;
 import com.example.PING.entity.Portfolio;
 import com.example.PING.entity.Survey;
 import com.example.PING.entity.Template;
@@ -55,11 +56,16 @@ public class PortfolioService {
     }
 
 
+    // 특정 사용자의 포트폴리오 리스트 조회
     @Transactional(readOnly = true)
-    public List<PortfolioResponseDto> getAllPortfolios() {
-        return portfolioRepository.findAll().stream()
+    public UserPortfoliosResponse getPortfoliosByUserId(Long userId) {
+
+        List<PortfolioResponseDto> portfolios = portfolioRepository.findAll().stream()
+                .filter(portfolio -> portfolio.getUser().getUserId().equals(userId))
                 .map(this::convertToResponseDto)
                 .collect(Collectors.toList());
+
+        return new UserPortfoliosResponse(userId, portfolios);
     }
 
     @Transactional(readOnly = true)
@@ -85,4 +91,5 @@ public class PortfolioService {
         dto.setUpdatedAt(portfolio.getUpdatedAt());
         return dto;
     }
+
 }
