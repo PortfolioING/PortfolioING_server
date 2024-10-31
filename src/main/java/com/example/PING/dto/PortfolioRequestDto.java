@@ -7,5 +7,6 @@ public class PortfolioRequestDto {
     private String title;
     private String description;
     private Long userId;  // User ID
+    private Long surveyId;
     private Long templateId;  // Template ID
 }
