@@ -90,19 +90,9 @@ public class PortfolioService {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
 
-        // 1. 연관된 Survey 삭제
-        Survey survey = portfolio.getSurvey();
-        if (survey != null) {
-            surveyRepository.delete(survey);
-        }
+        // CascadeType.ALL -> 영속성 전이 설정으로 연관된 domain, survey 삭제 로직 X!
 
-        // 2. 연관된 Domain 삭제
-        Domain domain = portfolio.getDomain();
-        if (domain != null) {
-            domainRepository.delete(domain);
-        }
-
-        // 3. Portfolio 삭제
+        // Portfolio 삭제
         portfolioRepository.delete(portfolio);
     }
 
