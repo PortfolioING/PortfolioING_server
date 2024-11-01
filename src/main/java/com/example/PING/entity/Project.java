@@ -1,4 +1,5 @@
 package com.example.PING.entity;
+import com.example.PING.dto.response.ProjectResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;

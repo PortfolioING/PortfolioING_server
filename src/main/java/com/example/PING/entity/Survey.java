@@ -19,8 +19,8 @@ public class Survey {
     @OneToOne (mappedBy = "survey")
     private Portfolio portfolio;
 
-//    @OneToMany(mappedBy = "project")
-//    private List<Project> projects = new ArrayList<>();
+    @OneToMany(mappedBy = "survey")
+    private List<Project> projects = new ArrayList<>();
 
     @Column(nullable = false)
     private String name;
@@ -30,5 +30,11 @@ public class Survey {
 
     @Column(nullable = false)
     private String pic;
+
+    @Column(name = "created_at", updatable = false)
+    @Getter @Setter private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @Getter private LocalDateTime updatedAt;
 }
 

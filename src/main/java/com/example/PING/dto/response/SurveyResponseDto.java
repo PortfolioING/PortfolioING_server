@@ -2,6 +2,7 @@ package com.example.PING.dto.response;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -12,6 +13,6 @@ public class SurveyResponseDto {
     private String PR;
     private String pic;
     private List<ProjectResponseDto> projects;
-    private String createdAt;
-    private String updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

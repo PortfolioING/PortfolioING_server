@@ -1,6 +1,8 @@
 package com.example.PING.service;
 
+import com.example.PING.controller.SurveyController;
 import com.example.PING.dto.request.SurveyRequestDto;
+import com.example.PING.dto.response.ProjectResponseDto;
 import com.example.PING.dto.response.SurveyResponseDto;
 import com.example.PING.entity.Portfolio;
 import com.example.PING.entity.Project;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class SurveyService {
     private final SurveyRepository surveyRepository;
     private final ProjectRepository projectRepository;
+    private final SurveyController surveyController;
 
     @Transactional
     public SurveyResponseDto createSurvey(SurveyRequestDto surveyRequest) {
@@ -52,7 +55,7 @@ public class SurveyService {
                 .collect(Collectors.toList());
 
         surveyRepository.save(survey); // 설문 저장
-
+        survey.setCreatedAt(LocalDateTime.now());
         // 프로젝트 저장
         projectRepository.saveAll(projects);
 
@@ -80,10 +83,31 @@ public class SurveyService {
     private SurveyResponseDto convertToResponseDto(Survey survey) {
         SurveyResponseDto dto = new SurveyResponseDto();
         dto.setSurveyId(survey.getSurveyId());
+        dto.setPortfolioId(null);
         dto.setName(survey.getName());
         dto.setPR(survey.getPR());
         dto.setPic(survey.getPic());
-        dto.setProjects(survey);
+        dto.setProjects(convertToProjectResponseDto(survey.getProjects()));
+        dto.setCreatedAt(survey.getCreatedAt());
+        dto.setUpdatedAt(LocalDateTime.now());
         return dto;
+    }
+
+    public static List<ProjectResponseDto> convertToProjectResponseDto(List<Project> projects) {
+        return projects.stream().map(project -> {
+            ProjectResponseDto responseDto = new ProjectResponseDto();
+            responseDto.setProjectId(project.getProjectId());
+            responseDto.setProjectName(project.getProjectName());
+            responseDto.setImage(project.getImage());
+            responseDto.setShortIntro(project.getShortIntro());
+            responseDto.setLongIntro(project.getLongIntro());
+            responseDto.setDate(String.valueOf(project.getDate()));
+            responseDto.setTarget(project.getTarget());
+            responseDto.setRole(project.getRole());
+            responseDto.setProblem(project.getProblem());
+            responseDto.setSolution(project.getSolution());
+            responseDto.setFeedback(project.getFeedback());
+            return responseDto;
+        }).collect(Collectors.toList());
     }
 }
