@@ -20,7 +20,7 @@ public class Survey {
     @OneToOne (optional = true, mappedBy = "survey")
     private Portfolio portfolio;
 
-    @OneToMany(mappedBy = "Survey")
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Project> projects = new ArrayList<>();
 
     @Column(nullable = false)

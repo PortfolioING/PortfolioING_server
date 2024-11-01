@@ -13,8 +13,8 @@ public class Project {
     private Long projectId;
 
     @ManyToOne
-    @JoinColumn(name = "portfolio_id", nullable = false)
-    private Portfolio portfolio;
+    @JoinColumn(name = "survey_id", nullable = false)
+    private Survey survey;
 
     @Column(name = "project_name", length = 128, nullable = false)
     private String projectName;
