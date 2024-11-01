@@ -20,8 +20,8 @@ public class Survey {
     @OneToOne (optional = true, mappedBy = "survey")
     private Portfolio portfolio;
 
-//    @OneToMany(mappedBy = "project")
-//    private List<Project> projects = new ArrayList<>();
+    @OneToMany(mappedBy = "Survey")
+    private List<Project> projects = new ArrayList<>();
 
     @Column(nullable = false)
     private String name;

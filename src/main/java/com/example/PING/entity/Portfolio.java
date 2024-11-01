@@ -23,9 +23,6 @@ public class Portfolio {
     @JoinColumn(name = "domain_id")
     private Domain domain;
 
-    @OneToMany(mappedBy = "portfolio")
-    private List<Project> projects = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
