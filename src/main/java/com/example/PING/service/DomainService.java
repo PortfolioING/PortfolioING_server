@@ -1,7 +1,7 @@
 package com.example.PING.service;
 
-import com.example.PING.dto.DomainRequestDto;
-import com.example.PING.dto.DomainResponseDto;
+import com.example.PING.dto.request.DomainRequestDto;
+import com.example.PING.dto.response.DomainResponseDto;
 import com.example.PING.entity.Domain;
 import com.example.PING.repository.DomainRepository;
 import lombok.RequiredArgsConstructor;

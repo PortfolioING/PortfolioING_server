@@ -16,12 +16,12 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-//    @OneToMany(mappedBy = "project")
-//    private List<Project> projects = new ArrayList<>();
+    @OneToMany(mappedBy = "project")
+    private List<Project> projects = new ArrayList<>();
 
     @Column(nullable = false)
     private String name;

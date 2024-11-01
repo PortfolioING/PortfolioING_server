@@ -18,6 +18,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Portfolio> portfolios = new ArrayList<>();
 
+    public List<Long> getPortfolioIds() {
+        return portfolios.stream()
+                .map(Portfolio::getId)
+                .toList();
+    }
+
     @Column(nullable = false)
     private String password;
 
@@ -32,8 +38,8 @@ public class User {
     private String profilePic;
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    @Getter private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Getter private LocalDateTime updatedAt;
 }

@@ -1,7 +1,7 @@
 package com.example.PING.service;
 
-import com.example.PING.dto.PortfolioRequestDto;
-import com.example.PING.dto.PortfolioResponseDto;
+import com.example.PING.dto.request.PortfolioRequestDto;
+import com.example.PING.dto.response.PortfolioResponseDto;
 import com.example.PING.entity.Portfolio;
 import com.example.PING.repository.PortfolioRepository;
 import lombok.RequiredArgsConstructor;

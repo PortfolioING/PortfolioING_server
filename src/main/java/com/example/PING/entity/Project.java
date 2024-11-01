@@ -12,6 +12,11 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectId;
 
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "survey_id")
+    private Survey survey;
+
     @ManyToOne
     @JoinColumn(name = "portfolio_id", nullable = false)
     private Portfolio portfolio;
@@ -45,4 +50,5 @@ public class Project {
 
     @Column(name = "feedback", length = 128)
     private String feedback;
+
 }
