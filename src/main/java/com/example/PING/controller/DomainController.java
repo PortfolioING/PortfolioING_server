@@ -24,4 +24,12 @@ public class DomainController {
         DomainResponseDto response = domainService.createDomain(domainRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    // 특정 포트폴리오의 도메인 조회
+    @GetMapping
+    public ResponseEntity<DomainResponseDto> getDomainByPortfolioId(@RequestParam("portfolio_id") Long portfolioId) {
+        DomainResponseDto response = domainService.getDomainByPortfolioId(portfolioId);
+        return ResponseEntity.ok(response);
+    }
 }
+

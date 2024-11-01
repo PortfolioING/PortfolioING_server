@@ -37,6 +37,12 @@ public class DomainService {
         return convertToResponseDto(savedDomain);
     }
 
+    @Transactional(readOnly = true)
+    public DomainResponseDto getDomainByPortfolioId(Long portfolioId) {
+        Domain domain = domainRepository.findByPortfolio_PortfolioId(portfolioId)
+                .orElseThrow(() -> new IllegalArgumentException("Domain not found for Portfolio ID: " + portfolioId));
+        return convertToResponseDto(domain);
+    }
 
     @Transactional(readOnly = true)
     public List<DomainResponseDto> getAllDomains() {
@@ -63,4 +69,5 @@ public class DomainService {
         dto.setCreatedAt(domain.getCreatedAt());
         return dto;
     }
+
 }
