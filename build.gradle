@@ -16,6 +16,7 @@ java {
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
+
 	}
 }
 
@@ -28,6 +29,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'mysql:mysql-connector-java:8.0.33'
+    // Swagger(Spring 3.x.x 이상부터 SpringFox 대신, SpringDoc)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
 	runtimeOnly 'mysql:mysql-connector-java'
 	compileOnly 'org.projectlombok:lombok'
