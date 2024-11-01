@@ -12,13 +12,13 @@ import lombok.Setter;
 public class PortfolioRequestDto {
 
     @NotNull(message = "User ID is required.")
-    private Long userId;
+    private Long user_id;
 
     @NotNull(message = "Survey ID is required.")
-    private Long surveyId;
+    private Long survey_id;
 
     @NotNull(message = "Template ID is required.")
-    private Long templateId;
+    private Long template_id;
 
     private String title;
     private String description;
