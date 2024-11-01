@@ -16,9 +16,11 @@ public class Domain {
     @OneToOne (mappedBy = "domain")
     private Portfolio portfolio;
 
+    // unique: 중복되는 domain url이 입력되는 것을 방지
     @Column(nullable = false, unique = true)
     private String domain;
 
+    // updatable = false: 생성 이후 수정 방지
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 }

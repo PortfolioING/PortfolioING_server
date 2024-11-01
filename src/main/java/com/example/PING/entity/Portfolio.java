@@ -18,7 +18,8 @@ public class Portfolio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long portfolioId;
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
+    // optional = true: request에서 제외 가능
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "domain_id")
     private Domain domain;
 
@@ -33,7 +34,8 @@ public class Portfolio {
     @JoinColumn(name = "template_id")
     private Template template;
 
-    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true)
+    // CascadeType.ALL: Survey 영속성 전이
+    @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_id")
     private Survey survey;
 

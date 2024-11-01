@@ -16,7 +16,8 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyId;
 
-    @OneToOne (mappedBy = "survey")
+    // optional = true: request에서 제외 가능
+    @OneToOne (optional = true, mappedBy = "survey")
     private Portfolio portfolio;
 
 //    @OneToMany(mappedBy = "project")
