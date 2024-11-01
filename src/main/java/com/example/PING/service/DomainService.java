@@ -58,6 +58,9 @@ public class DomainService {
 
     @Transactional
     public void deleteDomain(Long domainId) {
+        if (!domainRepository.existsById(domainId)) {
+            throw new IllegalArgumentException("Domain not found with ID: " + domainId);
+        }
         domainRepository.deleteById(domainId);
     }
 

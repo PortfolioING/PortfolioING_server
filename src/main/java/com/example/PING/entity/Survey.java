@@ -16,7 +16,7 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 

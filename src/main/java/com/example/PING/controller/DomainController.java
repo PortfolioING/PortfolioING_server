@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/domains")
 @RequiredArgsConstructor
@@ -29,6 +32,15 @@ public class DomainController {
     @GetMapping
     public ResponseEntity<DomainResponseDto> getDomainByPortfolioId(@RequestParam("portfolio_id") Long portfolioId) {
         DomainResponseDto response = domainService.getDomainByPortfolioId(portfolioId);
+        return ResponseEntity.ok(response);
+    }
+
+    // 특정 도메인 삭제
+    @DeleteMapping("/{domain_id}")
+    public ResponseEntity<Map<String, String>> deleteDomain(@PathVariable("domain_id") Long domainId) {
+        domainService.deleteDomain(domainId);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Domain deleted successfully");
         return ResponseEntity.ok(response);
     }
 }

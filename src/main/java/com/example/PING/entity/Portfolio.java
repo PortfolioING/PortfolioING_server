@@ -18,7 +18,7 @@ public class Portfolio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long portfolioId;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "domain_id")
     private Domain domain;
 
@@ -33,7 +33,7 @@ public class Portfolio {
     @JoinColumn(name = "template_id")
     private Template template;
 
-    @ManyToOne
+    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "survey_id")
     private Survey survey;
 

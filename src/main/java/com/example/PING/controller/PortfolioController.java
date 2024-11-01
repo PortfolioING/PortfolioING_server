@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/portfolios")
 public class PortfolioController {
@@ -51,9 +54,10 @@ public class PortfolioController {
 
     // (포트폴리오 삭제) 특정 포트폴리오 삭제
     @DeleteMapping("/{portfolio_id}")
-    public ResponseEntity<String> deletePortfolio(@PathVariable("portfolio_id") Long portfolioId) {
+    public ResponseEntity<Map<String, String>> deletePortfolio(@PathVariable("portfolio_id") Long portfolioId) {
         portfolioService.deletePortfolio(portfolioId);
-        String response = "Portfolio deleted successfully";
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Portfolio deleted successfully");
         return ResponseEntity.ok(response);
     }
 

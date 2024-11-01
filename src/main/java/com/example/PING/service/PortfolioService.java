@@ -3,14 +3,8 @@ package com.example.PING.service;
 import com.example.PING.dto.PortfolioRequestDto;
 import com.example.PING.dto.PortfolioResponseDto;
 import com.example.PING.dto.UserPortfoliosResponse;
-import com.example.PING.entity.Portfolio;
-import com.example.PING.entity.Survey;
-import com.example.PING.entity.Template;
-import com.example.PING.entity.User;
-import com.example.PING.repository.PortfolioRepository;
-import com.example.PING.repository.SurveyRepository;
-import com.example.PING.repository.TemplateRepository;
-import com.example.PING.repository.UserRepository;
+import com.example.PING.entity.*;
+import com.example.PING.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +20,8 @@ public class PortfolioService {
     private final UserRepository userRepository;
     private final TemplateRepository templateRepository;
     private final SurveyRepository surveyRepository;
+    private final DomainRepository domainRepository;
+
 
     @Transactional
     public PortfolioResponseDto createPortfolio(PortfolioRequestDto portfolioRequestDto) {
@@ -91,10 +87,23 @@ public class PortfolioService {
 
     @Transactional
     public void deletePortfolio(Long portfolioId) {
-        if (!portfolioRepository.existsById(portfolioId)) {
-            throw new IllegalArgumentException("Portfolio not found with ID: " + portfolioId);
+        Portfolio portfolio = portfolioRepository.findById(portfolioId)
+                .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
+
+        // 1. 연관된 Survey 삭제
+        Survey survey = portfolio.getSurvey();
+        if (survey != null) {
+            surveyRepository.delete(survey);
         }
-        portfolioRepository.deleteById(portfolioId);
+
+        // 2. 연관된 Domain 삭제
+        Domain domain = portfolio.getDomain();
+        if (domain != null) {
+            domainRepository.delete(domain);
+        }
+
+        // 3. Portfolio 삭제
+        portfolioRepository.delete(portfolio);
     }
 
     private PortfolioResponseDto convertToResponseDto(Portfolio portfolio) {
