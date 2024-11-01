@@ -48,4 +48,22 @@ public class Portfolio {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Builder
+    public Portfolio(User user, Template template, Survey survey, String title, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.user = user;
+        this.template = template;
+        this.survey = survey;
+        this.title = title;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    // 내용 수정 method
+    public void updatePortfolioContents(String title, String description, LocalDateTime updatedAt) {
+        this.title = title;
+        this.description = description;
+        this.updatedAt = updatedAt;
+    }
 }
