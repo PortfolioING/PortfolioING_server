@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ProjectRequestDto {
+    private Long projectId;
     private String projectName;
     private String image;
     private String shortIntro;
