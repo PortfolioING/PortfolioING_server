@@ -34,6 +34,10 @@ public class DomainService {
 
         Domain savedDomain = domainRepository.save(domain);
 
+        // Portfolio 에도 Domain 설정
+        portfolio.setDomain(savedDomain);
+        portfolioRepository.save(portfolio);
+
         return convertToResponseDto(savedDomain);
     }
 
