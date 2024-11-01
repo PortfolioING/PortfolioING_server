@@ -2,6 +2,8 @@ package com.example.PING.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ public class Portfolio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long portfolioId;
 
-    @OneToOne
+    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "domain_id")
     private Domain domain;
 
@@ -31,7 +33,7 @@ public class Portfolio {
     @JoinColumn(name = "template_id")
     private Template template;
 
-    @ManyToOne
+    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "survey_id")
     private Survey survey;
 
@@ -40,9 +42,11 @@ public class Portfolio {
 
     private String description;
 
+    @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

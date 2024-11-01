@@ -6,16 +6,14 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor
 public class Domain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long domainId;
 
-    @OneToOne
-    @JoinColumn(name = "portfolio_id")
+    @OneToOne (mappedBy = "domain")
     private Portfolio portfolio;
 
     @Column(nullable = false, unique = true)

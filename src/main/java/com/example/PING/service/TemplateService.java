@@ -1,7 +1,8 @@
 package com.example.PING.service;
 
-import com.example.PING.dto.request.TemplateRequestDto;
-import com.example.PING.dto.response.TemplateResponseDto;
+import com.example.PING.dto.PortfolioResponseDto;
+import com.example.PING.dto.TemplateRequestDto;
+import com.example.PING.dto.TemplateResponseDto;
 import com.example.PING.entity.Template;
 import com.example.PING.repository.TemplateRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class TemplateService {
         return convertToResponseDto(templateRepository.save(template));
     }
 
+    // (템플릿 목록 조회) 모든 템플릿 조회
     @Transactional(readOnly = true)
     public List<TemplateResponseDto> getAllTemplates() {
         return templateRepository.findAll().stream()
@@ -33,7 +35,9 @@ public class TemplateService {
 
     @Transactional(readOnly = true)
     public TemplateResponseDto getTemplateById(Long templateId) {
-        return convertToResponseDto(templateRepository.findById(templateId).orElse(null));
+        Template template = templateRepository.findById(templateId)
+                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + templateId));
+        return convertToResponseDto(template);
     }
 
     @Transactional
@@ -48,4 +52,5 @@ public class TemplateService {
         dto.setDescription(template.getDescription());
         return dto;
     }
+
 }
