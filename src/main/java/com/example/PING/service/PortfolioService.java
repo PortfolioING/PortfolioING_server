@@ -41,8 +41,6 @@ public class PortfolioService {
                 .template(template)
                 .title(portfolioRequestDto.getTitle())
                 .description(portfolioRequestDto.getDescription())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
 
         //Todo 혹시 여기서 savedPortfolio 따로 담은 이유가 있나요?
@@ -80,7 +78,7 @@ public class PortfolioService {
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
 
         // 포트폴리오 내용 필드 업데이트
-        portfolio.updatePortfolioContents(portfolioRequestDto.getTitle(), portfolioRequestDto.getDescription(), LocalDateTime.now());
+        portfolio.updatePortfolioContents(portfolioRequestDto.getTitle(), portfolioRequestDto.getDescription());
 
         return convertToResponseDto(portfolioRepository.save(portfolio));
     }

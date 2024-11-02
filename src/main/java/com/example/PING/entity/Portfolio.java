@@ -52,9 +52,8 @@ public class Portfolio {
         this.domain = domain;
     }
 
-    //Todo update 관련로직 추가할 필요 X
     @Builder
-    public Portfolio(User user, Template template, Survey survey, String title, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Portfolio(User user, Template template, Survey survey, String title, String description) {
         this.user = user;
         this.template = template;
         this.survey = survey;
@@ -63,9 +62,8 @@ public class Portfolio {
     }
 
     // 내용 수정 method
-    public void updatePortfolioContents(String title, String description, LocalDateTime updatedAt) {
+    public void updatePortfolioContents(String title, String description) {
         this.title = title;
         this.description = description;
-        this.updatedAt = updatedAt;
     }
 }

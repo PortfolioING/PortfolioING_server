@@ -3,6 +3,7 @@ package com.example.PING.entity;
 import com.example.PING.dto.DomainRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +23,7 @@ public class Domain {
     private String domain;
 
     // updatable = false: 생성 이후 수정 방지
+    @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
