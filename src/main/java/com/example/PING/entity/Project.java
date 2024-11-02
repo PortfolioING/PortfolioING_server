@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Project {
     @Id
@@ -45,4 +44,18 @@ public class Project {
 
     @Column(name = "feedback", length = 128)
     private String feedback;
+
+    @Builder
+    public Project(String projectName, String image, String shortIntro, String longIntro, LocalDateTime date, String target, String role, String problem, String solution, String feedback) {
+        this.projectName = projectName;
+        this.image = image;
+        this.shortIntro = shortIntro;
+        this.longIntro = longIntro;
+        this.date = date;
+        this.target = target;
+        this.role = role;
+        this.problem = problem;
+        this.solution = solution;
+        this.feedback = feedback;
+    }
 }

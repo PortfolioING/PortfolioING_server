@@ -11,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Portfolio {
     @Id
@@ -49,6 +48,11 @@ public class Portfolio {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    public void setDomain(Domain domain) {
+        this.domain = domain;
+    }
+
+    //Todo update 관련로직 추가할 필요 X
     @Builder
     public Portfolio(User user, Template template, Survey survey, String title, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.user = user;
@@ -56,8 +60,6 @@ public class Portfolio {
         this.survey = survey;
         this.title = title;
         this.description = description;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     // 내용 수정 method

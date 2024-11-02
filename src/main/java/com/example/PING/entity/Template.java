@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Template {
     @Id
@@ -23,5 +22,11 @@ public class Template {
     private String name;
 
     private String description;
+
+    @Builder
+    public Template(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
 

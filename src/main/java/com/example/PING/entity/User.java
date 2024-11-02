@@ -1,6 +1,7 @@
 package com.example.PING.entity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class User {
     @Id
@@ -37,4 +37,13 @@ public class User {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Builder
+    public User(String password, String name, String email, String nickname, String profilePic) {
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.nickname = nickname;
+        this.profilePic = profilePic;
+    }
 }

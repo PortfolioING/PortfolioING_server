@@ -19,9 +19,10 @@ public class TemplateService {
 
     @Transactional
     public TemplateResponseDto createTemplate(TemplateRequestDto templateRequestDto) {
-        Template template = new Template();
-        template.setName(templateRequestDto.getName());
-        template.setDescription(templateRequestDto.getDescription());
+        Template template = Template.builder()
+                .name(templateRequestDto.getName())
+                .description(templateRequestDto.getDescription())
+                .build();
         return convertToResponseDto(templateRepository.save(template));
     }
 
@@ -46,11 +47,9 @@ public class TemplateService {
     }
 
     private TemplateResponseDto convertToResponseDto(Template template) {
-        TemplateResponseDto dto = new TemplateResponseDto();
-        dto.setTemplateId(template.getTemplateId());
-        dto.setName(template.getName());
-        dto.setDescription(template.getDescription());
-        return dto;
+        return TemplateResponseDto.builder()
+                .template(template)
+                .build();
     }
 
 }

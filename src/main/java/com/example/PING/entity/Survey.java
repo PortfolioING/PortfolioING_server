@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Survey {
     @Id
@@ -31,5 +30,17 @@ public class Survey {
 
     @Column(nullable = false)
     private String pic;
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
+
+    @Builder
+    public Survey(List<Project> projects, String name, String PR, String pic) {
+        this.projects = projects;
+        this.name = name;
+        this.PR = PR;
+        this.pic = pic;
+    }
 }
 

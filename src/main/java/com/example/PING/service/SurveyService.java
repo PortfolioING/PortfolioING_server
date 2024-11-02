@@ -18,8 +18,11 @@ public class SurveyService {
 
     @Transactional
     public SurveyResponseDto createSurvey(SurveyRequestDto surveyRequestDto) {
-        Survey survey = new Survey();
-        survey.setName(surveyRequestDto.getName());
+        Survey survey = Survey.builder()
+                .name(surveyRequestDto.getName())
+                .PR(surveyRequestDto.getPR())
+                .pic(surveyRequestDto.getPic())
+                .build();
         // Portfolio 설정 추가 필요
         return convertToResponseDto(surveyRepository.save(survey));
     }
@@ -42,11 +45,8 @@ public class SurveyService {
     }
 
     private SurveyResponseDto convertToResponseDto(Survey survey) {
-        SurveyResponseDto dto = new SurveyResponseDto();
-        dto.setSurveyId(survey.getSurveyId());
-        dto.setName(survey.getName());
-        dto.setPR(survey.getPR());
-        dto.setPic(survey.getPic());
-        return dto;
+        return SurveyResponseDto.builder()
+                .survey(survey)
+                .build();
     }
 }
