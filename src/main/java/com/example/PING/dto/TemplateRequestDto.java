@@ -1,5 +1,6 @@
 package com.example.PING.dto;
 
+import com.example.PING.entity.Template;
 import lombok.Data;
 
 @Data

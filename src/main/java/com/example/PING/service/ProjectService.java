@@ -18,8 +18,9 @@ public class ProjectService {
 
     @Transactional
     public ProjectResponseDto createProject(ProjectRequestDto projectRequestDto) {
-        Project project = new Project();
-        project.setProjectName(projectRequestDto.getProjectName());
+        Project project = Project.builder()
+                .projectName(projectRequestDto.getProjectName())
+                .build();
         // Portfolio 설정 추가 필요
         return convertToResponseDto(projectRepository.save(project));
     }
@@ -42,9 +43,8 @@ public class ProjectService {
     }
 
     private ProjectResponseDto convertToResponseDto(Project project) {
-        ProjectResponseDto dto = new ProjectResponseDto();
-        dto.setProjectId(project.getProjectId());
-        dto.setProjectName(project.getProjectName());
-        return dto;
+        return ProjectResponseDto.builder()
+                .project(project)
+                .build();
     }
 }

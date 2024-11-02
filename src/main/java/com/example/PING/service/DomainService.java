@@ -27,10 +27,10 @@ public class DomainService {
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + domainRequestDto.getPortfolio_id()));
 
         // Domain 생성 및 Portfolio 설정
-        Domain domain = new Domain();
-        domain.setPortfolio(portfolio);
-        domain.setDomain(domainRequestDto.getDomain());
-        domain.setCreatedAt(LocalDateTime.now());
+        Domain domain = Domain.builder()
+                .portfolio(portfolio)
+                .domain(domainRequestDto.getDomain())
+                .build();
 
         Domain savedDomain = domainRepository.save(domain);
 
@@ -65,6 +65,7 @@ public class DomainService {
         Domain domain = domainRepository.findById(domainId)
                 .orElseThrow(() -> new IllegalArgumentException("Domain not found with ID: " + domainId));
 
+        // Todo 변경사항 전이되는지 확인
         // 해당 도메인을 사용하는 포트폴리오의 domain 필드를 null로 설정
         Portfolio portfolio = portfolioRepository.findByDomain(domain);
         if (portfolio != null) {
@@ -77,12 +78,8 @@ public class DomainService {
     }
 
     private DomainResponseDto convertToResponseDto(Domain domain) {
-        DomainResponseDto dto = new DomainResponseDto();
-        dto.setDomain_id(domain.getDomainId());
-        dto.setPortfolio_id(domain.getPortfolio().getPortfolioId());
-        dto.setDomain(domain.getDomain());
-        dto.setCreatedAt(domain.getCreatedAt());
-        return dto;
-    }
-
+        return DomainResponseDto.builder()
+                .domain(domain)
+                .build();
+        }
 }

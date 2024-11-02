@@ -18,12 +18,13 @@ public class UserService {
 
     @Transactional
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
-        User user = new User();
-        user.setName(userRequestDto.getName());
-        user.setEmail(userRequestDto.getEmail());
-        user.setPassword(userRequestDto.getPassword());
-        user.setNickname(userRequestDto.getNickname());
-        user.setProfilePic(userRequestDto.getProfilePic());
+        User user = User.builder()
+                .name(userRequestDto.getName())
+                .email(userRequestDto.getEmail())
+                .password(userRequestDto.getPassword())
+                .nickname(userRequestDto.getNickname())
+                .profilePic(userRequestDto.getProfilePic())
+                .build();
         return convertToResponseDto(userRepository.save(user));
     }
 
@@ -45,12 +46,8 @@ public class UserService {
     }
 
     private UserResponseDto convertToResponseDto(User user) {
-        UserResponseDto dto = new UserResponseDto();
-        dto.setUserId(user.getUserId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
-        dto.setNickname(user.getNickname());
-        dto.setProfilePic(user.getProfilePic());
-        return dto;
+        return UserResponseDto.builder()
+                .user(user)
+                .build();
     }
 }
