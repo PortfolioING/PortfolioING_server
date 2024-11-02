@@ -66,12 +66,12 @@ public class DomainService {
                 .orElseThrow(() -> new IllegalArgumentException("Domain not found with ID: " + domainId));
 
         // Todo 변경사항 전이되는지 확인
-//        // 해당 도메인을 사용하는 포트폴리오의 domain 필드를 null로 설정
-//        Portfolio portfolio = portfolioRepository.findByDomain(domain);
-//        if (portfolio != null) {
-//            portfolio.setDomain(null);
-//            portfolioRepository.save(portfolio);  // 변경사항 저장
-//        }
+        // 해당 도메인을 사용하는 포트폴리오의 domain 필드를 null로 설정
+        Portfolio portfolio = portfolioRepository.findByDomain(domain);
+        if (portfolio != null) {
+            portfolio.setDomain(null);
+            portfolioRepository.save(portfolio);  // 변경사항 저장
+        }
 
         // 도메인 삭제
         domainRepository.delete(domain);
