@@ -10,6 +10,7 @@ import com.example.PING.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.ErrorResponse;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,11 +24,11 @@ public class UserService {
     @Transactional
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
         User user = User.builder()
-                .name(userRequestDto.getName())
-                .email(userRequestDto.getEmail())
-                .password(userRequestDto.getPassword())
-                .nickname(userRequestDto.getNickname())
-                .profilePic(userRequestDto.getProfilePic())
+                .name(userRequestDto.name())
+                .email(userRequestDto.email())
+                .password(userRequestDto.password())
+                .nickname(userRequestDto.nickname())
+                .profilePic(userRequestDto.profilePic())
                 .build();
         return convertToResponseDto(userRepository.save(user));
     }
@@ -71,8 +72,7 @@ public class UserService {
                 return new UserResponseDto(user.getUserId(), user.getName(), user.getEmail(), token, user.getProfilePic());
             }
         }
-        // return new ErrorResponse("Invalid email or password"); //TODO 수정해야 함
-        return null;
+        return new ErrorResponse("Invalid email or password"); //TODO 수정해야 함
     }
 
     private String generateToken(User user) {
@@ -86,14 +86,7 @@ public class UserService {
         }
 
         // 새 사용자 객체 생성
-        User newUser = new User();
-        newUser.setName(request.name());
-        newUser.setEmail(request.email());
-        newUser.setPassword(request.password()); // 비밀번호는 해시 처리를 권장
-        newUser.setNickname(request.nickname());
-        newUser.setProfilePic(request.profilePic()); // 프로필 사진 URL 등
-        newUser.setCreatedAt(LocalDateTime.now()); // 생성일자 설정
-        newUser.setUpdatedAt(LocalDateTime.now()); // 업데이트일자 설정
+        User newUser = new User(request.name(), request.email(), request.password(), request.nickname(), request.profilePic(), LocalDateTime.now(), LocalDateTime.now());
 
         // 사용자 저장
         userRepository.save(newUser);

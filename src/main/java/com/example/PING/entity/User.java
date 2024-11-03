@@ -19,6 +19,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Portfolio> portfolios = new ArrayList<>();
 
+    public User(String name, String email, String password, String nickname, String prifilePic, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.userId = userId; // Todo 여기!!!!!!!!!!!!!!!!!!!!!!
+    }
+
     public List<Long> getPortfolioIds() {
         return portfolios.stream()
                 .map(Portfolio::getId)
