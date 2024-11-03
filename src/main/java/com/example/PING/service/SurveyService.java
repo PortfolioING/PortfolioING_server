@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SurveyService {
     private final SurveyRepository surveyRepository;
-
+    private final ProjectRepository projectRepository;
     @Transactional
     public SurveyResponseDto createSurvey(SurveyRequestDto surveyRequest) { // 생성
         Survey survey = new Survey();
@@ -125,33 +125,44 @@ public class SurveyService {
     }
 
     private SurveyResponseDto convertToSurveyResponseDto(Survey survey) {
-        SurveyResponseDto dto = new SurveyResponseDto();
-        dto.setSurveyId(survey.getSurveyId());
-        dto.setPortfolioId(null);
-        dto.setName(survey.getName());
-        dto.setPR(survey.getPR());
-        dto.setPic(survey.getPic());
-        dto.setProjects(convertToProjectResponseDto(survey.getProjects()));
-        dto.setCreatedAt(survey.getCreatedAt());
-        dto.setUpdatedAt(LocalDateTime.now());
-        return dto;
+//        SurveyResponseDto dto = new SurveyResponseDto();
+//        dto.setSurveyId(survey.getSurveyId());
+//        dto.setPortfolioId(null);
+//        dto.setName(survey.getName());
+//        dto.setPR(survey.getPR());
+//        dto.setPic(survey.getPic());
+//        dto.setProjects(convertToProjectResponseDto(survey.getProjects()));
+//        dto.setCreatedAt(survey.getCreatedAt());
+//        dto.setUpdatedAt(LocalDateTime.now());
+//        return dto;
+
+        // Builder로 대체
+        return SurveyResponseDto.builder()
+                .survey(survey)
+                .build();
     }
 
     public static List<ProjectResponseDto> convertToProjectResponseDto(List<Project> projects) {
         return projects.stream().map(project -> {
-            ProjectResponseDto responseDto = new ProjectResponseDto();
-            responseDto.setProjectId(project.getProjectId());
-            responseDto.setProjectName(project.getProjectName());
-            responseDto.setImage(project.getImage());
-            responseDto.setShortIntro(project.getShortIntro());
-            responseDto.setLongIntro(project.getLongIntro());
-            responseDto.setDate(String.valueOf(project.getDate()));
-            responseDto.setTarget(project.getTarget());
-            responseDto.setRole(project.getRole());
-            responseDto.setProblem(project.getProblem());
-            responseDto.setSolution(project.getSolution());
-            responseDto.setFeedback(project.getFeedback());
-            return responseDto;
+
+            // Builder로 대체
+            return ProjectResponseDto.builder()
+                    .project(project)
+                    .build();
+
+//            ProjectResponseDto responseDto = new ProjectResponseDto();
+//            responseDto.setProjectId(project.getProjectId());
+//            responseDto.setProjectName(project.getProjectName());
+//            responseDto.setImage(project.getImage());
+//            responseDto.setShortIntro(project.getShortIntro());
+//            responseDto.setLongIntro(project.getLongIntro());
+//            responseDto.setDate(String.valueOf(project.getDate()));
+//            responseDto.setTarget(project.getTarget());
+//            responseDto.setRole(project.getRole());
+//            responseDto.setProblem(project.getProblem());
+//            responseDto.setSolution(project.getSolution());
+//            responseDto.setFeedback(project.getFeedback());
+//            return responseDto;
         }).collect(Collectors.toList());
     }
 }

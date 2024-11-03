@@ -25,17 +25,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserRequestDto request) {
-        Object response = userService.login(request);
-
-        if (response instanceof LoginResponseDto loginResponse) {
-            return ResponseEntity.ok(loginResponse);  // HTTP 200 OK
-        } else if (response instanceof ErrorResponse errorResponse) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);  // HTTP 401 Unauthorized
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody UserRequestDto request) {
+//        Object response = userService.login(request);
+//
+//        if (response instanceof LoginResponseDto loginResponse) {
+//            return ResponseEntity.ok(loginResponse);  // HTTP 200 OK
+//        } else if (response instanceof ErrorResponse errorResponse) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);  // HTTP 401 Unauthorized
+//        }
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//    }
 
     @PostMapping("/signup") // 회원가입 엔드포인트
     public ResponseEntity<?> signup(@RequestBody UserRequestDto request) {

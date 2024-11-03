@@ -1,6 +1,6 @@
 package com.example.PING.controller;
 
-import com.example.PING.dto.TemplateResponseDto;
+import com.example.PING.dto.response.TemplateResponseDto;
 import com.example.PING.service.TemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

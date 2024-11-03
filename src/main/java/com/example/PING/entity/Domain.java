@@ -1,6 +1,6 @@
 package com.example.PING.entity;
 
-import com.example.PING.dto.DomainRequestDto;
+import com.example.PING.dto.request.DomainRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

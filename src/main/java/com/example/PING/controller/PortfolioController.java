@@ -1,10 +1,9 @@
 package com.example.PING.controller;
 
-import com.example.PING.dto.PortfolioRequestDto;
-import com.example.PING.dto.PortfolioResponseDto;
-import com.example.PING.dto.UserPortfoliosResponse;
+import com.example.PING.dto.request.PortfolioRequestDto;
+import com.example.PING.dto.response.PortfolioResponseDto;
+import com.example.PING.dto.response.UserPortfoliosResponse;
 import com.example.PING.service.PortfolioService;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

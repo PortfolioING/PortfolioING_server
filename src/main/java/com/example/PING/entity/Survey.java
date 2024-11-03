@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@NoArgsConstructor
+@Data
+@AllArgsConstructor
 public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class Survey {
     }
 
     @Builder
-    public Survey(List<Project> projects, String name, String PR, String pic) {
+    public Survey() {
         this.projects = projects;
         this.name = name;
         this.PR = PR;

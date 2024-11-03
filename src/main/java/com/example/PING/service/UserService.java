@@ -62,18 +62,18 @@ public class UserService {
         );
     }
 
-    public UserResponseDto login(UserRequestDto request) {
-        Optional<User> targetUser = Optional.ofNullable(userRepository.findByEmail(request.email()));
-
-        if (targetUser.isPresent()) {
-            User user = targetUser.get();
-            if (user.getPassword().equals(request.password())) {
-                String token = generateToken(user);  // JWT 토큰 생성 로직 (모의)
-                return new UserResponseDto(user.getUserId(), user.getName(), user.getEmail(), token, user.getProfilePic());
-            }
-        }
-        return new ErrorResponse("Invalid email or password"); //TODO 수정해야 함
-    }
+//    public UserResponseDto login(UserRequestDto request) {
+//        Optional<User> targetUser = Optional.ofNullable(userRepository.findByEmail(request.email()));
+//
+//        if (targetUser.isPresent()) {
+//            User user = targetUser.get();
+//            if (user.getPassword().equals(request.password())) {
+//                String token = generateToken(user);  // JWT 토큰 생성 로직 (모의)
+//                return new UserResponseDto(user.getUserId(), user.getName(), user.getEmail(), token, user.getProfilePic());
+//            }
+//        }
+//        return new ErrorResponse("Invalid email or password"); //TODO 수정해야 함
+//    }
 
     private String generateToken(User user) {
         return "jwt_token_here";  // JWT 토큰 생성 로직
@@ -131,8 +131,10 @@ public class UserService {
                 user.getProfilePic(),
                 user.getUpdatedAt()
         );
-        return UserResponseDto.builder()
-                .user(user)
-                .build();
+
+        // record로 작업된 거라 builder 추가하지 않음
+//        return UserResponseDto.builder()
+//                .user(user)
+//                .build();
     }
 }

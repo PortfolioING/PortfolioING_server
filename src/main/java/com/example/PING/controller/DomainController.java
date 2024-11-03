@@ -1,8 +1,8 @@
 package com.example.PING.controller;
 
 
-import com.example.PING.dto.DomainRequestDto;
-import com.example.PING.dto.DomainResponseDto;
+import com.example.PING.dto.request.DomainRequestDto;
+import com.example.PING.dto.response.DomainResponseDto;
 import com.example.PING.service.DomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
