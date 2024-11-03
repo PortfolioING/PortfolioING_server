@@ -1,4 +1,4 @@
-package com.example.PING.dto;
+package com.example.PING.dto.response;
 
 import com.example.PING.entity.Domain;
 import lombok.Builder;

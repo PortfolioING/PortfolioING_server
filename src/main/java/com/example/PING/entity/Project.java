@@ -5,15 +5,21 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectId;
 
+    @Setter
     @ManyToOne
-    @JoinColumn(name = "survey_id", nullable = false)
+    @JoinColumn(name = "survey_id")
     private Survey survey;
+
+    @ManyToOne
+    @JoinColumn(name = "portfolio_id", nullable = false)
+    private Portfolio portfolio;
 
     @Column(name = "project_name", length = 128, nullable = false)
     private String projectName;

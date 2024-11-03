@@ -1,4 +1,4 @@
-package com.example.PING.dto;
+package com.example.PING.dto.request;
 
 import com.example.PING.entity.Template;
 import lombok.Data;

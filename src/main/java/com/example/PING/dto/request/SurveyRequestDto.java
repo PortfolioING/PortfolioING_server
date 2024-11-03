@@ -1,11 +1,14 @@
-package com.example.PING.dto;
+package com.example.PING.dto.request;
 
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class SurveyRequestDto {
     private String name;
     private String PR;
     private String pic;
-    private Long portfolioId;  // Portfolio ID
+    private List<ProjectRequestDto> projects;
 }
+

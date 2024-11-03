@@ -31,6 +31,12 @@ public class Survey {
     @Column(nullable = false)
     private String pic;
 
+    @Column(name = "created_at", updatable = false)
+    @Getter @Setter private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @Getter private LocalDateTime updatedAt;
+
     public void setPortfolio(Portfolio portfolio) {
         this.portfolio = portfolio;
     }

@@ -19,6 +19,16 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Portfolio> portfolios = new ArrayList<>();
 
+    public User(String name, String email, String password, String nickname, String prifilePic, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.userId = userId; // Todo 여기!!!!!!!!!!!!!!!!!!!!!!
+    }
+
+    public List<Long> getPortfolioIds() {
+        return portfolios.stream()
+                .map(Portfolio::getId)
+                .toList();
+    }
+
     @Column(nullable = false)
     private String password;
 
@@ -35,11 +45,11 @@ public class User {
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    @Getter private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Getter private LocalDateTime updatedAt;
 
     @Builder
     public User(String password, String name, String email, String nickname, String profilePic) {

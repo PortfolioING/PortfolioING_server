@@ -1,4 +1,4 @@
-package com.example.PING.dto;
+package com.example.PING.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
