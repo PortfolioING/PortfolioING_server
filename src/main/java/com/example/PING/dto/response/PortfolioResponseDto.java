@@ -1,9 +1,7 @@
 package com.example.PING.dto.response;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.example.PING.entity.Portfolio;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -19,4 +17,16 @@ public class PortfolioResponseDto {
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @Builder
+    public PortfolioResponseDto(Portfolio portfolio) {
+        this.portfolioId = portfolio.getPortfolioId();
+        this.userId = portfolio.getUser().getUserId();
+        this.surveyId = portfolio.getSurvey().getSurveyId();
+        this.templateId = portfolio.getTemplate().getTemplateId();
+        this.title = portfolio.getTitle();
+        this.description = portfolio.getDescription();
+        this.createdAt = portfolio.getCreatedAt();
+        this.updatedAt = portfolio.getUpdatedAt();
+    }
 }

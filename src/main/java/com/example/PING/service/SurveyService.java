@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SurveyService {
     private final SurveyRepository surveyRepository;
-    private final ProjectRepository projectRepository;
-    private final SurveyController surveyController;
 
     @Transactional
     public SurveyResponseDto createSurvey(SurveyRequestDto surveyRequest) { // 생성

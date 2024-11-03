@@ -9,17 +9,17 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyId;
 
-    @OneToOne (mappedBy = "survey")
+    // optional = true: request에서 제외 가능
+    @OneToOne (optional = true, mappedBy = "survey")
     private Portfolio portfolio;
 
-    @OneToMany(mappedBy = "survey")
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Project> projects = new ArrayList<>();
 
     @Column(nullable = false)
@@ -36,5 +36,17 @@ public class Survey {
 
     @Column(name = "updated_at")
     @Getter private LocalDateTime updatedAt;
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
+
+    @Builder
+    public Survey(List<Project> projects, String name, String PR, String pic) {
+        this.projects = projects;
+        this.name = name;
+        this.PR = PR;
+        this.pic = pic;
+    }
 }
 

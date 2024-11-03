@@ -39,15 +39,15 @@ public class PortfolioService {
                 .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + portfolioRequestDto.getTemplate_id()));
 
         // Portfolio 생성 및 설정
-        Portfolio portfolio = new Portfolio();
-        portfolio.setUser(user);
-        portfolio.setSurvey(survey);
-        portfolio.setTemplate(template);
-        portfolio.setTitle(portfolioRequestDto.getTitle());
-        portfolio.setDescription(portfolioRequestDto.getDescription());
-        portfolio.setCreatedAt(LocalDateTime.now());
-        portfolio.setUpdatedAt(LocalDateTime.now());
+        Portfolio portfolio = Portfolio.builder()
+                .user(user)
+                .survey(survey)
+                .template(template)
+                .title(portfolioRequestDto.getTitle())
+                .description(portfolioRequestDto.getDescription())
+                .build();
 
+        //Todo 혹시 여기서 savedPortfolio 따로 담은 이유가 있나요?
         Portfolio savedPortfolio = portfolioRepository.save(portfolio);
 
         // Survey 에도 Portfolio 설정
@@ -81,10 +81,8 @@ public class PortfolioService {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
 
-        // 포트폴리오 필드 업데이트
-        portfolio.setTitle(portfolioRequestDto.getTitle());
-        portfolio.setDescription(portfolioRequestDto.getDescription());
-        portfolio.setUpdatedAt(LocalDateTime.now());  // 수정 시간 갱신
+        // 포트폴리오 내용 필드 업데이트
+        portfolio.updatePortfolioContents(portfolioRequestDto.getTitle(), portfolioRequestDto.getDescription());
 
         return convertToResponseDto(portfolioRepository.save(portfolio));
     }
@@ -94,34 +92,16 @@ public class PortfolioService {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
 
-        // 1. 연관된 Survey 삭제
-        Survey survey = portfolio.getSurvey();
-        if (survey != null) {
-            surveyRepository.delete(survey);
-        }
+        // CascadeType.ALL -> 영속성 전이 설정으로 연관된 domain, survey 삭제 로직 X!
 
-        // 2. 연관된 Domain 삭제
-        Domain domain = portfolio.getDomain();
-        if (domain != null) {
-            domainRepository.delete(domain);
-        }
-
-        // 3. Portfolio 삭제
+        // Portfolio 삭제
         portfolioRepository.delete(portfolio);
     }
 
     private PortfolioResponseDto convertToResponseDto(Portfolio portfolio) {
-        PortfolioResponseDto dto = new PortfolioResponseDto();
-
-        dto.setPortfolioId(portfolio.getPortfolioId());
-        dto.setUserId(portfolio.getUser().getUserId());
-        dto.setSurveyId(portfolio.getSurvey().getSurveyId());
-        dto.setTemplateId(portfolio.getTemplate().getTemplateId());
-        dto.setTitle(portfolio.getTitle());
-        dto.setDescription(portfolio.getDescription());
-        dto.setCreatedAt(portfolio.getCreatedAt());
-        dto.setUpdatedAt(portfolio.getUpdatedAt());
-        return dto;
+        return PortfolioResponseDto.builder()
+                .portfolio(portfolio)
+                .build();
     }
 
 }

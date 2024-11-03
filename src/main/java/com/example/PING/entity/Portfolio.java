@@ -11,19 +11,16 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Portfolio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long portfolioId;
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
+    // optional = true: request에서 제외 가능
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "domain_id")
     private Domain domain;
-
-    @OneToMany(mappedBy = "portfolio")
-    private List<Project> projects = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -33,7 +30,8 @@ public class Portfolio {
     @JoinColumn(name = "template_id")
     private Template template;
 
-    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true)
+    // CascadeType.ALL: Survey 영속성 전이
+    @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_id")
     private Survey survey;
 
@@ -52,5 +50,24 @@ public class Portfolio {
 
     public Long getId() {
         return portfolioId;
+    }
+
+    public void setDomain(Domain domain) {
+        this.domain = domain;
+    }
+
+    @Builder
+    public Portfolio(User user, Template template, Survey survey, String title, String description) {
+        this.user = user;
+        this.template = template;
+        this.survey = survey;
+        this.title = title;
+        this.description = description;
+    }
+
+    // 내용 수정 method
+    public void updatePortfolioContents(String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 }

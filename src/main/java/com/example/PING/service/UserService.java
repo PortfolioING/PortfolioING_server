@@ -20,6 +20,18 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
 
+    @Transactional
+    public UserResponseDto createUser(UserRequestDto userRequestDto) {
+        User user = User.builder()
+                .name(userRequestDto.getName())
+                .email(userRequestDto.getEmail())
+                .password(userRequestDto.getPassword())
+                .nickname(userRequestDto.getNickname())
+                .profilePic(userRequestDto.getProfilePic())
+                .build();
+        return convertToResponseDto(userRepository.save(user));
+    }
+
     @Transactional(readOnly = true)
     public List<UserResponseDto> getAllUsers() {
         return userRepository.findAll().stream()
@@ -126,5 +138,8 @@ public class UserService {
                 user.getProfilePic(),
                 user.getUpdatedAt()
         );
+        return UserResponseDto.builder()
+                .user(user)
+                .build();
     }
 }
