@@ -86,7 +86,7 @@ public class UserService {
         }
 
         // 새 사용자 객체 생성
-        User newUser = new User(request.name(), request.email(), request.password(), request.nickname(), request.profilePic(), LocalDateTime.now(), LocalDateTime.now());
+        User newUser = new User(request.name(), request.email(), request.password(), request.nickname(), request.profilePic());
 
         // 사용자 저장
         userRepository.save(newUser);
