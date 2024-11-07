@@ -20,8 +20,7 @@ public class User {
     private List<Portfolio> portfolios = new ArrayList<>();
 
 
-
-    public List<Long> getPortfolioIds() {
+E    public List<Long> getPortfolioIds() {
         return portfolios.stream()
                 .map(Portfolio::getId)
                 .toList();
