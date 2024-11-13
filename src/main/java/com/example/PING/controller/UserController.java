@@ -1,5 +1,6 @@
 package com.example.PING.controller;
 
+import com.example.PING.dto.request.UserLoginRequestDto;
 import com.example.PING.dto.response.*;
 import com.example.PING.dto.request.UserRequestDto;
 import com.example.PING.service.UserService;
@@ -28,8 +29,8 @@ public class UserController {
 //        this.userService = userService;
 //    }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserRequestDto request) {
+    @GetMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserLoginRequestDto request) {
         Object response = userService.login(request);
 
         if (response instanceof LoginResponseDto loginResponse) {

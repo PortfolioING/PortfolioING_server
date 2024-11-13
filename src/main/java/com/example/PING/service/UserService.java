@@ -1,5 +1,6 @@
 package com.example.PING.service;
 
+import com.example.PING.dto.request.UserLoginRequestDto;
 import com.example.PING.dto.response.SignUpResponseDto;
 import com.example.PING.dto.request.UserRequestDto;
 import com.example.PING.dto.response.UserDetailResponseDto;
@@ -64,21 +65,25 @@ public class UserService {
         );
     }
 
-    public UserResponseDto login(UserRequestDto request) {
+    public UserResponseDto login(UserLoginRequestDto request) {
         User targetUser = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new IllegalArgumentException("User not found with Email: " + request.email()));
 
+        // 비밀번호 확인 로직 활성화
+        if (request.password().equals(targetUser.getPassword())) {
+            throw new IllegalArgumentException("Invalid password");
+        }
         if (targetUser.getPassword().equals(request.password())) {
 //            String token = generateToken(targetUser);  // JWT 토큰 생성 로직 (모의)
 //            return new UserResponseDto(targetUser.getUserId(), targetUser.getName(), targetUser.getEmail(), token, targetUser.getProfilePic());
             httpSession.setAttribute("user", targetUser);
-        }
+        } else new IllegalArgumentException("");
         return UserResponseDto.builder()
                 .userId(targetUser.getUserId())
                 .email(targetUser.getEmail())
                 .name(targetUser.getName())
                 .nickname(targetUser.getNickname())
-                .profilePic(request.profilePic())
+                .profilePic(targetUser.getProfilePic())
                 .build();
     }
 
