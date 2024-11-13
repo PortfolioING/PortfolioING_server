@@ -72,15 +72,17 @@ public class UserService {
         }
 //            String token = generateToken(targetUser);  // JWT 토큰 생성 로직 (모의)
 //            return new UserResponseDto(targetUser.getUserId(), targetUser.getName(), targetUser.getEmail(), token, targetUser.getProfilePic());
-        httpSession.setAttribute("user", targetUser);
-        User u = (User) httpSession.getAttribute("user");
+        httpSession.setAttribute("user", targetUser.getUserId());
+        long loginId = Long.parseLong(httpSession.getAttribute("user").toString());
+        User loginUser = userRepository.findById(loginId)
+                .orElseThrow(()-> new IllegalArgumentException("User not found with id: "+ loginId));
 
         return new LoginResponseDto(
-                u.getUserId(),
-                u.getEmail(),
-                u.getName(),
-                u.getNickname(),
-                u.getProfilePic());
+                loginUser.getUserId(),
+                loginUser.getEmail(),
+                loginUser.getName(),
+                loginUser.getNickname(),
+                loginUser.getProfilePic());
     }
 
     private String generateToken(User user) {
