@@ -29,7 +29,7 @@ public class UserController {
 //        this.userService = userService;
 //    }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginRequestDto request) {
         Object response = userService.login(request);
 
