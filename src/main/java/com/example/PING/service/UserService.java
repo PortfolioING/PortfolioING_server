@@ -93,7 +93,7 @@ public class UserService {
 
     public SignUpResponseDto signUp(UserRequestDto request) {
         // 이미 존재하는 이메일인지 확인
-        if (userRepository.findByEmail(request.email()) != null) {
+        if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");  // 이메일 중복 처리
         }
 
