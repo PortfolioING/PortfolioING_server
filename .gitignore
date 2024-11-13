@@ -19,7 +19,7 @@ bin/
 
 ### IntelliJ IDEA ###
 ## 매우중요! ##
-application.properties
+src/main/resources/application.properties
 .idea
 *.iws
 *.iml
