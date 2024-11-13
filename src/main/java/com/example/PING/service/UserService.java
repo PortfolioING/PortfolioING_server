@@ -1,11 +1,8 @@
 package com.example.PING.service;
 
 import com.example.PING.dto.request.UserLoginRequestDto;
-import com.example.PING.dto.response.SignUpResponseDto;
+import com.example.PING.dto.response.*;
 import com.example.PING.dto.request.UserRequestDto;
-import com.example.PING.dto.response.UserDetailResponseDto;
-import com.example.PING.dto.response.UserResponseDto;
-import com.example.PING.dto.response.UserUpdateResponseDto;
 import com.example.PING.entity.User;
 import com.example.PING.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -65,26 +62,25 @@ public class UserService {
         );
     }
 
-    public UserResponseDto login(UserLoginRequestDto request) {
+    public LoginResponseDto login(UserLoginRequestDto request) {
         User targetUser = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new IllegalArgumentException("User not found with Email: " + request.email()));
 
         // 비밀번호 확인 로직 활성화
-        if (request.password().equals(targetUser.getPassword())) {
-            throw new IllegalArgumentException("Invalid password");
+        if (!targetUser.getPassword().equals(request.password())) {
+            new IllegalArgumentException("Password does not match. Your input: " + request.password());
         }
-        if (targetUser.getPassword().equals(request.password())) {
 //            String token = generateToken(targetUser);  // JWT 토큰 생성 로직 (모의)
 //            return new UserResponseDto(targetUser.getUserId(), targetUser.getName(), targetUser.getEmail(), token, targetUser.getProfilePic());
-            httpSession.setAttribute("user", targetUser);
-        } else new IllegalArgumentException("");
-        return UserResponseDto.builder()
-                .userId(targetUser.getUserId())
-                .email(targetUser.getEmail())
-                .name(targetUser.getName())
-                .nickname(targetUser.getNickname())
-                .profilePic(targetUser.getProfilePic())
-                .build();
+        httpSession.setAttribute("user", targetUser);
+        User u = (User) httpSession.getAttribute("user");
+
+        return new LoginResponseDto(
+                u.getUserId(),
+                u.getEmail(),
+                u.getName(),
+                u.getNickname(),
+                u.getProfilePic());
     }
 
     private String generateToken(User user) {
@@ -93,7 +89,7 @@ public class UserService {
 
     public SignUpResponseDto signUp(UserRequestDto request) {
         // 이미 존재하는 이메일인지 확인
-        if (userRepository.findByEmail(request.email()) != null) {
+        if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");  // 이메일 중복 처리
         }
 
