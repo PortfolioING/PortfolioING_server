@@ -14,7 +14,5 @@ RUN microdnf install findutils
 RUN ./gradlew bootJar
 
 FROM openjdk:17
-WORKDIR /app
-COPY --from=builder /app/build/libs/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY --from=builder /app/build/libs/PING-0.0.1-SNAPSHOT.jar PING.jar
+CMD ["java", "-jar", "PING.jar"]
