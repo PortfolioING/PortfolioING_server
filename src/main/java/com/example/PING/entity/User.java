@@ -7,7 +7,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Data
@@ -57,10 +56,4 @@ public class User {
         this.nickname = nickname;
         this.profilePic = profilePic;
     }
-
-    public static User objectToUser(Object user) {
-        if (user == null) new IllegalArgumentException("로그인된 User가 존재하지 않습니다.");
-        return (User) user;
-    }
-
 }

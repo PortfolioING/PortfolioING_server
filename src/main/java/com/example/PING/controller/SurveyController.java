@@ -17,7 +17,7 @@ public class SurveyController {
         this.surveyService = surveyService;
     }
 
-    @PostMapping("/surveys") // 생성
+    @PostMapping // 생성
     public ResponseEntity<SurveyResponseDto> createSurvey(@RequestBody SurveyRequestDto surveyRequest) {
         SurveyResponseDto createdSurvey = surveyService.createSurvey(surveyRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSurvey);

@@ -3,6 +3,7 @@ package com.example.PING.service;
 import com.example.PING.controller.SurveyController;
 import com.example.PING.dto.request.ProjectRequestDto;
 import com.example.PING.dto.request.SurveyRequestDto;
+import com.example.PING.dto.response.ProjectIdResponseDto;
 import com.example.PING.dto.response.ProjectResponseDto;
 import com.example.PING.dto.response.SurveyResponseDto;
 import com.example.PING.entity.Project;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class SurveyService {
     private final SurveyRepository surveyRepository;
     private final ProjectRepository projectRepository;
+
     @Transactional
     public SurveyResponseDto createSurvey(SurveyRequestDto surveyRequest) { // 생성
         Survey survey = new Survey();
@@ -30,30 +32,24 @@ public class SurveyService {
         // 포트폴리오 설정
         survey.setPortfolio(null);
         survey.setName(surveyRequest.getName());
-        survey.setPR(surveyRequest.getPR());
+        survey.setPr(surveyRequest.getPr());
         survey.setPic(surveyRequest.getPic());
 
-        // 설문에 프로젝트 리스트 추가
+        // 설문에 기존 프로젝트 리스트 추가
         List<Project> projects = surveyRequest.getProjects().stream()
                 .map(projectRequest -> {
-                    Project project = new Project();
-                    project.setProjectName(projectRequest.getProjectName());
-                    project.setImage(projectRequest.getImage());
-                    project.setShortIntro(projectRequest.getShortIntro());
-                    project.setLongIntro(projectRequest.getLongIntro());
-                    project.setDate(LocalDateTime.parse(projectRequest.getDate()));
-                    project.setTarget(projectRequest.getTarget());
-                    project.setRole(projectRequest.getRole());
-                    project.setProblem(projectRequest.getProblem());
-                    project.setSolution(projectRequest.getSolution());
-                    project.setFeedback(projectRequest.getFeedback());
+                    // 기존 프로젝트 조회
+                    Project project = projectRepository.findById(projectRequest.getProject_id())
+                            .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + projectRequest.getProject_id()));
                     project.setSurvey(survey); // 설문과 연결
                     return project;
                 })
                 .collect(Collectors.toList());
 
-        surveyRepository.save(survey); // 설문 저장
         survey.setCreatedAt(LocalDateTime.now());
+
+        surveyRepository.save(survey); // 설문 저장
+
         // 프로젝트 저장
         projectRepository.saveAll(projects);
 
@@ -65,6 +61,7 @@ public class SurveyService {
         Survey survey = surveyRepository.findById(survey_id)
                 .orElseThrow(() -> new ResourceNotFoundException("Survey not found with id " + survey_id));
 
+        System.out.println(survey);
         return convertToSurveyResponseDto(survey);
     }
 
@@ -75,7 +72,7 @@ public class SurveyService {
 
         // 기존 데이터 업데이트
         survey.setName(surveyRequest.getName());
-        survey.setPR(surveyRequest.getPR());
+        survey.setPr(surveyRequest.getPr());
         survey.setPic(surveyRequest.getPic());
         updateProjects(survey, surveyRequest.getProjects());
         survey.setUpdatedAt(LocalDateTime.now());
@@ -90,12 +87,12 @@ public class SurveyService {
         for (ProjectRequestDto projectRequest : projectRequests) {
             // 기존 프로젝트 ID와 매칭되는 프로젝트를 찾아 업데이트
             for (Project project : projects) {
-                if (project.getProjectId().equals(projectRequest.getProjectId())) {
-                    project.setProjectName(projectRequest.getProjectName());
+                if (project.getProjectId().equals(projectRequest.getProject_id())) {
+                    project.setProjectName(projectRequest.getProject_name());
                     project.setImage(projectRequest.getImage());
-                    project.setShortIntro(projectRequest.getShortIntro());
-                    project.setLongIntro(projectRequest.getLongIntro());
-                    project.setDate(LocalDateTime.parse(projectRequest.getDate()));
+                    project.setShortIntro(projectRequest.getShort_intro());
+                    project.setLongIntro(projectRequest.getLong_intro());
+                    project.setDate(projectRequest.getDate());
                     project.setTarget(projectRequest.getTarget());
                     project.setRole(projectRequest.getRole());
                     project.setProblem(projectRequest.getProblem());
@@ -125,44 +122,22 @@ public class SurveyService {
     }
 
     private SurveyResponseDto convertToSurveyResponseDto(Survey survey) {
-//        SurveyResponseDto dto = new SurveyResponseDto();
-//        dto.setSurveyId(survey.getSurveyId());
-//        dto.setPortfolioId(null);
-//        dto.setName(survey.getName());
-//        dto.setPR(survey.getPR());
-//        dto.setPic(survey.getPic());
-//        dto.setProjects(convertToProjectResponseDto(survey.getProjects()));
-//        dto.setCreatedAt(survey.getCreatedAt());
-//        dto.setUpdatedAt(LocalDateTime.now());
-//        return dto;
-
-        // Builder로 대체
         return SurveyResponseDto.builder()
-                .survey(survey)
+                .surveyId(survey.getSurveyId())
+                .portfolioId(survey.getPortfolio() != null ? survey.getPortfolio().getPortfolioId() : null)
+                .name(survey.getName())
+                .pr(survey.getPr())
+                .pic(survey.getPic())
+                .projects(
+                        survey.getProjects() != null
+                                ? survey.getProjects().stream()
+                                .map(project -> new ProjectIdResponseDto(project.getProjectId()))
+                                .collect(Collectors.toList())
+                                : List.of()
+                )
+                .createdAt(survey.getCreatedAt())
+                .updatedAt(survey.getUpdatedAt())
                 .build();
     }
 
-    public static List<ProjectResponseDto> convertToProjectResponseDto(List<Project> projects) {
-        return projects.stream().map(project -> {
-
-            // Builder로 대체
-            return ProjectResponseDto.builder()
-                    .project(project)
-                    .build();
-
-//            ProjectResponseDto responseDto = new ProjectResponseDto();
-//            responseDto.setProjectId(project.getProjectId());
-//            responseDto.setProjectName(project.getProjectName());
-//            responseDto.setImage(project.getImage());
-//            responseDto.setShortIntro(project.getShortIntro());
-//            responseDto.setLongIntro(project.getLongIntro());
-//            responseDto.setDate(String.valueOf(project.getDate()));
-//            responseDto.setTarget(project.getTarget());
-//            responseDto.setRole(project.getRole());
-//            responseDto.setProblem(project.getProblem());
-//            responseDto.setSolution(project.getSolution());
-//            responseDto.setFeedback(project.getFeedback());
-//            return responseDto;
-        }).collect(Collectors.toList());
-    }
 }
