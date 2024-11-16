@@ -9,6 +9,7 @@ import com.example.PING.dto.request.PortfolioRequestDto;
 import com.example.PING.dto.response.PortfolioResponseDto;
 import com.example.PING.entity.Portfolio;
 import com.example.PING.repository.PortfolioRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,22 +25,27 @@ public class PortfolioService {
     private final TemplateRepository templateRepository;
     private final SurveyRepository surveyRepository;
     private final DomainRepository domainRepository;
+    private final HttpSession httpSession;
 
 
     @Transactional
     public PortfolioResponseDto createPortfolio(PortfolioRequestDto portfolioRequestDto) {
 
         // User, Survey, Template 엔티티 조회
-        User user = userRepository.findById(portfolioRequestDto.getUser_id())
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + portfolioRequestDto.getUser_id()));
+//        User user = userRepository.findById(portfolioRequestDto.getUser_id())
+//                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + portfolioRequestDto.getUser_id()));
         Survey survey = surveyRepository.findById(portfolioRequestDto.getSurvey_id())
                 .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + portfolioRequestDto.getSurvey_id()));
         Template template = templateRepository.findById(portfolioRequestDto.getTemplate_id())
                 .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + portfolioRequestDto.getTemplate_id()));
 
+        long loginId = Long.parseLong(httpSession.getAttribute("user").toString());
+        User loginUser = userRepository.findById(loginId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + loginId));
+
         // Portfolio 생성 및 설정
         Portfolio portfolio = Portfolio.builder()
-                .user(user)
+                .user(loginUser)
                 .survey(survey)
                 .template(template)
                 .title(portfolioRequestDto.getTitle())

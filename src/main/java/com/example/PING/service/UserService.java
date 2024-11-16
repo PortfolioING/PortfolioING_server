@@ -1,12 +1,11 @@
 package com.example.PING.service;
 
-import com.example.PING.dto.response.SignUpResponseDto;
+import com.example.PING.dto.request.UserLoginRequestDto;
+import com.example.PING.dto.response.*;
 import com.example.PING.dto.request.UserRequestDto;
-import com.example.PING.dto.response.UserDetailResponseDto;
-import com.example.PING.dto.response.UserResponseDto;
-import com.example.PING.dto.response.UserUpdateResponseDto;
 import com.example.PING.entity.User;
 import com.example.PING.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final HttpSession httpSession;
 
     @Transactional
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
@@ -62,18 +62,26 @@ public class UserService {
         );
     }
 
-//    public UserResponseDto login(UserRequestDto request) {
-//        Optional<User> targetUser = Optional.ofNullable(userRepository.findByEmail(request.email()));
-//
-//        if (targetUser.isPresent()) {
-//            User user = targetUser.get();
-//            if (user.getPassword().equals(request.password())) {
-//                String token = generateToken(user);  // JWT 토큰 생성 로직 (모의)
-//                return new UserResponseDto(user.getUserId(), user.getName(), user.getEmail(), token, user.getProfilePic());
-//            }
-//        }
-//        return new ErrorResponse("Invalid email or password"); //TODO 수정해야 함
-//    }
+    public LoginResponseDto login(UserLoginRequestDto request) {
+        User targetUser = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new IllegalArgumentException("User not found with Email: " + request.email()));
+        // 비밀번호 확인 로직 활성화
+        if (!targetUser.getPassword().equals(request.password())) {
+            new IllegalArgumentException("Password does not match. Your input: " + request.password());
+        }
+//            String token = generateToken(targetUser);  // JWT 토큰 생성 로직 (모의)
+//            return new UserResponseDto(targetUser.getUserId(), targetUser.getName(), targetUser.getEmail(), token, targetUser.getProfilePic());
+        httpSession.setAttribute("user", targetUser.getUserId());
+        long loginId = Long.parseLong(httpSession.getAttribute("user").toString());
+        User loginUser = userRepository.findById(loginId)
+                .orElseThrow(()-> new IllegalArgumentException("User not found with id: "+ loginId));
+        return new LoginResponseDto(
+                loginUser.getUserId(),
+                loginUser.getEmail(),
+                loginUser.getName(),
+                loginUser.getNickname(),
+                loginUser.getProfilePic());
+    }
 
     private String generateToken(User user) {
         return "jwt_token_here";  // JWT 토큰 생성 로직
@@ -81,7 +89,7 @@ public class UserService {
 
     public SignUpResponseDto signUp(UserRequestDto request) {
         // 이미 존재하는 이메일인지 확인
-        if (userRepository.findByEmail(request.email()) != null) {
+        if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");  // 이메일 중복 처리
         }
 

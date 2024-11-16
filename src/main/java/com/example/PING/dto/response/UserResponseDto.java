@@ -1,7 +1,7 @@
 package com.example.PING.dto.response;
 
 
-import java.util.List;
+import lombok.Builder;
 
 public record UserResponseDto(
         Long userId,
@@ -10,4 +10,12 @@ public record UserResponseDto(
         String nickname,
         String profilePic
 ) {
+    @Builder
+    public UserResponseDto(Long userId, String name, String email, String nickname, String profilePic) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.nickname = nickname;
+        this.profilePic = profilePic;
+    }
 }

@@ -19,8 +19,8 @@ bin/
 
 ### IntelliJ IDEA ###
 ## 매우중요! ##
-src/main/resources/application.properties
-src/test/resources/application.properties
+/src/main/resources/application.properties
+/src/test/resources/application.properties
 .env
 .idea
 *.iws
