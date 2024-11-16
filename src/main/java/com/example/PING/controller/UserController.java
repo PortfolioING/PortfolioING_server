@@ -1,10 +1,10 @@
 package com.example.PING.controller;
 
+import com.example.PING.dto.request.UserLoginRequestDto;
 import com.example.PING.dto.response.*;
 import com.example.PING.dto.request.UserRequestDto;
 import com.example.PING.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -15,27 +15,22 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class UserController {
 
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserLoginRequestDto request) {
+        Object response = userService.login(request);
+        if (response instanceof LoginResponseDto loginResponse) {
+            return ResponseEntity.ok(loginResponse);  // HTTP 200 OK
+        } else if (response instanceof ErrorResponse errorResponse) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);  // HTTP 401 Unauthorized
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody UserRequestDto request) {
-//        Object response = userService.login(request);
-//
-//        if (response instanceof LoginResponseDto loginResponse) {
-//            return ResponseEntity.ok(loginResponse);  // HTTP 200 OK
-//        } else if (response instanceof ErrorResponse errorResponse) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);  // HTTP 401 Unauthorized
-//        }
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//    }
 
     @PostMapping("/signup") // 회원가입 엔드포인트
     public ResponseEntity<?> signup(@RequestBody UserRequestDto request) {
@@ -58,8 +53,8 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<UserUpdateResponseDto> updateUser( // My page 정보 수정
-            @PathVariable Long userId,
-            @RequestBody UserRequestDto userUpdateRequest) {
+                                                             @PathVariable Long userId,
+                                                             @RequestBody UserRequestDto userUpdateRequest) {
 
         UserUpdateResponseDto updatedUser = userService.updateUser(userId, userUpdateRequest);
         return ResponseEntity.ok(updatedUser);
