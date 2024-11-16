@@ -26,13 +26,13 @@ public class Survey {
     private String name;
 
     @Column(nullable = false)
-    private String PR;
+    private String pr;
 
     @Column(nullable = false)
     private String pic;
 
     @Column(name = "created_at", updatable = false)
-    @Getter @Setter private LocalDateTime createdAt;
+    @Getter private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     @Getter private LocalDateTime updatedAt;
@@ -45,7 +45,7 @@ public class Survey {
     public Survey() {
         this.projects = projects;
         this.name = name;
-        this.PR = PR;
+        this.pr = pr;
         this.pic = pic;
     }
 }

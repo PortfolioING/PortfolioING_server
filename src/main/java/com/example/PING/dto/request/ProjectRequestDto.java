@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Getter
 public class ProjectRequestDto {
-    private Long projectId;
+    private Long project_id;
     private String project_name;
     private String image;
     private String short_intro;

@@ -6,27 +6,18 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
+@Builder
 public class SurveyResponseDto {
     private Long surveyId;
     private Long portfolioId;
     private String name;
-    private String PR;
+    private String pr;
     private String pic;
-    private List<ProjectResponseDto> projects;
+    private List<ProjectIdResponseDto> projects;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @Builder
-    public SurveyResponseDto(Survey survey) {
-        this.surveyId = surveyId;
-        this.portfolioId = portfolioId;
-        this.name = name;
-        this.PR = PR;
-        this.pic = pic;
-        this.projects = projects;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 }
