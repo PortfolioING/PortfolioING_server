@@ -37,11 +37,11 @@ public class SurveyService {
         List<Project> projects = surveyRequest.getProjects().stream()
                 .map(projectRequest -> {
                     Project project = new Project();
-                    project.setProjectName(projectRequest.getProjectName());
+                    project.setProjectName(projectRequest.getProject_name());
                     project.setImage(projectRequest.getImage());
-                    project.setShortIntro(projectRequest.getShortIntro());
-                    project.setLongIntro(projectRequest.getLongIntro());
-                    project.setDate(LocalDateTime.parse(projectRequest.getDate()));
+                    project.setShortIntro(projectRequest.getShort_intro());
+                    project.setLongIntro(projectRequest.getLong_intro());
+                    project.setDate(projectRequest.getDate());
                     project.setTarget(projectRequest.getTarget());
                     project.setRole(projectRequest.getRole());
                     project.setProblem(projectRequest.getProblem());
@@ -91,11 +91,11 @@ public class SurveyService {
             // 기존 프로젝트 ID와 매칭되는 프로젝트를 찾아 업데이트
             for (Project project : projects) {
                 if (project.getProjectId().equals(projectRequest.getProjectId())) {
-                    project.setProjectName(projectRequest.getProjectName());
+                    project.setProjectName(projectRequest.getProject_name());
                     project.setImage(projectRequest.getImage());
-                    project.setShortIntro(projectRequest.getShortIntro());
-                    project.setLongIntro(projectRequest.getLongIntro());
-                    project.setDate(LocalDateTime.parse(projectRequest.getDate()));
+                    project.setShortIntro(projectRequest.getShort_intro());
+                    project.setLongIntro(projectRequest.getLong_intro());
+                    project.setDate(projectRequest.getDate());
                     project.setTarget(projectRequest.getTarget());
                     project.setRole(projectRequest.getRole());
                     project.setProblem(projectRequest.getProblem());
@@ -142,27 +142,27 @@ public class SurveyService {
                 .build();
     }
 
-    public static List<ProjectResponseDto> convertToProjectResponseDto(List<Project> projects) {
-        return projects.stream().map(project -> {
-
-            // Builder로 대체
-            return ProjectResponseDto.builder()
-                    .project(project)
-                    .build();
-
-//            ProjectResponseDto responseDto = new ProjectResponseDto();
-//            responseDto.setProjectId(project.getProjectId());
-//            responseDto.setProjectName(project.getProjectName());
-//            responseDto.setImage(project.getImage());
-//            responseDto.setShortIntro(project.getShortIntro());
-//            responseDto.setLongIntro(project.getLongIntro());
-//            responseDto.setDate(String.valueOf(project.getDate()));
-//            responseDto.setTarget(project.getTarget());
-//            responseDto.setRole(project.getRole());
-//            responseDto.setProblem(project.getProblem());
-//            responseDto.setSolution(project.getSolution());
-//            responseDto.setFeedback(project.getFeedback());
-//            return responseDto;
-        }).collect(Collectors.toList());
-    }
+//    public static List<ProjectResponseDto> convertToProjectResponseDto(List<Project> projects) {
+//        return projects.stream().map(project -> {
+//
+//            // Builder로 대체
+//            return ProjectResponseDto.builder()
+//                    .project(project)
+//                    .build();
+//
+////            ProjectResponseDto responseDto = new ProjectResponseDto();
+////            responseDto.setProjectId(project.getProjectId());
+////            responseDto.setProjectName(project.getProjectName());
+////            responseDto.setImage(project.getImage());
+////            responseDto.setShortIntro(project.getShortIntro());
+////            responseDto.setLongIntro(project.getLongIntro());
+////            responseDto.setDate(String.valueOf(project.getDate()));
+////            responseDto.setTarget(project.getTarget());
+////            responseDto.setRole(project.getRole());
+////            responseDto.setProblem(project.getProblem());
+////            responseDto.setSolution(project.getSolution());
+////            responseDto.setFeedback(project.getFeedback());
+////            return responseDto;
+//        }).collect(Collectors.toList());
+//    }
 }

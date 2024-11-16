@@ -17,11 +17,7 @@ public class Project {
     @JoinColumn(name = "survey_id")
     private Survey survey;
 
-    @ManyToOne
-    @JoinColumn(name = "portfolio_id", nullable = false)
-    private Portfolio portfolio;
-
-    @Column(name = "project_name", length = 128, nullable = false)
+    @Column(name = "project_name", length = 128)
     private String projectName;
 
     @Column(name = "image", length = 128)
