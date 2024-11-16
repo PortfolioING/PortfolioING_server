@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,23 +19,32 @@ public class ProjectService {
 
     @Transactional
     public ProjectResponseDto createProject(ProjectRequestDto projectRequestDto) {
+
+        System.out.println(projectRequestDto);
+
         Project project = Project.builder()
-                .projectName(projectRequestDto.getProjectName())
+                .projectName(projectRequestDto.getProject_name())
+                .image(projectRequestDto.getImage())
+                .shortIntro(projectRequestDto.getShort_intro())
+                .longIntro(projectRequestDto.getLong_intro())
+                .date(projectRequestDto.getDate())
+                .target(projectRequestDto.getTarget())
+                .role(projectRequestDto.getRole())
+                .problem(projectRequestDto.getProblem())
+                .solution(projectRequestDto.getSolution())
+                .feedback(projectRequestDto.getFeedback())
                 .build();
-        // Portfolio 설정 추가 필요
-        return convertToResponseDto(projectRepository.save(project));
-    }
 
-    @Transactional(readOnly = true)
-    public List<ProjectResponseDto> getAllProjects() {
-        return projectRepository.findAll().stream()
-                .map(this::convertToResponseDto)
-                .collect(Collectors.toList());
-    }
+        // Project 엔티티 저장
+        Project savedProject = projectRepository.save(project);
 
-    @Transactional(readOnly = true)
-    public ProjectResponseDto getProjectById(Long projectId) {
-        return convertToResponseDto(projectRepository.findById(projectId).orElse(null));
+        // 응답 DTO 변환
+        ProjectResponseDto responseDto = new ProjectResponseDto();
+        responseDto.setProjectId(savedProject.getProjectId());
+        responseDto.setProjectName(savedProject.getProjectName());
+        responseDto.setCreatedAt(LocalDateTime.now());  // or set created_at if it exists
+
+        return responseDto;
     }
 
     @Transactional
@@ -42,9 +52,4 @@ public class ProjectService {
         projectRepository.deleteById(projectId);
     }
 
-    private ProjectResponseDto convertToResponseDto(Project project) {
-        return ProjectResponseDto.builder()
-                .project(project)
-                .build();
-    }
 }
