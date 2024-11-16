@@ -14,7 +14,7 @@ public class Project {
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "survey_id")
+    @JoinColumn(name = "survey_id", nullable = true)
     private Survey survey;
 
     @Column(name = "project_name", length = 128)
