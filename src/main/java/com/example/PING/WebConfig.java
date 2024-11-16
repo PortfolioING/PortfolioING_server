@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://" + this.ipAddress + ":" + this.frontEndPort)
-                .allowCredentials(true); // 브라우저에서 frontend js 코드가 응답 자체에 접근할 수 있게 허용함
+                .allowCredentials(true)
+                .allowedOrigins("http://" + this.ipAddress + ":" + this.frontEndPort);
     }
 }

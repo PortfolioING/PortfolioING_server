@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class SurveyRequestDto {
     private String name;
-    private String PR;
+    private String pr;
     private String pic;
     private List<ProjectRequestDto> projects;
 }

@@ -1,15 +1,20 @@
 package com.example.PING.dto.request;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Data
+@Getter
 public class ProjectRequestDto {
-    private Long projectId;
-    private String projectName;
+    private Long project_id;
+    private String project_name;
     private String image;
-    private String shortIntro;
-    private String longIntro;
-    private String date;
+    private String short_intro;
+    private String long_intro;
+    private LocalDateTime date;
     private String target;
     private String role;
     private String problem;
