@@ -8,7 +8,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final String ipAddress = "localhost"; // 또는 실제 IP 주소
-    private final String frontEndPort = "3000"; // React 앱이 실행되는 포트
+    private final String frontEndPort = "5173"; // React 앱이 실행되는 포트
+
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
