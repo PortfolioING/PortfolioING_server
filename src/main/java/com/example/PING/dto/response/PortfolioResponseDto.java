@@ -15,6 +15,9 @@ public class PortfolioResponseDto {
     private Long templateId;  // Template ID
     private String title;
     private String description;
+    private String mainColor; // 컬러값 요소 포함
+    private String subColor;
+    private String backgroundColor;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -25,6 +28,9 @@ public class PortfolioResponseDto {
         this.surveyId = portfolio.getSurvey().getSurveyId();
         this.templateId = portfolio.getTemplate().getTemplateId();
         this.title = portfolio.getTitle();
+        this.mainColor = portfolio.getMainColor();
+        this.subColor = portfolio.getSubColor();
+        this.backgroundColor = portfolio.getBackgroundColor();
         this.description = portfolio.getDescription();
         this.createdAt = portfolio.getCreatedAt();
         this.updatedAt = portfolio.getUpdatedAt();

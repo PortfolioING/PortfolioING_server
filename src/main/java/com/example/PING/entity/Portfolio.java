@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 public class Portfolio {
     @Id
@@ -27,6 +27,15 @@ public class Portfolio {
     @ManyToOne
     @JoinColumn(name = "template_id")
     private Template template;
+
+    @Column(name = "main_color", length = 7) // #RRGGBB
+    private String mainColor;
+
+    @Column(name = "sub_color", length = 7)
+    private String subColor;
+
+    @Column(name = "background_color", length = 7)
+    private String backgroundColor;
 
     // CascadeType.ALL: Survey 영속성 전이
     @OneToOne (cascade = CascadeType.ALL)
@@ -55,12 +64,15 @@ public class Portfolio {
     }
 
     @Builder
-    public Portfolio(User user, Template template, Survey survey, String title, String description) {
+    public Portfolio(User user, Template template, Survey survey, String title, String description, String mainColor, String subColor, String backgroundColor) {
         this.user = user;
         this.template = template;
         this.survey = survey;
         this.title = title;
         this.description = description;
+        this.mainColor = mainColor;
+        this.subColor = subColor;
+        this.backgroundColor = backgroundColor;
     }
 
     // 내용 수정 method

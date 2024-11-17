@@ -22,4 +22,7 @@ public class PortfolioRequestDto {
 
     private String title;
     private String description;
+    private String mainColor; // 컬러값 요소 포함
+    private String subColor;
+    private String backgroundColor;
 }
