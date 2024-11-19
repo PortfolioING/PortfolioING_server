@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
+//    private final HttpSession httpSession;
 
     @Transactional
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
@@ -71,16 +71,16 @@ public class UserService {
         }
 //            String token = generateToken(targetUser);  // JWT 토큰 생성 로직 (모의)
 //            return new UserResponseDto(targetUser.getUserId(), targetUser.getName(), targetUser.getEmail(), token, targetUser.getProfilePic());
-        httpSession.setAttribute("user", targetUser.getUserId());
-        long loginId = Long.parseLong(httpSession.getAttribute("user").toString());
-        User loginUser = userRepository.findById(loginId)
-                .orElseThrow(()-> new IllegalArgumentException("User not found with id: "+ loginId));
+//        httpSession.setAttribute("user", targetUser.getUserId());
+//        long loginId = Long.parseLong(httpSession.getAttribute("user").toString());
+//        User loginUser = userRepository.findById(loginId)
+//                .orElseThrow(()-> new IllegalArgumentException("User not found with id: "+ loginId));
         return new LoginResponseDto(
-                loginUser.getUserId(),
-                loginUser.getEmail(),
-                loginUser.getName(),
-                loginUser.getNickname(),
-                loginUser.getProfilePic());
+                targetUser.getUserId());
+//                targetUser.getEmail(),
+//                targetUser.getName(),
+//                targetUser.getNickname(),
+//                targetUser.getProfilePic());
     }
 
     private String generateToken(User user) {
