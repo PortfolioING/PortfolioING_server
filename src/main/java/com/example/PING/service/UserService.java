@@ -76,11 +76,11 @@ public class UserService {
 //        User loginUser = userRepository.findById(loginId)
 //                .orElseThrow(()-> new IllegalArgumentException("User not found with id: "+ loginId));
         return new LoginResponseDto(
-                targetUser.getUserId(),
-                targetUser.getEmail(),
-                targetUser.getName(),
-                targetUser.getNickname(),
-                targetUser.getProfilePic());
+                targetUser.getUserId());
+//                targetUser.getEmail(),
+//                targetUser.getName(),
+//                targetUser.getNickname(),
+//                targetUser.getProfilePic());
     }
 
     private String generateToken(User user) {
