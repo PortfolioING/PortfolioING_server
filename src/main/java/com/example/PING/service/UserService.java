@@ -1,6 +1,7 @@
 package com.example.PING.service;
 
 import com.example.PING.dto.request.UserLoginRequestDto;
+import com.example.PING.dto.request.UserUpdateRequestDto;
 import com.example.PING.dto.response.*;
 import com.example.PING.dto.request.UserRequestDto;
 import com.example.PING.entity.User;
@@ -119,12 +120,11 @@ public class UserService {
     }
 
     @Transactional
-    public UserUpdateResponseDto updateUser(Long userId, UserRequestDto userUpdateRequest) {
+    public UserUpdateResponseDto updateUser(Long userId, UserUpdateRequestDto userUpdateRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setName(userUpdateRequest.name());
-        user.setEmail(userUpdateRequest.email());
         user.setNickname(userUpdateRequest.nickname());
         user.setProfilePic(userUpdateRequest.profilePic());
         user.setUpdatedAt(LocalDateTime.now());
@@ -139,10 +139,5 @@ public class UserService {
                 user.getProfilePic(),
                 user.getUpdatedAt()
         );
-
-        // record로 작업된 거라 builder 추가하지 않음
-//        return UserResponseDto.builder()
-//                .user(user)
-//                .build();
     }
 }
