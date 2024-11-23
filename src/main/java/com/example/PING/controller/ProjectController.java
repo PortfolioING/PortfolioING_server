@@ -1,6 +1,7 @@
 package com.example.PING.controller;
 
 import com.example.PING.dto.request.ProjectRequestDto;
+import com.example.PING.dto.response.ProjectIdResponseDto;
 import com.example.PING.dto.response.ProjectResponseDto;
 import com.example.PING.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping
-    public ResponseEntity<ProjectResponseDto> createProject(@RequestBody ProjectRequestDto projectRequestDto) {
-        ProjectResponseDto response = projectService.createProject(projectRequestDto);
+    public ResponseEntity<ProjectIdResponseDto> createProject(@RequestBody ProjectRequestDto projectRequestDto) {
+        ProjectIdResponseDto response = projectService.createProject(projectRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

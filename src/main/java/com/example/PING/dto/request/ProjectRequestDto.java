@@ -1,23 +1,23 @@
 package com.example.PING.dto.request;
 
+import com.example.PING.entity.ProblemSolution;
+import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Getter
 public class ProjectRequestDto {
-    private Long project_id;
-    private String project_name;
+    private String projectName;
     private String image;
-    private String short_intro;
-    private String long_intro;
-    private LocalDateTime date;
-    private String target;
-    private String role;
-    private String problem;
-    private String solution;
-    private String feedback;
+    private String projectDesc;
+    private String projectFullDesc;
+    private String projectLink;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private List<String> roles;
+    private List<ProblemSolution> pns;
 }

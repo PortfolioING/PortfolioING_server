@@ -19,13 +19,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Portfolio> portfolios = new ArrayList<>();
 
-
-    public List<Long> getPortfolioIds() {
-        return portfolios.stream()
-                .map(Portfolio::getId)
-                .toList();
-    }
-
     @Column(nullable = false)
     private String password;
 
@@ -59,6 +52,12 @@ public class User {
     public static User objectToUser(Object user) {
         if (user == null) new IllegalArgumentException("로그인된 User가 존재하지 않습니다.");
         return (User) user;
+    }
+
+    public List<Long> getPortfolioIds() {
+        return portfolios.stream()
+                .map(Portfolio::getId)
+                .toList();
     }
 
 }
