@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/surveys")
+@RequestMapping("/api/survey")
 public class SurveyController {
 
     private final SurveyService surveyService;

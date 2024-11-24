@@ -8,9 +8,9 @@ import java.util.List;
 @Data
 @Getter
 public class SurveyRequestDto {
-    private String title;
+    private String name;
     private String introduce;
-    private String image;
+    private String profile;
     private List<Long> projectsId;
 }
 

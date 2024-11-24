@@ -29,9 +29,9 @@ public class SurveyService {
 
         // 포트폴리오 설정
         survey.setPortfolio(null);
-        survey.setTitle(surveyRequest.getTitle());
+        survey.setName(surveyRequest.getName());
         survey.setIntroduce(surveyRequest.getIntroduce());
-        survey.setImage(surveyRequest.getImage());
+        survey.setProfile(surveyRequest.getProfile());
 
         // 설문에 기존 프로젝트 리스트 추가
         List<Project> projects = surveyRequest.getProjectsId().stream()
@@ -72,9 +72,9 @@ public class SurveyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Survey not found with id " + survey_id));
 
         // 기존 데이터 업데이트
-        survey.setTitle(surveyRequest.getTitle());
+        survey.setName(surveyRequest.getName());
         survey.setIntroduce(surveyRequest.getIntroduce());
-        survey.setImage(surveyRequest.getImage());
+        survey.setProfile(surveyRequest.getProfile());
         survey.setProjects(getProjectsById(surveyRequest.getProjectsId()));
         survey.setUpdatedAt(LocalDateTime.now());
 
@@ -138,9 +138,9 @@ public class SurveyService {
         return SurveyResponseDto.builder()
                 .surveyId(survey.getSurveyId())
                 .portfolioId(survey.getPortfolio() != null ? survey.getPortfolio().getPortfolioId() : null)
-                .name(survey.getTitle())
-                .pr(survey.getIntroduce())
-                .pic(survey.getImage())
+                .name(survey.getName())
+                .introduce(survey.getIntroduce())
+                .profile(survey.getProfile())
                 .projects(
                         survey.getProjects() != null
                                 ? survey.getProjects().stream()

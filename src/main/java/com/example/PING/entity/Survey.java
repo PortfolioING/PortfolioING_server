@@ -23,13 +23,13 @@ public class Survey {
     private List<Project> projects = new ArrayList<>();
 
     @Column(nullable = false)
-    private String title;
+    private String name;
 
     @Column(nullable = false)
     private String introduce;
 
     @Column(nullable = false)
-    private String image;
+    private String profile;
 
     @Column(name = "created_at", updatable = false)
     @Getter private LocalDateTime createdAt;
@@ -44,9 +44,9 @@ public class Survey {
     @Builder
     public Survey() {
         this.projects = projects;
-        this.title = title;
+        this.name = name;
         this.introduce = introduce;
-        this.image = image;
+        this.profile = profile;
     }
 }
 

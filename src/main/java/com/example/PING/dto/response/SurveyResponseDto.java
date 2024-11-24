@@ -14,8 +14,8 @@ public class SurveyResponseDto {
     private Long surveyId;
     private Long portfolioId;
     private String name;
-    private String pr;
-    private String pic;
+    private String introduce;
+    private String profile;
     private List<ProjectIdResponseDto> projects;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

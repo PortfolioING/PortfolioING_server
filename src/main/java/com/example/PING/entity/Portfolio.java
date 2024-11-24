@@ -37,6 +37,8 @@ public class Portfolio {
     @Column(name = "background_color", length = 7)
     private String backgroundColor;
 
+    // 대표 사진 추가
+
     // CascadeType.ALL: Survey 영속성 전이
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_id")
