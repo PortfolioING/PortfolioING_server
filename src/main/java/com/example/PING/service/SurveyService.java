@@ -1,8 +1,8 @@
 package com.example.PING.service;
 
-import com.example.PING.dto.request.ProjectRequestDto;
 import com.example.PING.dto.request.SurveyRequestDto;
 import com.example.PING.dto.response.ProjectIdResponseDto;
+import com.example.PING.dto.response.SurveyCreateResponseDto;
 import com.example.PING.dto.response.SurveyResponseDto;
 import com.example.PING.entity.Project;
 import com.example.PING.entity.Survey;
@@ -24,14 +24,14 @@ public class SurveyService {
     private final ProjectRepository projectRepository;
 
     @Transactional
-    public SurveyResponseDto createSurvey(SurveyRequestDto surveyRequest) { // 생성
+    public SurveyCreateResponseDto createSurvey(SurveyRequestDto surveyRequest) { // 생성
         Survey survey = new Survey();
 
         // 포트폴리오 설정
         survey.setPortfolio(null);
         survey.setName(surveyRequest.getName());
-        survey.setPr(surveyRequest.getPr());
-        survey.setPic(surveyRequest.getPic());
+        survey.setIntroduce(surveyRequest.getIntroduce());
+        survey.setProfile(surveyRequest.getProfile());
 
         // 설문에 기존 프로젝트 리스트 추가
         List<Project> projects = surveyRequest.getProjectsId().stream()
@@ -44,15 +44,16 @@ public class SurveyService {
                 })
                 .collect(Collectors.toList());
 
-        survey.setCreatedAt(LocalDateTime.now());
-
         surveyRepository.save(survey); // 설문 저장
 
         // 프로젝트 저장
         projectRepository.saveAll(projects);
 
         // 응답 DTO 생성
-        return convertToSurveyResponseDto(survey);
+        return SurveyCreateResponseDto.builder()
+                .surveyId(survey.getSurveyId())
+                .createdAt(survey.getCreatedAt())
+                .build();
     }
 
     public SurveyResponseDto getSurvey(Long survey_id) { // 조회
@@ -70,10 +71,9 @@ public class SurveyService {
 
         // 기존 데이터 업데이트
         survey.setName(surveyRequest.getName());
-        survey.setPr(surveyRequest.getPr());
-        survey.setPic(surveyRequest.getPic());
+        survey.setIntroduce(surveyRequest.getIntroduce());
+        survey.setProfile(surveyRequest.getProfile());
         survey.setProjects(getProjectsById(surveyRequest.getProjectsId()));
-        survey.setUpdatedAt(LocalDateTime.now());
 
         // 설문조사 업데이트
         surveyRepository.save(survey);
@@ -136,8 +136,8 @@ public class SurveyService {
                 .surveyId(survey.getSurveyId())
                 .portfolioId(survey.getPortfolio() != null ? survey.getPortfolio().getPortfolioId() : null)
                 .name(survey.getName())
-                .pr(survey.getPr())
-                .pic(survey.getPic())
+                .introduce(survey.getIntroduce())
+                .profile(survey.getProfile())
                 .projects(
                         survey.getProjects() != null
                                 ? survey.getProjects().stream()

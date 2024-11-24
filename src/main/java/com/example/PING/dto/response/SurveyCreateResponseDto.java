@@ -1,15 +1,14 @@
 package com.example.PING.dto.response;
 
-import com.example.PING.entity.Project;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Setter;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Data
-@Setter
-public class ProjectResponseDto {
-    private Long projectId;
+@Builder
+@Getter
+public class SurveyCreateResponseDto {
+    private Long surveyId;
     private LocalDateTime createdAt;
 }
