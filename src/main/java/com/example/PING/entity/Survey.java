@@ -2,6 +2,8 @@ package com.example.PING.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,9 +33,11 @@ public class Survey {
     @Column(nullable = false)
     private String profile;
 
+    @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     @Getter private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     @Getter private LocalDateTime updatedAt;
 

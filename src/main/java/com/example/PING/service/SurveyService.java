@@ -44,8 +44,6 @@ public class SurveyService {
                 })
                 .collect(Collectors.toList());
 
-        survey.setCreatedAt(LocalDateTime.now());
-
         surveyRepository.save(survey); // 설문 저장
 
         // 프로젝트 저장
@@ -76,7 +74,6 @@ public class SurveyService {
         survey.setIntroduce(surveyRequest.getIntroduce());
         survey.setProfile(surveyRequest.getProfile());
         survey.setProjects(getProjectsById(surveyRequest.getProjectsId()));
-        survey.setUpdatedAt(LocalDateTime.now());
 
         // 설문조사 업데이트
         surveyRepository.save(survey);
