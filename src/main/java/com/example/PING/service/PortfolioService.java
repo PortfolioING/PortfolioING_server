@@ -1,6 +1,8 @@
 package com.example.PING.service;
 
+import com.example.PING.dto.request.PortfolioCreateRequestDto;
 import com.example.PING.dto.request.PortfolioRequestDto;
+import com.example.PING.dto.response.PortfolioCreateResponseDto;
 import com.example.PING.dto.response.PortfolioResponseDto;
 import com.example.PING.dto.response.UserPortfoliosResponse;
 import com.example.PING.entity.*;
@@ -29,15 +31,15 @@ public class PortfolioService {
 
 
     @Transactional
-    public PortfolioResponseDto createPortfolio(PortfolioRequestDto portfolioRequestDto) {
+    public PortfolioCreateResponseDto createPortfolio(PortfolioCreateRequestDto requestDto) {
 
         // User, Survey, Template 엔티티 조회
-        User user = userRepository.findById(portfolioRequestDto.getUser_id())
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + portfolioRequestDto.getUser_id()));
-        Survey survey = surveyRepository.findById(portfolioRequestDto.getSurvey_id())
-                .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + portfolioRequestDto.getSurvey_id()));
-        Template template = templateRepository.findById(portfolioRequestDto.getTemplate_id())
-                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + portfolioRequestDto.getTemplate_id()));
+        User user = userRepository.findById(requestDto.getUser_id())
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + requestDto.getUser_id()));
+        Survey survey = surveyRepository.findById(requestDto.getSurvey_id())
+                .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + requestDto.getSurvey_id()));
+//        Template template = templateRepository.findById(requestDto.getTemplate_id())
+//                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + requestDto.getTemplate_id()));
 
 //        long loginId = Long.parseLong(httpSession.getAttribute("user").toString());
 //        User loginUser = userRepository.findById(loginId)
@@ -48,22 +50,21 @@ public class PortfolioService {
 //                .user(loginUser)
                 .user(user)
                 .survey(survey)
-                .template(template)
-                .title(portfolioRequestDto.getTitle())
-                .description(portfolioRequestDto.getDescription())
-                .mainColor(null)
-                .subColor(null)
-                .backgroundColor(null)
+                .title(requestDto.getTitle())
+                .description(requestDto.getDescription())
+                .image(requestDto.getImage())
                 .build();
 
-        //Todo 혹시 여기서 savedPortfolio 따로 담은 이유가 있나요?
         Portfolio savedPortfolio = portfolioRepository.save(portfolio);
 
         // Survey 에도 Portfolio 설정
         survey.setPortfolio(savedPortfolio);
         surveyRepository.save(survey);
 
-        return convertToResponseDto(portfolioRepository.save(portfolio));
+        return PortfolioCreateResponseDto.builder()
+                .portfolioId(savedPortfolio.getPortfolioId())
+                .createdAt(savedPortfolio.getCreatedAt())
+                .build();
     }
 
 

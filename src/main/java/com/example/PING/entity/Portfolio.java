@@ -37,8 +37,6 @@ public class Portfolio {
     @Column(name = "background_color", length = 7)
     private String backgroundColor;
 
-    // 대표 사진 추가
-
     // CascadeType.ALL: Survey 영속성 전이
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_id")
@@ -48,6 +46,8 @@ public class Portfolio {
     private String title;
 
     private String description;
+
+    private String image;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -66,16 +66,14 @@ public class Portfolio {
     }
 
     @Builder
-    public Portfolio(User user, Template template, Survey survey, String title, String description, String mainColor, String subColor, String backgroundColor) {
+    public Portfolio(User user, Survey survey, String title, String description, String image) {
         this.user = user;
-        this.template = template;
         this.survey = survey;
         this.title = title;
         this.description = description;
-        this.mainColor = mainColor;
-        this.subColor = subColor;
-        this.backgroundColor = backgroundColor;
+        this.image = image;
     }
+
 
     // 내용 수정 method
     public void updatePortfolioContents(String title, String description) {
