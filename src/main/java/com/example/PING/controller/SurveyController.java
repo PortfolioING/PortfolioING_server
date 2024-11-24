@@ -1,6 +1,7 @@
 package com.example.PING.controller;
 
 import com.example.PING.dto.request.SurveyRequestDto;
+import com.example.PING.dto.response.SurveyCreateResponseDto;
 import com.example.PING.dto.response.SurveyResponseDto;
 import com.example.PING.service.SurveyService;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,8 @@ public class SurveyController {
     }
 
     @PostMapping // 생성
-    public ResponseEntity<SurveyResponseDto> createSurvey(@RequestBody SurveyRequestDto surveyRequest) {
-        SurveyResponseDto createdSurvey = surveyService.createSurvey(surveyRequest);
+    public ResponseEntity<SurveyCreateResponseDto> createSurvey(@RequestBody SurveyRequestDto surveyRequest) {
+        SurveyCreateResponseDto createdSurvey = surveyService.createSurvey(surveyRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSurvey);
     }
 
