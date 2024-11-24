@@ -16,7 +16,7 @@ public class Portfolio {
     private Long portfolioId;
 
     // optional = true: request에서 제외 가능
-    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "domain_id")
     private Domain domain;
 
