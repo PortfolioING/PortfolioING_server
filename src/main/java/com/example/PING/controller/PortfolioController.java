@@ -2,8 +2,10 @@ package com.example.PING.controller;
 
 import com.example.PING.dto.request.PortfolioCreateRequestDto;
 import com.example.PING.dto.request.PortfolioRequestDto;
+import com.example.PING.dto.request.PortfolioUpdateTemplateRequestDto;
 import com.example.PING.dto.response.PortfolioCreateResponseDto;
 import com.example.PING.dto.response.PortfolioResponseDto;
+import com.example.PING.dto.response.PortfolioUpdateTemplateResponseDto;
 import com.example.PING.dto.response.UserPortfoliosResponse;
 import com.example.PING.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +51,15 @@ public class PortfolioController {
             @PathVariable("portfolio_id") Long portfolioId,
             @RequestBody PortfolioRequestDto portfolioRequestDto) {
         PortfolioResponseDto response = portfolioService.updatePortfolio(portfolioId, portfolioRequestDto);
+        return ResponseEntity.ok(response);
+    }
+
+    // (포트폴리오 수정) 포트폴리오 세부 내용 수정
+    @PutMapping("/template/{portfolio_id}")
+    public ResponseEntity<PortfolioUpdateTemplateResponseDto> updateTemplate(
+            @PathVariable("portfolio_id") Long portfolioId,
+            @RequestBody PortfolioUpdateTemplateRequestDto portfolioRequestDto) {
+        PortfolioUpdateTemplateResponseDto response = portfolioService.updateTemplate(portfolioId, portfolioRequestDto);
         return ResponseEntity.ok(response);
     }
 

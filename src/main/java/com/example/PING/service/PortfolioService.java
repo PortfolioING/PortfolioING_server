@@ -2,9 +2,8 @@ package com.example.PING.service;
 
 import com.example.PING.dto.request.PortfolioCreateRequestDto;
 import com.example.PING.dto.request.PortfolioRequestDto;
-import com.example.PING.dto.response.PortfolioCreateResponseDto;
-import com.example.PING.dto.response.PortfolioResponseDto;
-import com.example.PING.dto.response.UserPortfoliosResponse;
+import com.example.PING.dto.request.PortfolioUpdateTemplateRequestDto;
+import com.example.PING.dto.response.*;
 import com.example.PING.entity.*;
 import com.example.PING.repository.*;
 import com.example.PING.dto.request.PortfolioRequestDto;
@@ -84,7 +83,8 @@ public class PortfolioService {
     public PortfolioResponseDto getPortfolioById(Long portfolioId) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
-        return convertToResponseDto(portfolio);    }
+        return convertToResponseDto(portfolio);
+    }
 
     @Transactional
     public PortfolioResponseDto updatePortfolio(Long portfolioId, PortfolioRequestDto portfolioRequestDto) {
@@ -109,6 +109,23 @@ public class PortfolioService {
         }
 
         return convertToResponseDto(portfolioRepository.save(portfolio));
+    }
+
+    @Transactional
+    public PortfolioUpdateTemplateResponseDto updateTemplate(Long portfolioId, PortfolioUpdateTemplateRequestDto requestDto) {
+        Portfolio portfolio = portfolioRepository.findById(portfolioId)
+                .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
+
+        Template template = templateRepository.findById(requestDto.getTemplateId())
+                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + requestDto.getTemplateId()));
+
+        // @Transactional의 DirtyChecking으로 save 없이 수정 사항 DB에 반영
+        portfolio.updatePortfolioTemplate(template);
+        return PortfolioUpdateTemplateResponseDto.builder()
+                .portfolioId(portfolio.getPortfolioId())
+                .templateId(portfolio.getTemplate().getTemplateId())
+                .updatedAt(portfolio.getUpdatedAt())
+                .build();
     }
 
     @Transactional

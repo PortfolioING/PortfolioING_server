@@ -80,4 +80,8 @@ public class Portfolio {
         this.title = title;
         this.description = description;
     }
+
+    public void updatePortfolioTemplate(Template template) {
+        this.template = template;
+    }
 }
