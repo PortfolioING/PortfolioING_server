@@ -1,6 +1,7 @@
 package com.example.PING.service;
 
 import com.example.PING.dto.request.SurveyRequestDto;
+import com.example.PING.dto.response.PortfolioResponseDto;
 import com.example.PING.dto.response.ProjectIdResponseDto;
 import com.example.PING.dto.response.SurveyCreateResponseDto;
 import com.example.PING.dto.response.SurveyResponseDto;
@@ -61,7 +62,9 @@ public class SurveyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Survey not found with id " + survey_id));
 
         System.out.println(survey);
-        return convertToSurveyResponseDto(survey);
+        return SurveyResponseDto.builder()
+                .survey(survey)
+                .build();
     }
 
     @Transactional
@@ -77,7 +80,9 @@ public class SurveyService {
 
         // 설문조사 업데이트
         surveyRepository.save(survey);
-        return convertToSurveyResponseDto(survey);
+        return SurveyResponseDto.builder()
+                .survey(survey)
+                .build();
     }
 
     private List<Project> getProjectsById(List<Long> projectsId) {
@@ -123,7 +128,7 @@ public class SurveyService {
 
     @Transactional(readOnly = true)
     public SurveyResponseDto getSurveyById(Long surveyId) {
-        return convertToSurveyResponseDto(surveyRepository.findById(surveyId).orElse(null));
+        return SurveyResponseDto.builder().survey(surveyRepository.findById(surveyId).orElse(null)).build();
     }
 
     @Transactional
@@ -133,20 +138,21 @@ public class SurveyService {
 
     private SurveyResponseDto convertToSurveyResponseDto(Survey survey) {
         return SurveyResponseDto.builder()
-                .surveyId(survey.getSurveyId())
-                .portfolioId(survey.getPortfolio() != null ? survey.getPortfolio().getPortfolioId() : null)
-                .name(survey.getName())
-                .introduce(survey.getIntroduce())
-                .profile(survey.getProfile())
-                .projects(
-                        survey.getProjects() != null
-                                ? survey.getProjects().stream()
-                                .map(project -> new ProjectIdResponseDto(project.getProjectId()))
-                                .collect(Collectors.toList())
-                                : List.of()
-                )
-                .createdAt(survey.getCreatedAt())
-                .updatedAt(survey.getUpdatedAt())
+                .survey(survey)
+//                .portfolioId(survey.getPortfolio() != null
+//                        ? survey.getPortfolio().getPortfolioId() : null)
+//                .name(survey.getName())
+//                .introduce(survey.getIntroduce())
+//                .profile(survey.getProfile())
+//                .projects(
+//                        survey.getProjects() != null
+//                                ? survey.getProjects().stream()
+//                                .map(project -> new ProjectIdResponseDto(project.getProjectId()))
+//                                .collect(Collectors.toList())
+//                                : List.of()
+//                )
+//                .createdAt(survey.getCreatedAt())
+//                .updatedAt(survey.getUpdatedAt())
                 .build();
     }
 
