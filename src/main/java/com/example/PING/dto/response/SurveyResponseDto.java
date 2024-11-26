@@ -28,10 +28,10 @@ public class SurveyResponseDto {
         this.name = survey.getName();
         this.introduce = survey.getIntroduce();
         this.profile = survey.getProfile();
-        this.projects = new ArrayList<>();
-        survey.getProjects().stream().map(project -> ProjectResponseDto.builder()
+        this.projects = survey.getProjects().stream()
+                .map(project -> ProjectResponseDto.builder()
                 .project(project).build())
-                .forEach(dto -> this.projects.add(dto));
+                .collect(Collectors.toList());
         this.createdAt = survey.getCreatedAt();
         this.updatedAt = survey.getUpdatedAt();
     }
