@@ -17,6 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .allowedHeaders("*")
                 .allowedMethods("*")
-                .allowedOrigins("http://" + this.ipAddress + ":" + this.frontEndPort);
+                .allowedOrigins("httgip://" + this.ipAddress + ":" + this.frontEndPort);
     }
 }
