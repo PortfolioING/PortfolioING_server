@@ -132,12 +132,10 @@ public class UserService {
         userRepository.save(user);
 
         return new UserUpdateResponseDto(
-                user.getUserId(),
                 user.getName(),
-                user.getEmail(),
                 user.getNickname(),
-                user.getProfilePic(),
-                user.getUpdatedAt()
+                user.getPassword(),
+                user.getProfilePic()
         );
     }
 }
