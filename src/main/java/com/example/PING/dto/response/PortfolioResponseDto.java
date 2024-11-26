@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class PortfolioResponseDto {
     private Long portfolioId;  // User ID
     private Long userId;
-    private Long surveyId;
+    private SurveyResponseDto surveyDto;
     private Long templateId;  // Template ID
     private String title;
     private String description;
@@ -25,7 +25,9 @@ public class PortfolioResponseDto {
     public PortfolioResponseDto(Portfolio portfolio) {
         this.portfolioId = portfolio.getPortfolioId();
         this.userId = portfolio.getUser().getUserId();
-        this.surveyId = portfolio.getSurvey().getSurveyId();
+        this.surveyDto = SurveyResponseDto.builder()
+                .survey(portfolio.getSurvey())
+                .build();
         this.templateId = portfolio.getTemplate().getTemplateId();
         this.title = portfolio.getTitle();
         this.mainColor = portfolio.getMainColor();

@@ -2,6 +2,8 @@ package com.example.PING.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,14 +28,16 @@ public class Survey {
     private String name;
 
     @Column(nullable = false)
-    private String pr;
+    private String introduce;
 
     @Column(nullable = false)
-    private String pic;
+    private String profile;
 
+    @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     @Getter private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     @Getter private LocalDateTime updatedAt;
 
@@ -45,8 +49,8 @@ public class Survey {
     public Survey() {
         this.projects = projects;
         this.name = name;
-        this.pr = pr;
-        this.pic = pic;
+        this.introduce = introduce;
+        this.profile = profile;
     }
 }
 

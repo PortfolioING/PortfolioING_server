@@ -1,7 +1,10 @@
 package com.example.PING.entity;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,41 +26,38 @@ public class Project {
     @Column(name = "image", length = 128)
     private String image;
 
-    @Column(name = "short_intro", length = 128)
-    private String shortIntro;
+    @Column(name = "project_desc", length = 128)
+    private String projectDesc;
 
-    @Column(name = "long_intro", length = 128)
-    private String longIntro;
+    @Column(name = "project_full_desc", length = 128)
+    private String projectFullDesc;
 
-    @Column(name = "date")
-    private LocalDateTime date;
+    @Column(name = "project_link", length = 128)
+    private String projectLink;
 
-    @Column(name = "target", length = 128)
-    private String target;
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-    @Column(name = "role", length = 128)
-    private String role;
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
-    @Column(name = "problem", length = 128)
-    private String problem;
+    @ElementCollection
+    @Column(name = "roles")
+    private List<String> roles = new ArrayList<>();
 
-    @Column(name = "solution", length = 128)
-    private String solution;
-
-    @Column(name = "feedback", length = 128)
-    private String feedback;
+    @ElementCollection
+    private List<ProblemSolution> pns = new ArrayList<>(); // 문제와 해결책 리스트
 
     @Builder
-    public Project(String projectName, String image, String shortIntro, String longIntro, LocalDateTime date, String target, String role, String problem, String solution, String feedback) {
+    public Project(String projectName, String image, String projectDesc, String projectFullDesc, String projectLink, LocalDate startDate, LocalDate endDate, List<String> roles, List<ProblemSolution> pns) {
         this.projectName = projectName;
         this.image = image;
-        this.shortIntro = shortIntro;
-        this.longIntro = longIntro;
-        this.date = date;
-        this.target = target;
-        this.role = role;
-        this.problem = problem;
-        this.solution = solution;
-        this.feedback = feedback;
+        this.projectDesc = projectDesc;
+        this.projectFullDesc = projectFullDesc;
+        this.projectLink = projectLink;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.roles = roles;
+        this.pns = pns;
     }
 }

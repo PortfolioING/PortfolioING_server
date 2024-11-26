@@ -1,6 +1,7 @@
 package com.example.PING.service;
 
 import com.example.PING.dto.request.ProjectRequestDto;
+import com.example.PING.dto.response.ProjectIdResponseDto;
 import com.example.PING.dto.response.ProjectResponseDto;
 import com.example.PING.entity.Project;
 import com.example.PING.repository.ProjectRepository;
@@ -18,33 +19,27 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
 
     @Transactional
-    public ProjectResponseDto createProject(ProjectRequestDto projectRequestDto) {
+    public ProjectIdResponseDto createProject(ProjectRequestDto requestDto) {
 
-        System.out.println(projectRequestDto);
+//        System.out.println(requestDto);
 
         Project project = Project.builder()
-                .projectName(projectRequestDto.getProject_name())
-                .image(projectRequestDto.getImage())
-                .shortIntro(projectRequestDto.getShort_intro())
-                .longIntro(projectRequestDto.getLong_intro())
-                .date(projectRequestDto.getDate())
-                .target(projectRequestDto.getTarget())
-                .role(projectRequestDto.getRole())
-                .problem(projectRequestDto.getProblem())
-                .solution(projectRequestDto.getSolution())
-                .feedback(projectRequestDto.getFeedback())
+                .projectName(requestDto.getProjectName())
+                .image(requestDto.getImage())
+                .projectDesc(requestDto.getProjectDesc())
+                .projectFullDesc(requestDto.getProjectFullDesc())
+                .projectLink(requestDto.getProjectLink())
+                .startDate(requestDto.getStartDate())
+                .endDate(requestDto.getEndDate())
+                .roles(requestDto.getRoles())
+                .pns(requestDto.getPns())
                 .build();
 
         // Project 엔티티 저장
         Project savedProject = projectRepository.save(project);
 
         // 응답 DTO 변환
-        ProjectResponseDto responseDto = new ProjectResponseDto();
-        responseDto.setProjectId(savedProject.getProjectId());
-        responseDto.setProjectName(savedProject.getProjectName());
-        responseDto.setCreatedAt(LocalDateTime.now());  // or set created_at if it exists
-
-        return responseDto;
+        return new ProjectIdResponseDto(savedProject.getProjectId());
     }
 
     @Transactional

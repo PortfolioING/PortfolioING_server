@@ -1,5 +1,6 @@
 package com.example.PING.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,7 +17,7 @@ public class Portfolio {
     private Long portfolioId;
 
     // optional = true: request에서 제외 가능
-    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "domain_id")
     private Domain domain;
 
@@ -40,12 +41,15 @@ public class Portfolio {
     // CascadeType.ALL: Survey 영속성 전이
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_id")
+//    @JsonIgnore // 이 필드를 JSON 직렬화에서 제외
     private Survey survey;
 
     @Column(nullable = false)
     private String title;
 
     private String description;
+
+    private String image;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -64,20 +68,22 @@ public class Portfolio {
     }
 
     @Builder
-    public Portfolio(User user, Template template, Survey survey, String title, String description, String mainColor, String subColor, String backgroundColor) {
+    public Portfolio(User user, Survey survey, String title, String description, String image) {
         this.user = user;
-        this.template = template;
         this.survey = survey;
         this.title = title;
         this.description = description;
-        this.mainColor = mainColor;
-        this.subColor = subColor;
-        this.backgroundColor = backgroundColor;
+        this.image = image;
     }
+
 
     // 내용 수정 method
     public void updatePortfolioContents(String title, String description) {
         this.title = title;
         this.description = description;
+    }
+
+    public void updatePortfolioTemplate(Template template) {
+        this.template = template;
     }
 }
