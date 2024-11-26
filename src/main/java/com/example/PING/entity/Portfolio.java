@@ -1,5 +1,6 @@
 package com.example.PING.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,6 +41,7 @@ public class Portfolio {
     // CascadeType.ALL: Survey 영속성 전이
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_id")
+//    @JsonIgnore // 이 필드를 JSON 직렬화에서 제외
     private Survey survey;
 
     @Column(nullable = false)

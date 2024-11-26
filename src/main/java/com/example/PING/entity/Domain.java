@@ -28,10 +28,9 @@ public class Domain {
     private LocalDateTime createdAt;
 
     @Builder
-    public Domain(Portfolio portfolio, String domain, LocalDateTime createdAt) {
+    public Domain(Portfolio portfolio, String domain) {
         this.portfolio = portfolio;
         this.domain = domain;
-        this.createdAt = createdAt;
     }
 
 }
