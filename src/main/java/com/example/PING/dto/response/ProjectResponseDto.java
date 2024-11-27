@@ -34,14 +34,14 @@ public class ProjectResponseDto {
     public ProjectResponseDto(Project project) {
         this.projectId = project.getProjectId();
         this.surveyId = project.getSurvey().getSurveyId();
-        this.projectName = getProjectName();
-        this.image = getImage();
-        this.projectDesc = getProjectDesc();
-        this.projectFullDesc = getProjectFullDesc();
-        this.projectLink = getProjectLink();
-        this.startDate = getStartDate();
-        this.endDate = getEndDate();
-        this.roles = getRoles();
-        this.pns = getPns();
+        this.projectName = project.getProjectName();
+        this.image = project.getImage();
+        this.projectDesc = project.getProjectDesc();
+        this.projectFullDesc = project.getProjectFullDesc();
+        this.projectLink = project.getProjectLink();
+        this.startDate = project.getStartDate();
+        this.endDate = project.getEndDate();
+        this.roles = project.getRoles();
+        this.pns = project.getPns();
     }
 }
