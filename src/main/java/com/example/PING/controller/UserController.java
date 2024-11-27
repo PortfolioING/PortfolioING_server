@@ -1,6 +1,7 @@
 package com.example.PING.controller;
 
 import com.example.PING.dto.request.UserLoginRequestDto;
+import com.example.PING.dto.request.UserUpdateRequestDto;
 import com.example.PING.dto.response.*;
 import com.example.PING.dto.request.UserRequestDto;
 import com.example.PING.service.UserService;
@@ -54,7 +55,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<UserUpdateResponseDto> updateUser( // My page 정보 수정
                                                              @PathVariable Long userId,
-                                                             @RequestBody UserRequestDto userUpdateRequest) {
+                                                             @RequestBody UserUpdateRequestDto userUpdateRequest) {
 
         UserUpdateResponseDto updatedUser = userService.updateUser(userId, userUpdateRequest);
         return ResponseEntity.ok(updatedUser);

@@ -7,17 +7,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-//    private final String ipAddress = "43.203.51.237"; // 배포용
-    private final String ipAddress = "localhost";
+    private final String ipAddress = "localhost"; // 또는 실제 IP 주소
     private final String frontEndPort = "5173"; // React 앱이 실행되는 포트
 
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://" + this.ipAddress + ":" + this.frontEndPort)
-                .allowedMethods("*")
+                .allowCredentials(true)
                 .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedOrigins("http://" + this.ipAddress + ":" + this.frontEndPort);
     }
 }
