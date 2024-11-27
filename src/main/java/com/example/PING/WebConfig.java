@@ -16,7 +16,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://" + this.ipAddress + ":" + this.frontEndPort)
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedMethods("*")
+                .allowedHeaders("*")
                 .allowCredentials(true);
     }
 }
