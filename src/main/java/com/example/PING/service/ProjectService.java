@@ -1,8 +1,10 @@
 package com.example.PING.service;
 
 import com.example.PING.dto.request.ProjectRequestDto;
+import com.example.PING.dto.response.PortfolioResponseDto;
 import com.example.PING.dto.response.ProjectIdResponseDto;
 import com.example.PING.dto.response.ProjectResponseDto;
+import com.example.PING.entity.Portfolio;
 import com.example.PING.entity.Project;
 import com.example.PING.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,14 @@ public class ProjectService {
         return new ProjectIdResponseDto(savedProject.getProjectId());
     }
 
+    @Transactional(readOnly = true)
+    public ProjectResponseDto getProjectById(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + projectId));
+        return ProjectResponseDto.builder()
+                .project(project)
+                .build();
+    }
     @Transactional
     public void deleteProject(Long projectId) {
         projectRepository.deleteById(projectId);
