@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDetailResponseDto> getMyPage(@PathVariable Long userId) { // My page 정보 조회
+    public ResponseEntity<UserDetailResponseDto> getMyPage(@PathVariable("userId") Long userId) { // My page 정보 조회
         Optional<UserDetailResponseDto> userResponse = userService.getUserDetail(userId);
 
         return userResponse
@@ -54,7 +54,7 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<UserUpdateResponseDto> updateUser( // My page 정보 수정
-                                                             @PathVariable Long userId,
+                                                             @PathVariable("userId") Long userId,
                                                              @RequestBody UserUpdateRequestDto userUpdateRequest) {
 
         UserUpdateResponseDto updatedUser = userService.updateUser(userId, userUpdateRequest);
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userId) { // User 삭제
+    public ResponseEntity<?> deleteUser(@PathVariable("userId") Long userId) { // User 삭제
         userService.deleteUser(userId);
         Map<String, String> response = new HashMap<>();
         response.put("message", "User deleted successfully");
