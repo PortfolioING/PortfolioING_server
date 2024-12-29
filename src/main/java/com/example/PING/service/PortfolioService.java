@@ -96,15 +96,16 @@ public class PortfolioService {
         if (portfolioRequestDto.description() != null) {
             portfolio.setDescription(portfolioRequestDto.description());
         }
-        if (portfolioRequestDto.mainColor() != null) {
-            portfolio.setMainColor(portfolioRequestDto.mainColor());
-        }
-        if (portfolioRequestDto.subColor() != null) {
-            portfolio.setSubColor(portfolioRequestDto.subColor());
-        }
-        if (portfolioRequestDto.backgroundColor() != null) {
-            portfolio.setBackgroundColor(portfolioRequestDto.backgroundColor());
-        }
+//        if (portfolioRequestDto.mainColor() != null) {
+//            portfolio.setMainColor(portfolioRequestDto.mainColor());
+//        }
+//        if (portfolioRequestDto.subColor() != null) {
+//            portfolio.setSubColor(portfolioRequestDto.subColor());
+//        }
+//        if (portfolioRequestDto.backgroundColor() != null) {
+//            portfolio.setBackgroundColor(portfolioRequestDto.backgroundColor());
+//        }
+//        수정 필요!!!!!!!!
 
         return PortfolioResponseDto.from(portfolioRepository.save(portfolio));
     }
