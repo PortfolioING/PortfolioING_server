@@ -2,9 +2,11 @@ package com.example.PING.dto.response;
 
 import com.example.PING.entity.ProblemSolution;
 import com.example.PING.entity.Project;
+import com.example.PING.entity.Role;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public record ProjectResponseDto(
         Long projectId,
@@ -16,7 +18,7 @@ public record ProjectResponseDto(
         String projectLink,
         LocalDate startDate,
         LocalDate endDate,
-        List<String> roles,
+        Set<Role> roles,
         List<ProblemSolution> pns
 ) {
     public static ProjectResponseDto from(Project project) {
