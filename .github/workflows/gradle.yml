@@ -43,7 +43,7 @@ jobs:
 
       # 4. Docker 이미지 빌드
       - name: Docker image build
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/PING-actions-demo .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ping-actions-demo .
 
       # 5. DockerHub 로그인
       - name: Docker login
