@@ -1,7 +1,9 @@
 package com.example.PING.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 @Entity
 @Data
@@ -20,4 +22,12 @@ public class Style {
     @Column(name = "background_color", length = 7)
     private String backgroundColor;
 
+
+//    @Builder
+//    public Style() {
+//        this.styleId = styleId;
+//        this.mainColor = mainColor;
+//        this.subColor = subColor;
+//        this.backgroundColor = backgroundColor;
+//    }
 }
