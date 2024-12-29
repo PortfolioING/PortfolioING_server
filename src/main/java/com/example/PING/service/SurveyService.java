@@ -30,12 +30,12 @@ public class SurveyService {
 
         // 포트폴리오 설정
         survey.setPortfolio(null);
-        survey.setName(surveyRequest.getName());
-        survey.setIntroduce(surveyRequest.getIntroduce());
-        survey.setProfile(surveyRequest.getProfile());
+        survey.setName(surveyRequest.name());
+        survey.setIntroduce(surveyRequest.introduce());
+        survey.setProfile(surveyRequest.profile());
 
         // 설문에 기존 프로젝트 리스트 추가
-        List<Project> projects = surveyRequest.getProjectsId().stream()
+        List<Project> projects = surveyRequest.projectsId().stream()
                 .map(projectId -> {
                     // 기존 프로젝트 조회
                     Project project = projectRepository.findById(projectId)
@@ -51,10 +51,7 @@ public class SurveyService {
         projectRepository.saveAll(projects);
 
         // 응답 DTO 생성
-        return SurveyCreateResponseDto.builder()
-                .surveyId(survey.getSurveyId())
-                .createdAt(survey.getCreatedAt())
-                .build();
+        return SurveyCreateResponseDto.from(survey);
     }
 
     public SurveyResponseDto getSurvey(Long survey_id) { // 조회
@@ -62,9 +59,7 @@ public class SurveyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Survey not found with id " + survey_id));
 
         System.out.println(survey);
-        return SurveyResponseDto.builder()
-                .survey(survey)
-                .build();
+        return SurveyResponseDto.from(survey);
     }
 
     @Transactional
@@ -73,16 +68,14 @@ public class SurveyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Survey not found with id " + survey_id));
 
         // 기존 데이터 업데이트
-        survey.setName(surveyRequest.getName());
-        survey.setIntroduce(surveyRequest.getIntroduce());
-        survey.setProfile(surveyRequest.getProfile());
-        survey.setProjects(getProjectsById(surveyRequest.getProjectsId()));
+        survey.setName(surveyRequest.name());
+        survey.setIntroduce(surveyRequest.introduce());
+        survey.setProfile(surveyRequest.profile());
+        survey.setProjects(getProjectsById(surveyRequest.projectsId()));
 
         // 설문조사 업데이트
         surveyRepository.save(survey);
-        return SurveyResponseDto.builder()
-                .survey(survey)
-                .build();
+        return SurveyResponseDto.from(survey);
     }
 
     private List<Project> getProjectsById(List<Long> projectsId) {
@@ -122,38 +115,20 @@ public class SurveyService {
     @Transactional(readOnly = true)
     public List<SurveyResponseDto> getAllSurveys() {
         return surveyRepository.findAll().stream()
-                .map(this::convertToSurveyResponseDto)
+                .map(SurveyResponseDto::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public SurveyResponseDto getSurveyById(Long surveyId) {
-        return SurveyResponseDto.builder().survey(surveyRepository.findById(surveyId).orElse(null)).build();
+        return SurveyResponseDto.from(
+                surveyRepository.findById(surveyId)
+                        .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + surveyId))
+        );
     }
 
     @Transactional
     public void deleteSurvey(Long surveyId) {
         surveyRepository.deleteById(surveyId);
     }
-
-    private SurveyResponseDto convertToSurveyResponseDto(Survey survey) {
-        return SurveyResponseDto.builder()
-                .survey(survey)
-//                .portfolioId(survey.getPortfolio() != null
-//                        ? survey.getPortfolio().getPortfolioId() : null)
-//                .name(survey.getName())
-//                .introduce(survey.getIntroduce())
-//                .profile(survey.getProfile())
-//                .projects(
-//                        survey.getProjects() != null
-//                                ? survey.getProjects().stream()
-//                                .map(project -> new ProjectIdResponseDto(project.getProjectId()))
-//                                .collect(Collectors.toList())
-//                                : List.of()
-//                )
-//                .createdAt(survey.getCreatedAt())
-//                .updatedAt(survey.getUpdatedAt())
-                .build();
-    }
-
 }
