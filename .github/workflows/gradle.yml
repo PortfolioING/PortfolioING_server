@@ -72,11 +72,19 @@ jobs:
       - name: docker stop container
         run: sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
 
-      # 3. 최신 이미지를 컨테이너화하여 실행시킵니다
+      # 3. 최신 이미지를 컨테이너화하여 실행시킵니다\
       - name: docker run new container
-#        run: sudo docker run --name ping-backend-actions --rm -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions
-        run: sudo docker run --name ping-backend-actions -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions
-
+        run: |
+          docker run \
+            --name ping-backend-actions \  
+            --rm \
+            -d \
+            -e SPRING_DATASOURCE_URL=${{ secrets.RDS_URL }} \
+            -e SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USERNAME }} \
+            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }} \
+            -p 8080:8080 \
+            ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions
+            
       # 4. 미사용 이미지를 정리합니다
       - name: delete old docker image
         run: sudo docker system prune -f
