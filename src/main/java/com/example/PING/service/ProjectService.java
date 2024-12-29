@@ -11,9 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,19 +19,16 @@ public class ProjectService {
 
     @Transactional
     public ProjectIdResponseDto createProject(ProjectRequestDto requestDto) {
-
-//        System.out.println(requestDto);
-
         Project project = Project.builder()
-                .projectName(requestDto.getProjectName())
-                .image(requestDto.getImage())
-                .projectDesc(requestDto.getProjectDesc())
-                .projectFullDesc(requestDto.getProjectFullDesc())
-                .projectLink(requestDto.getProjectLink())
-                .startDate(requestDto.getStartDate())
-                .endDate(requestDto.getEndDate())
-                .roles(requestDto.getRoles())
-                .pns(requestDto.getPns())
+                .projectName(requestDto.projectName())
+                .image(requestDto.image())
+                .projectDesc(requestDto.projectDesc())
+                .projectFullDesc(requestDto.projectFullDesc())
+                .projectLink(requestDto.projectLink())
+                .startDate(requestDto.startDate())
+                .endDate(requestDto.endDate())
+                .roles(requestDto.roles())
+                .pns(requestDto.pns())
                 .build();
 
         // Project 엔티티 저장
@@ -48,9 +42,7 @@ public class ProjectService {
     public ProjectResponseDto getProjectById(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + projectId));
-        return ProjectResponseDto.builder()
-                .project(project)
-                .build();
+        return ProjectResponseDto.from(project);
     }
     @Transactional
     public void deleteProject(Long projectId) {

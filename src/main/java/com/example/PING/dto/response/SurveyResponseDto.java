@@ -21,7 +21,6 @@ public class SurveyResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @Builder
     public SurveyResponseDto(Survey survey) {
         this.surveyId = survey.getSurveyId();
         this.portfolioId = survey.getPortfolio().getPortfolioId();
@@ -29,10 +28,10 @@ public class SurveyResponseDto {
         this.introduce = survey.getIntroduce();
         this.profile = survey.getProfile();
         this.projects = survey.getProjects().stream()
-                .map(project -> ProjectResponseDto.builder()
-                .project(project).build())
+                .map(ProjectResponseDto::from)
                 .collect(Collectors.toList());
         this.createdAt = survey.getCreatedAt();
         this.updatedAt = survey.getUpdatedAt();
     }
+
 }
