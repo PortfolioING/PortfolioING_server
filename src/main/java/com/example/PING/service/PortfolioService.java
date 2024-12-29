@@ -114,16 +114,16 @@ public class PortfolioService {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
 
-        Template template = templateRepository.findById(requestDto.getTemplateId())
-                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + requestDto.getTemplateId()));
+        Template template = templateRepository.findById(requestDto.templateId())
+                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + requestDto.templateId()));
 
         // @Transactional의 DirtyChecking으로 save 없이 수정 사항 DB에 반영
         portfolio.updatePortfolioTemplate(template);
-        return PortfolioUpdateTemplateResponseDto.builder()
-                .portfolioId(portfolio.getPortfolioId())
-                .templateId(portfolio.getTemplate().getTemplateId())
-                .updatedAt(portfolio.getUpdatedAt())
-                .build();
+        return new PortfolioUpdateTemplateResponseDto(
+                portfolio.getPortfolioId(),
+                portfolio.getTemplate().getTemplateId(),
+                portfolio.getUpdatedAt()
+        );
     }
 
     @Transactional
