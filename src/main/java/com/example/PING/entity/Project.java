@@ -4,7 +4,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -40,15 +42,16 @@ public class Project {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @ElementCollection
+    @ElementCollection(targetClass = Role.class)
+    @Enumerated(EnumType.STRING)
     @Column(name = "roles")
-    private List<String> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 
     @ElementCollection
     private List<ProblemSolution> pns = new ArrayList<>(); // 문제와 해결책 리스트
 
     @Builder
-    public Project(String projectName, String image, String projectDesc, String projectFullDesc, String projectLink, LocalDate startDate, LocalDate endDate, List<String> roles, List<ProblemSolution> pns) {
+    public Project(String projectName, String image, String projectDesc, String projectFullDesc, String projectLink, LocalDate startDate, LocalDate endDate, Set<Role> roles, List<ProblemSolution> pns) {
         this.projectName = projectName;
         this.image = image;
         this.projectDesc = projectDesc;

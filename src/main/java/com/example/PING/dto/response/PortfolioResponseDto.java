@@ -10,9 +10,7 @@ public record PortfolioResponseDto(
         Long templateId,
         String title,
         String description,
-        String mainColor,
-        String subColor,
-        String backgroundColor,
+        StyleResponseDto styleDto,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -24,9 +22,7 @@ public record PortfolioResponseDto(
                 portfolio.getTemplate().getTemplateId(),
                 portfolio.getTitle(),
                 portfolio.getDescription(),
-                portfolio.getMainColor(),
-                portfolio.getSubColor(),
-                portfolio.getBackgroundColor(),
+                StyleResponseDto.from(portfolio.getStyle()),
                 portfolio.getCreatedAt(),
                 portfolio.getUpdatedAt()
         );

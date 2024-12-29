@@ -12,10 +12,10 @@ public record PortfolioRequestDto(
         @NotNull(message = "Template ID is required.")
         Long template_id,
 
+        @NotNull(message = "Style ID is required.")
+        Long style_id,
+
         String title,
-        String description,
-        String mainColor,
-        String subColor,
-        String backgroundColor
+        String description
 ) {
 }
