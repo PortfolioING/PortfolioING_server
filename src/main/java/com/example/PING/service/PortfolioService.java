@@ -31,10 +31,10 @@ public class PortfolioService {
     public PortfolioCreateResponseDto createPortfolio(PortfolioCreateRequestDto requestDto) {
 
         // User, Survey, Template 엔티티 조회
-        User user = userRepository.findById(requestDto.getUser_id())
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + requestDto.getUser_id()));
-        Survey survey = surveyRepository.findById(requestDto.getSurvey_id())
-                .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + requestDto.getSurvey_id()));
+        User user = userRepository.findById(requestDto.user_id())
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + requestDto.user_id()));
+        Survey survey = surveyRepository.findById(requestDto.survey_id())
+                .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + requestDto.survey_id()));
 //        Template template = templateRepository.findById(requestDto.getTemplate_id())
 //                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + requestDto.getTemplate_id()));
 
@@ -47,9 +47,9 @@ public class PortfolioService {
 //                .user(loginUser)
                 .user(user)
                 .survey(survey)
-                .title(requestDto.getTitle())
-                .description(requestDto.getDescription())
-                .image(requestDto.getImage())
+                .title(requestDto.title())
+                .description(requestDto.description())
+                .image(requestDto.image())
                 .build();
 
         Portfolio savedPortfolio = portfolioRepository.save(portfolio);
@@ -58,12 +58,11 @@ public class PortfolioService {
         survey.setPortfolio(savedPortfolio);
         surveyRepository.save(survey);
 
-        return PortfolioCreateResponseDto.builder()
-                .portfolioId(savedPortfolio.getPortfolioId())
-                .createdAt(savedPortfolio.getCreatedAt())
-                .build();
+        return new PortfolioCreateResponseDto(
+                savedPortfolio.getPortfolioId(),
+                savedPortfolio.getCreatedAt()
+        );
     }
-
 
     // 특정 사용자의 포트폴리오 리스트 조회
     @Transactional(readOnly = true)
