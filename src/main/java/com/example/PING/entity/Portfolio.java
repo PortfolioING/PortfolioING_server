@@ -29,14 +29,9 @@ public class Portfolio {
     @JoinColumn(name = "template_id")
     private Template template;
 
-    @Column(name = "main_color", length = 7) // #RRGGBB
-    private String mainColor;
-
-    @Column(name = "sub_color", length = 7)
-    private String subColor;
-
-    @Column(name = "background_color", length = 7)
-    private String backgroundColor;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "style_id")
+    private Style style;
 
     // CascadeType.ALL: Survey 영속성 전이
     @OneToOne (cascade = CascadeType.ALL)
