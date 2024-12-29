@@ -20,9 +20,7 @@ public record PortfolioResponseDto(
         return new PortfolioResponseDto(
                 portfolio.getPortfolioId(),
                 portfolio.getUser().getUserId(),
-                SurveyResponseDto.builder()
-                        .survey(portfolio.getSurvey())
-                        .build(),
+                SurveyResponseDto.from(portfolio.getSurvey()),
                 portfolio.getTemplate().getTemplateId(),
                 portfolio.getTitle(),
                 portfolio.getDescription(),
