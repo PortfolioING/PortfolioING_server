@@ -7,7 +7,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final String ipAddress = "localhost"; // 또는 실제 IP 주소
+//    private final String ipAddress = "localhost"; // 로컬 테스트용 IP
+    private final String ipAddress = "43.203.51.237"; // CI/CD 배포를 위한 IP 주소
     private final String frontEndPort = "5173"; // React 앱이 실행되는 포트
 
 
