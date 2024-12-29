@@ -1,12 +1,7 @@
 package com.example.PING.dto.request;
 
-import com.example.PING.entity.Domain;
-import lombok.Data;
-
-import java.time.LocalDateTime;
-
-@Data
-public class DomainRequestDto {
-    private Long portfolio_id;  // Portfolio ID
-    private String domain;
+public record DomainRequestDto (
+        Long portfolio_id,
+        String domain
+){
 }

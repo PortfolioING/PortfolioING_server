@@ -1,6 +1,5 @@
 package com.example.PING.entity;
 
-import com.example.PING.dto.request.DomainRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,6 +31,4 @@ public class Domain {
         this.portfolio = portfolio;
         this.domain = domain;
     }
-
 }
-
