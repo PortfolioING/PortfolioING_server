@@ -20,17 +20,17 @@ public class TemplateService {
     @Transactional
     public TemplateResponseDto createTemplate(TemplateRequestDto templateRequestDto) {
         Template template = Template.builder()
-                .name(templateRequestDto.getName())
-                .description(templateRequestDto.getDescription())
+                .name(templateRequestDto.name())
+                .description(templateRequestDto.description())
                 .build();
-        return convertToResponseDto(templateRepository.save(template));
+        return TemplateResponseDto.from(templateRepository.save(template));
     }
 
     // (템플릿 목록 조회) 모든 템플릿 조회
     @Transactional(readOnly = true)
     public List<TemplateResponseDto> getAllTemplates() {
         return templateRepository.findAll().stream()
-                .map(this::convertToResponseDto)
+                .map(TemplateResponseDto::from)
                 .collect(Collectors.toList());
     }
 
@@ -38,18 +38,11 @@ public class TemplateService {
     public TemplateResponseDto getTemplateById(Long templateId) {
         Template template = templateRepository.findById(templateId)
                 .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + templateId));
-        return convertToResponseDto(template);
+        return TemplateResponseDto.from(template);
     }
 
     @Transactional
     public void deleteTemplate(Long templateId) {
         templateRepository.deleteById(templateId);
     }
-
-    private TemplateResponseDto convertToResponseDto(Template template) {
-        return TemplateResponseDto.builder()
-                .template(template)
-                .build();
-    }
-
 }
