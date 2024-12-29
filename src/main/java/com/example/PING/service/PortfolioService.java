@@ -70,17 +70,18 @@ public class PortfolioService {
 
         List<PortfolioResponseDto> portfolios = portfolioRepository.findAll().stream()
                 .filter(portfolio -> portfolio.getUser().getUserId().equals(userId))
-                .map(this::convertToResponseDto)
+                .map(PortfolioResponseDto::from)
                 .collect(Collectors.toList());
 
         return new UserPortfoliosResponse(userId, portfolios);
     }
 
+
     @Transactional(readOnly = true)
     public PortfolioResponseDto getPortfolioById(Long portfolioId) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
-        return convertToResponseDto(portfolio);
+        return PortfolioResponseDto.from(portfolio);
     }
 
     @Transactional
@@ -89,23 +90,23 @@ public class PortfolioService {
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
 
         // 포트폴리오 내용 필드 업데이트
-        if (portfolioRequestDto.getTitle() != null) {
-            portfolio.setTitle(portfolioRequestDto.getTitle());
+        if (portfolioRequestDto.title() != null) {
+            portfolio.setTitle(portfolioRequestDto.title());
         }
-        if (portfolioRequestDto.getDescription() != null) {
-            portfolio.setDescription(portfolioRequestDto.getDescription());
+        if (portfolioRequestDto.description() != null) {
+            portfolio.setDescription(portfolioRequestDto.description());
         }
-        if (portfolioRequestDto.getMainColor() != null) {
-            portfolio.setMainColor(portfolioRequestDto.getMainColor());
+        if (portfolioRequestDto.mainColor() != null) {
+            portfolio.setMainColor(portfolioRequestDto.mainColor());
         }
-        if (portfolioRequestDto.getSubColor() != null) {
-            portfolio.setSubColor(portfolioRequestDto.getSubColor());
+        if (portfolioRequestDto.subColor() != null) {
+            portfolio.setSubColor(portfolioRequestDto.subColor());
         }
-        if (portfolioRequestDto.getBackgroundColor() != null) {
-            portfolio.setBackgroundColor(portfolioRequestDto.getBackgroundColor());
+        if (portfolioRequestDto.backgroundColor() != null) {
+            portfolio.setBackgroundColor(portfolioRequestDto.backgroundColor());
         }
 
-        return convertToResponseDto(portfolioRepository.save(portfolio));
+        return PortfolioResponseDto.from(portfolioRepository.save(portfolio));
     }
 
     @Transactional
@@ -135,11 +136,4 @@ public class PortfolioService {
         // Portfolio 삭제
         portfolioRepository.delete(portfolio);
     }
-
-    private PortfolioResponseDto convertToResponseDto(Portfolio portfolio) {
-        return PortfolioResponseDto.builder()
-                .portfolio(portfolio)
-                .build();
-    }
-
 }
