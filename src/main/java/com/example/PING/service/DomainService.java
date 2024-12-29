@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,13 +24,13 @@ public class DomainService {
     @Transactional
     public DomainResponseDto createDomain(DomainRequestDto domainRequestDto) {
         // Portfolio 조회
-        Portfolio portfolio = portfolioRepository.findById(domainRequestDto.getPortfolio_id())
-                .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + domainRequestDto.getPortfolio_id()));
+        Portfolio portfolio = portfolioRepository.findById(domainRequestDto.portfolio_id())
+                .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + domainRequestDto.portfolio_id()));
 
         // Domain 생성 및 Portfolio 설정
         Domain domain = Domain.builder()
                 .portfolio(portfolio)
-                .domain(domainRequestDto.getDomain())
+                .domain(domainRequestDto.domain())
                 .build();
 
         Domain savedDomain = domainRepository.save(domain);
@@ -38,26 +39,28 @@ public class DomainService {
         portfolio.setDomain(savedDomain);
         portfolioRepository.save(portfolio);
 
-        return convertToResponseDto(savedDomain);
+        return DomainResponseDto.from(savedDomain);
     }
 
     @Transactional(readOnly = true)
     public DomainResponseDto getDomainByPortfolioId(Long portfolioId) {
         Domain domain = domainRepository.findByPortfolio_PortfolioId(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Domain not found for Portfolio ID: " + portfolioId));
-        return convertToResponseDto(domain);
+        return DomainResponseDto.from(domain);
     }
 
     @Transactional(readOnly = true)
     public List<DomainResponseDto> getAllDomains() {
         return domainRepository.findAll().stream()
-                .map(this::convertToResponseDto)
+                .map(DomainResponseDto::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public DomainResponseDto getDomainById(Long domainId) {
-        return convertToResponseDto(domainRepository.findById(domainId).orElse(null));
+        return domainRepository.findById(domainId)
+                .map(DomainResponseDto::from)
+                .orElseThrow(() -> new IllegalArgumentException("Domain with ID " + domainId + " not found"));
     }
 
     @Transactional
@@ -76,10 +79,4 @@ public class DomainService {
         // 도메인 삭제
         domainRepository.delete(domain);
     }
-
-    private DomainResponseDto convertToResponseDto(Domain domain) {
-        return DomainResponseDto.builder()
-                .domain(domain)
-                .build();
-        }
 }
