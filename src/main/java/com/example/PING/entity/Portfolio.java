@@ -58,8 +58,12 @@ public class Portfolio {
         return portfolioId;
     }
 
-    public void setDomain(Domain domain) {
+    public void saveDomainToPortfolio(Domain domain) { // 생성한 도메인을 Portfolio에 저장할 때 사용
         this.domain = domain;
+    }
+
+    public void setDomainNull(){ // 도메인을 제거할 때 Portfolio의 도메인에 null값을 저장해놓기 위해 사용
+        this.domain = null;
     }
 
     @Builder

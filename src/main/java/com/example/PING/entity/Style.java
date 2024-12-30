@@ -1,9 +1,7 @@
 package com.example.PING.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
 @Entity
 @Data

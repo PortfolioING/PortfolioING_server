@@ -36,7 +36,7 @@ public class DomainService {
         Domain savedDomain = domainRepository.save(domain);
 
         // Portfolio 에도 Domain 설정
-        portfolio.setDomain(savedDomain);
+        portfolio.saveDomainToPortfolio(savedDomain); // 생성한 도메인을 연결된 포트폴리오에 저장해두기
         portfolioRepository.save(portfolio);
 
         return DomainResponseDto.from(savedDomain);
@@ -72,7 +72,7 @@ public class DomainService {
         // 해당 도메인을 사용하는 포트폴리오의 domain 필드를 null로 설정
         Portfolio portfolio = portfolioRepository.findByDomain(domain);
         if (portfolio != null) {
-            portfolio.setDomain(null);
+            portfolio.setDomainNull(); // 삭제 대상인 도메인을 사용하고 있는 포트폴리오에 대해서 도메인값을 null로 설정함.
             portfolioRepository.save(portfolio);  // 변경사항 저장
         }
 
