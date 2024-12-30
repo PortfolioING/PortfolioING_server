@@ -41,8 +41,12 @@ public class Survey {
     @Column(name = "updated_at")
     @Getter private LocalDateTime updatedAt;
 
-    public void setPortfolio(Portfolio portfolio) {
+    public void savePortfolioToSurvey(Portfolio portfolio) {
         this.portfolio = portfolio;
+    }
+
+    public void setPortfolioNull() {
+        this.portfolio = null;
     }
 
     @Builder

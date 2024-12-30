@@ -55,7 +55,7 @@ public class PortfolioService {
         Portfolio savedPortfolio = portfolioRepository.save(portfolio);
 
         // Survey 에도 Portfolio 설정
-        survey.setPortfolio(savedPortfolio);
+        survey.savePortfolioToSurvey(savedPortfolio); // 생성한 Portfolio 값을 survey에 저장
         surveyRepository.save(survey);
 
         return new PortfolioCreateResponseDto(
