@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,14 +100,15 @@ public class PortfolioService {
             portfolio.setDescription(portfolioRequestDto.description());
         }
 
-        // 수정 필요!!!!!!!!
         // Style 업데이트 처리
-        if (portfolioRequestDto.style_id() != null) {
-            styleService.updateStyle(portfolioRequestDto.style_id(), new StyleRequestDto(
-                    portfolioRequestDto.style_id(),
+        if (portfolio.getStyle() != null) {
+            Long styleId = portfolio.getStyle().getStyleId();
+            styleService.updateStyle(styleId, new StyleRequestDto(
+                    styleId,
                     portfolioRequestDto.mainColor(),
                     portfolioRequestDto.subColor(),
-                    portfolioRequestDto.backgroundColor()));
+                    portfolioRequestDto.backgroundColor())
+            );
         }
 
         return PortfolioResponseDto.from(portfolioRepository.save(portfolio));

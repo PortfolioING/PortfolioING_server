@@ -13,8 +13,6 @@ public record PortfolioRequestDto(
         @NotNull(message = "Template ID is required.")
         Long template_id,
 
-        Long style_id, // style_id는 선택적
-
         String mainColor,
         String subColor,
         String backgroundColor,
