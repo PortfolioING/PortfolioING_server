@@ -1,6 +1,7 @@
 package com.example.PING.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 public record PortfolioRequestDto(
         @NotNull(message = "User ID is required.")
@@ -12,8 +13,11 @@ public record PortfolioRequestDto(
         @NotNull(message = "Template ID is required.")
         Long template_id,
 
-        @NotNull(message = "Style ID is required.")
-        Long style_id,
+        Long style_id, // style_id는 선택적
+
+        String mainColor,
+        String subColor,
+        String backgroundColor,
 
         String title,
         String description

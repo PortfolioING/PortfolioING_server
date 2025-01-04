@@ -9,6 +9,9 @@ public record PortfolioCreateRequestDto(
         @NotNull(message = "Survey ID is required.")
         Long survey_id,
 
+        @NotNull(message = "Style ID is required.")
+        Long style_id,
+
         String title,
         String description,
         String image

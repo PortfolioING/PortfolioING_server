@@ -67,8 +67,9 @@ public class Portfolio {
     }
 
     @Builder
-    public Portfolio(User user, Survey survey, String title, String description, String image) {
+    public Portfolio(User user, Style style, Survey survey, String title, String description, String image) {
         this.user = user;
+        this.style = style;
         this.survey = survey;
         this.title = title;
         this.description = description;

@@ -3,6 +3,7 @@ package com.example.PING.service;
 import com.example.PING.dto.request.PortfolioCreateRequestDto;
 import com.example.PING.dto.request.PortfolioRequestDto;
 import com.example.PING.dto.request.PortfolioUpdateTemplateRequestDto;
+import com.example.PING.dto.request.StyleRequestDto;
 import com.example.PING.dto.response.*;
 import com.example.PING.entity.*;
 import com.example.PING.repository.*;
@@ -10,6 +11,7 @@ import com.example.PING.dto.response.PortfolioResponseDto;
 import com.example.PING.entity.Portfolio;
 import com.example.PING.repository.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,29 +25,29 @@ public class PortfolioService {
     private final UserRepository userRepository;
     private final TemplateRepository templateRepository;
     private final SurveyRepository surveyRepository;
-    private final DomainRepository domainRepository;
+    private final StyleRepository styleRepository;
+    private final StyleService styleService;
+
 //    private final HttpSession httpSession;
 
 
     @Transactional
     public PortfolioCreateResponseDto createPortfolio(PortfolioCreateRequestDto requestDto) {
 
-        // User, Survey, Template 엔티티 조회
+        // User, Survey 엔티티 조회
         User user = userRepository.findById(requestDto.user_id())
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + requestDto.user_id()));
         Survey survey = surveyRepository.findById(requestDto.survey_id())
                 .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + requestDto.survey_id()));
-//        Template template = templateRepository.findById(requestDto.getTemplate_id())
-//                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + requestDto.getTemplate_id()));
 
-//        long loginId = Long.parseLong(httpSession.getAttribute("user").toString());
-//        User loginUser = userRepository.findById(loginId)
-//                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + loginId));
+        // 빈 스타일 객체 생성
+        Style style = styleService.createEmptyStyle();
 
         // Portfolio 생성 및 설정
         Portfolio portfolio = Portfolio.builder()
 //                .user(loginUser)
                 .user(user)
+                .style(style)
                 .survey(survey)
                 .title(requestDto.title())
                 .description(requestDto.description())
@@ -96,16 +98,16 @@ public class PortfolioService {
         if (portfolioRequestDto.description() != null) {
             portfolio.setDescription(portfolioRequestDto.description());
         }
-//        if (portfolioRequestDto.mainColor() != null) {
-//            portfolio.setMainColor(portfolioRequestDto.mainColor());
-//        }
-//        if (portfolioRequestDto.subColor() != null) {
-//            portfolio.setSubColor(portfolioRequestDto.subColor());
-//        }
-//        if (portfolioRequestDto.backgroundColor() != null) {
-//            portfolio.setBackgroundColor(portfolioRequestDto.backgroundColor());
-//        }
-//        수정 필요!!!!!!!!
+
+        // 수정 필요!!!!!!!!
+        // Style 업데이트 처리
+        if (portfolioRequestDto.style_id() != null) {
+            styleService.updateStyle(portfolioRequestDto.style_id(), new StyleRequestDto(
+                    portfolioRequestDto.style_id(),
+                    portfolioRequestDto.mainColor(),
+                    portfolioRequestDto.subColor(),
+                    portfolioRequestDto.backgroundColor()));
+        }
 
         return PortfolioResponseDto.from(portfolioRepository.save(portfolio));
     }
