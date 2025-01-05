@@ -1,9 +1,9 @@
 package com.example.PING.controller;
 
-import com.example.PING.dto.request.UserLoginRequestDto;
-import com.example.PING.dto.request.UserUpdateRequestDto;
+import com.example.PING.dto.request.UserLoginRequest;
+import com.example.PING.dto.request.UserUpdateRequest;
 import com.example.PING.dto.response.*;
-import com.example.PING.dto.request.UserRequestDto;
+import com.example.PING.dto.request.UserRequest;
 import com.example.PING.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,9 +23,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginRequestDto request) {
+    public ResponseEntity<?> login(@RequestBody UserLoginRequest request) {
         Object response = userService.login(request);
-        if (response instanceof LoginResponseDto loginResponse) {
+        if (response instanceof LoginResponse loginResponse) {
             return ResponseEntity.ok(loginResponse);  // HTTP 200 OK
         } else if (response instanceof ErrorResponse errorResponse) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);  // HTTP 401 Unauthorized
@@ -34,9 +34,9 @@ public class UserController {
     }
 
     @PostMapping("/signup") // 회원가입 엔드포인트
-    public ResponseEntity<?> signup(@RequestBody UserRequestDto request) {
+    public ResponseEntity<?> signup(@RequestBody UserRequest request) {
         try {
-            SignUpResponseDto newUserResponse = userService.signUp(request);
+            SignUpResponse newUserResponse = userService.signUp(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(newUserResponse); // HTTP 201 Created
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage())); // HTTP 400 Bad Request
@@ -44,8 +44,8 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDetailResponseDto> getMyPage(@PathVariable("userId") Long userId) { // My page 정보 조회
-        Optional<UserDetailResponseDto> userResponse = userService.getUserDetail(userId);
+    public ResponseEntity<UserDetailResponse> getMyPage(@PathVariable("userId") Long userId) { // My page 정보 조회
+        Optional<UserDetailResponse> userResponse = userService.getUserDetail(userId);
 
         return userResponse
                 .map(ResponseEntity::ok)
@@ -53,11 +53,11 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserUpdateResponseDto> updateUser( // My page 정보 수정
-                                                             @PathVariable("userId") Long userId,
-                                                             @RequestBody UserUpdateRequestDto userUpdateRequest) {
+    public ResponseEntity<UserUpdateResponse> updateUser( // My page 정보 수정
+                                                          @PathVariable("userId") Long userId,
+                                                          @RequestBody UserUpdateRequest userUpdateRequest) {
 
-        UserUpdateResponseDto updatedUser = userService.updateUser(userId, userUpdateRequest);
+        UserUpdateResponse updatedUser = userService.updateUser(userId, userUpdateRequest);
         return ResponseEntity.ok(updatedUser);
     }
 

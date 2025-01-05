@@ -1,7 +1,7 @@
 package com.example.PING.service;
 
-import com.example.PING.dto.request.DomainRequestDto;
-import com.example.PING.dto.response.DomainResponseDto;
+import com.example.PING.dto.request.DomainRequest;
+import com.example.PING.dto.response.DomainResponse;
 import com.example.PING.entity.Domain;
 import com.example.PING.entity.Portfolio;
 import com.example.PING.error.ResourceNotFoundException;
@@ -11,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,15 +21,15 @@ public class DomainService {
     private final PortfolioRepository portfolioRepository;
 
     @Transactional
-    public DomainResponseDto createDomain(DomainRequestDto domainRequestDto) {
+    public DomainResponse createDomain(DomainRequest domainRequest) {
         // Portfolio 조회
-        Portfolio portfolio = portfolioRepository.findById(domainRequestDto.portfolio_id())
-                .orElseThrow(() -> new ResourceNotFoundException("Portfolio not found with ID: " + domainRequestDto.portfolio_id()));
+        Portfolio portfolio = portfolioRepository.findById(domainRequest.portfolio_id())
+                .orElseThrow(() -> new ResourceNotFoundException("Portfolio not found with ID: " + domainRequest.portfolio_id()));
 
         // Domain 생성 및 Portfolio 설정
         Domain domain = Domain.builder()
                 .portfolio(portfolio)
-                .domain(domainRequestDto.domain())
+                .domain(domainRequest.domain())
                 .build();
 
         Domain savedDomain = domainRepository.save(domain);
@@ -40,27 +38,27 @@ public class DomainService {
         portfolio.saveDomainToPortfolio(savedDomain); // 생성한 도메인을 연결된 포트폴리오에 저장해두기
         portfolioRepository.save(portfolio);
 
-        return DomainResponseDto.from(savedDomain);
+        return DomainResponse.from(savedDomain);
     }
 
     @Transactional(readOnly = true)
-    public DomainResponseDto getDomainByPortfolioId(Long portfolioId) {
+    public DomainResponse getDomainByPortfolioId(Long portfolioId) {
         Domain domain = domainRepository.findByPortfolio_PortfolioId(portfolioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Domain not found for Portfolio ID: " + portfolioId));
-        return DomainResponseDto.from(domain);
+        return DomainResponse.from(domain);
     }
 
     @Transactional(readOnly = true)
-    public List<DomainResponseDto> getAllDomains() {
+    public List<DomainResponse> getAllDomains() {
         return domainRepository.findAll().stream()
-                .map(DomainResponseDto::from)
+                .map(DomainResponse::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public DomainResponseDto getDomainById(Long domainId) {
+    public DomainResponse getDomainById(Long domainId) {
         return domainRepository.findById(domainId)
-                .map(DomainResponseDto::from)
+                .map(DomainResponse::from)
                 .orElseThrow(() -> new ResourceNotFoundException("Domain with ID " + domainId + " not found"));
     }
 

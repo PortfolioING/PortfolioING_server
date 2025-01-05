@@ -1,8 +1,7 @@
 package com.example.PING.service;
 
-import com.example.PING.dto.response.PortfolioResponseDto;
-import com.example.PING.dto.request.TemplateRequestDto;
-import com.example.PING.dto.response.TemplateResponseDto;
+import com.example.PING.dto.request.TemplateRequest;
+import com.example.PING.dto.response.TemplateResponse;
 import com.example.PING.entity.Template;
 import com.example.PING.error.ResourceNotFoundException;
 import com.example.PING.repository.TemplateRepository;
@@ -19,27 +18,27 @@ public class TemplateService {
     private final TemplateRepository templateRepository;
 
     @Transactional
-    public TemplateResponseDto createTemplate(TemplateRequestDto templateRequestDto) {
+    public TemplateResponse createTemplate(TemplateRequest templateRequest) {
         Template template = Template.builder()
-                .name(templateRequestDto.name())
-                .description(templateRequestDto.description())
+                .name(templateRequest.name())
+                .description(templateRequest.description())
                 .build();
-        return TemplateResponseDto.from(templateRepository.save(template));
+        return TemplateResponse.from(templateRepository.save(template));
     }
 
     // (템플릿 목록 조회) 모든 템플릿 조회
     @Transactional(readOnly = true)
-    public List<TemplateResponseDto> getAllTemplates() {
+    public List<TemplateResponse> getAllTemplates() {
         return templateRepository.findAll().stream()
-                .map(TemplateResponseDto::from)
+                .map(TemplateResponse::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public TemplateResponseDto getTemplateById(Long templateId) {
+    public TemplateResponse getTemplateById(Long templateId) {
         Template template = templateRepository.findById(templateId)
                 .orElseThrow(() -> new ResourceNotFoundException("Template not found with ID: " + templateId));
-        return TemplateResponseDto.from(template);
+        return TemplateResponse.from(template);
     }
 
     @Transactional

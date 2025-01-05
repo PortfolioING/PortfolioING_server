@@ -4,6 +4,6 @@ import java.util.List;
 
 public record UserPortfoliosResponse (
         Long userId,
-        List<PortfolioResponseDto> portfolios
+        List<PortfolioResponse> portfolios
 ){
 }

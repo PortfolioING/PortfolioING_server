@@ -1,6 +1,6 @@
 package com.example.PING.dto.response;
 
-public record LoginResponseDto(
+public record LoginResponse(
         Long userId
 //        String name,
 //        String email,

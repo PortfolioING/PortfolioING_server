@@ -1,6 +1,6 @@
 package com.example.PING.controller;
 
-import com.example.PING.dto.response.TemplateResponseDto;
+import com.example.PING.dto.response.TemplateResponse;
 import com.example.PING.service.TemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +20,15 @@ public class TemplateController {
 
     // 모든 템플릿 조회
     @GetMapping
-    public ResponseEntity<Map<String, List<TemplateResponseDto>>> getAllTemplates() {
-        List<TemplateResponseDto> templates = templateService.getAllTemplates();
+    public ResponseEntity<Map<String, List<TemplateResponse>>> getAllTemplates() {
+        List<TemplateResponse> templates = templateService.getAllTemplates();
         return ResponseEntity.ok(Map.of("templates", templates));
     }
 
     // 특정 템플릿 상세 조회
     @GetMapping("/{template_id}")
-    public ResponseEntity<TemplateResponseDto> getTemplateById(@PathVariable("template_id") Long templateId) {
-        TemplateResponseDto response = templateService.getTemplateById(templateId);
+    public ResponseEntity<TemplateResponse> getTemplateById(@PathVariable("template_id") Long templateId) {
+        TemplateResponse response = templateService.getTemplateById(templateId);
         return ResponseEntity.ok(response);
     }
 }

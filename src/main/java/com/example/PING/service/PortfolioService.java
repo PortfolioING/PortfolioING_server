@@ -1,12 +1,12 @@
 package com.example.PING.service;
 
-import com.example.PING.dto.request.PortfolioCreateRequestDto;
-import com.example.PING.dto.request.PortfolioRequestDto;
-import com.example.PING.dto.request.PortfolioUpdateTemplateRequestDto;
+import com.example.PING.dto.request.PortfolioCreateRequest;
+import com.example.PING.dto.request.PortfolioRequest;
+import com.example.PING.dto.request.PortfolioUpdateTemplateRequest;
 import com.example.PING.dto.response.*;
 import com.example.PING.entity.*;
 import com.example.PING.repository.*;
-import com.example.PING.dto.response.PortfolioResponseDto;
+import com.example.PING.dto.response.PortfolioResponse;
 import com.example.PING.entity.Portfolio;
 import com.example.PING.repository.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class PortfolioService {
 
 
     @Transactional
-    public PortfolioCreateResponseDto createPortfolio(PortfolioCreateRequestDto requestDto) {
+    public PortfolioCreateResponse createPortfolio(PortfolioCreateRequest requestDto) {
 
         // User, Survey, Template 엔티티 조회
         User user = userRepository.findById(requestDto.user_id())
@@ -58,7 +58,7 @@ public class PortfolioService {
         survey.savePortfolioToSurvey(savedPortfolio); // 생성한 Portfolio 값을 survey에 저장
         surveyRepository.save(survey);
 
-        return new PortfolioCreateResponseDto(
+        return new PortfolioCreateResponse(
                 savedPortfolio.getPortfolioId(),
                 savedPortfolio.getCreatedAt()
         );
@@ -68,9 +68,9 @@ public class PortfolioService {
     @Transactional(readOnly = true)
     public UserPortfoliosResponse getAllPortfolios(Long userId) {
 
-        List<PortfolioResponseDto> portfolios = portfolioRepository.findAll().stream()
+        List<PortfolioResponse> portfolios = portfolioRepository.findAll().stream()
                 .filter(portfolio -> portfolio.getUser().getUserId().equals(userId))
-                .map(PortfolioResponseDto::from)
+                .map(PortfolioResponse::from)
                 .collect(Collectors.toList());
 
         return new UserPortfoliosResponse(userId, portfolios);
@@ -78,23 +78,23 @@ public class PortfolioService {
 
 
     @Transactional(readOnly = true)
-    public PortfolioResponseDto getPortfolioById(Long portfolioId) {
+    public PortfolioResponse getPortfolioById(Long portfolioId) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
-        return PortfolioResponseDto.from(portfolio);
+        return PortfolioResponse.from(portfolio);
     }
 
     @Transactional
-    public PortfolioResponseDto updatePortfolio(Long portfolioId, PortfolioRequestDto portfolioRequestDto) {
+    public PortfolioResponse updatePortfolio(Long portfolioId, PortfolioRequest portfolioRequest) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
 
         // 포트폴리오 내용 필드 업데이트
-        if (portfolioRequestDto.title() != null) {
-            portfolio.setTitle(portfolioRequestDto.title());
+        if (portfolioRequest.title() != null) {
+            portfolio.setTitle(portfolioRequest.title());
         }
-        if (portfolioRequestDto.description() != null) {
-            portfolio.setDescription(portfolioRequestDto.description());
+        if (portfolioRequest.description() != null) {
+            portfolio.setDescription(portfolioRequest.description());
         }
 //        if (portfolioRequestDto.mainColor() != null) {
 //            portfolio.setMainColor(portfolioRequestDto.mainColor());
@@ -107,11 +107,11 @@ public class PortfolioService {
 //        }
 //        수정 필요!!!!!!!!
 
-        return PortfolioResponseDto.from(portfolioRepository.save(portfolio));
+        return PortfolioResponse.from(portfolioRepository.save(portfolio));
     }
 
     @Transactional
-    public PortfolioUpdateTemplateResponseDto updateTemplate(Long portfolioId, PortfolioUpdateTemplateRequestDto requestDto) {
+    public PortfolioUpdateTemplateResponse updateTemplate(Long portfolioId, PortfolioUpdateTemplateRequest requestDto) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
 
@@ -120,7 +120,7 @@ public class PortfolioService {
 
         // @Transactional의 DirtyChecking으로 save 없이 수정 사항 DB에 반영
         portfolio.updatePortfolioTemplate(template);
-        return new PortfolioUpdateTemplateResponseDto(
+        return new PortfolioUpdateTemplateResponse(
                 portfolio.getPortfolioId(),
                 portfolio.getTemplate().getTemplateId(),
                 portfolio.getUpdatedAt()

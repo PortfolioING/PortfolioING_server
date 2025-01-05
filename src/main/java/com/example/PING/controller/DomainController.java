@@ -1,8 +1,8 @@
 package com.example.PING.controller;
 
 
-import com.example.PING.dto.request.DomainRequestDto;
-import com.example.PING.dto.response.DomainResponseDto;
+import com.example.PING.dto.request.DomainRequest;
+import com.example.PING.dto.response.DomainResponse;
 import com.example.PING.service.DomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,17 +21,17 @@ public class DomainController {
 
     // 새로운 도메인 등록
     @PostMapping
-    public ResponseEntity<DomainResponseDto> createDomain(@RequestBody DomainRequestDto domainRequestDto) {
-        if (domainRequestDto == null) System.out.println("domainRequestDto is null");
-        else System.out.println(domainRequestDto);
-        DomainResponseDto response = domainService.createDomain(domainRequestDto);
+    public ResponseEntity<DomainResponse> createDomain(@RequestBody DomainRequest domainRequest) {
+        if (domainRequest == null) System.out.println("domainRequestDto is null");
+        else System.out.println(domainRequest);
+        DomainResponse response = domainService.createDomain(domainRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // 특정 포트폴리오의 도메인 조회
     @GetMapping
-    public ResponseEntity<DomainResponseDto> getDomainByPortfolioId(@RequestParam("portfolio_id") Long portfolioId) {
-        DomainResponseDto response = domainService.getDomainByPortfolioId(portfolioId);
+    public ResponseEntity<DomainResponse> getDomainByPortfolioId(@RequestParam("portfolio_id") Long portfolioId) {
+        DomainResponse response = domainService.getDomainByPortfolioId(portfolioId);
         return ResponseEntity.ok(response);
     }
 

@@ -1,6 +1,6 @@
 package com.example.PING.dto.request;
 
-public record UserRequestDto(
+public record UserRequest(
         String name,
         String email,
         String password,
