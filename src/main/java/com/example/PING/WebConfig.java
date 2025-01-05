@@ -8,8 +8,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
 //    private final String ipAddress = "localhost"; // 로컬 테스트용 IP
-    private final String ipAddress = "43.203.51.237"; // CI/CD 배포를 위한 IP 주소
-    private final String frontEndPort = "5173"; // React 앱이 실행되는 포트
+//    private final String ipAddress = "43.203.51.237"; // CI/CD 배포를 위한 IP 주소
+//    private final String frontEndPort = "5173"; // React 앱이 실행되는 포트
 
 
     @Override
@@ -18,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .allowedHeaders("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedOrigins("http://" + this.ipAddress + ":" + this.frontEndPort);
+//                .allowedOrigins("http://" + this.ipAddress + ":" + this.frontEndPort);
+                .allowedOrigins("http://ping-deploy-bucket.s3-website.ap-northeast-2.amazonaws.com");   // S3 배포로 제공받은 도메인 주소
     }
 }
