@@ -39,7 +39,7 @@ public class SurveyService {
                 .map(projectId -> {
                     // 기존 프로젝트 조회
                     Project project = projectRepository.findById(projectId)
-                            .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + projectId));
+                            .orElseThrow(() -> new ResourceNotFoundException("Project not found with ID: " + projectId));
                     project.setSurvey(survey); // 설문과 연결
                     return project;
                 })
@@ -82,7 +82,7 @@ public class SurveyService {
         List<Project> projects = projectsId.stream()
                 .map(projectId -> {
                     Project project = projectRepository.findById(projectId)
-                            .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + projectId));
+                            .orElseThrow(() -> new ResourceNotFoundException("Project not found with ID: " + projectId));
                     return project;
                 })
                 .collect(Collectors.toList());
@@ -123,7 +123,7 @@ public class SurveyService {
     public SurveyResponseDto getSurveyById(Long surveyId) {
         return SurveyResponseDto.from(
                 surveyRepository.findById(surveyId)
-                        .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + surveyId))
+                        .orElseThrow(() -> new ResourceNotFoundException("Survey not found with ID: " + surveyId))
         );
     }
 

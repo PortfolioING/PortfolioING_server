@@ -4,6 +4,7 @@ import com.example.PING.dto.request.DomainRequestDto;
 import com.example.PING.dto.response.DomainResponseDto;
 import com.example.PING.entity.Domain;
 import com.example.PING.entity.Portfolio;
+import com.example.PING.error.ResourceNotFoundException;
 import com.example.PING.repository.DomainRepository;
 import com.example.PING.repository.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class DomainService {
     public DomainResponseDto createDomain(DomainRequestDto domainRequestDto) {
         // Portfolio 조회
         Portfolio portfolio = portfolioRepository.findById(domainRequestDto.portfolio_id())
-                .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + domainRequestDto.portfolio_id()));
+                .orElseThrow(() -> new ResourceNotFoundException("Portfolio not found with ID: " + domainRequestDto.portfolio_id()));
 
         // Domain 생성 및 Portfolio 설정
         Domain domain = Domain.builder()
@@ -45,7 +46,7 @@ public class DomainService {
     @Transactional(readOnly = true)
     public DomainResponseDto getDomainByPortfolioId(Long portfolioId) {
         Domain domain = domainRepository.findByPortfolio_PortfolioId(portfolioId)
-                .orElseThrow(() -> new IllegalArgumentException("Domain not found for Portfolio ID: " + portfolioId));
+                .orElseThrow(() -> new ResourceNotFoundException("Domain not found for Portfolio ID: " + portfolioId));
         return DomainResponseDto.from(domain);
     }
 
@@ -60,13 +61,13 @@ public class DomainService {
     public DomainResponseDto getDomainById(Long domainId) {
         return domainRepository.findById(domainId)
                 .map(DomainResponseDto::from)
-                .orElseThrow(() -> new IllegalArgumentException("Domain with ID " + domainId + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Domain with ID " + domainId + " not found"));
     }
 
     @Transactional
     public void deleteDomain(Long domainId) {
         Domain domain = domainRepository.findById(domainId)
-                .orElseThrow(() -> new IllegalArgumentException("Domain not found with ID: " + domainId));
+                .orElseThrow(() -> new ResourceNotFoundException("Domain not found with ID: " + domainId));
 
         // Todo 변경사항 전이되는지 확인
         // 해당 도메인을 사용하는 포트폴리오의 domain 필드를 null로 설정

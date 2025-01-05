@@ -4,6 +4,7 @@ import com.example.PING.dto.response.PortfolioResponseDto;
 import com.example.PING.dto.request.TemplateRequestDto;
 import com.example.PING.dto.response.TemplateResponseDto;
 import com.example.PING.entity.Template;
+import com.example.PING.error.ResourceNotFoundException;
 import com.example.PING.repository.TemplateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class TemplateService {
     @Transactional(readOnly = true)
     public TemplateResponseDto getTemplateById(Long templateId) {
         Template template = templateRepository.findById(templateId)
-                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + templateId));
+                .orElseThrow(() -> new ResourceNotFoundException("Template not found with ID: " + templateId));
         return TemplateResponseDto.from(template);
     }
 

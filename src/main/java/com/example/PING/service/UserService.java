@@ -6,11 +6,9 @@ import com.example.PING.dto.response.*;
 import com.example.PING.dto.request.UserRequestDto;
 import com.example.PING.entity.User;
 import com.example.PING.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.ErrorResponse;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,7 +21,7 @@ public class UserService {
 //    private final HttpSession httpSession;
 
     @Transactional
-    public UserResponseDto createUser(UserRequestDto userRequestDto) {
+    public UserResponse createUser(UserRequestDto userRequestDto) {
         User user = User.builder()
                 .name(userRequestDto.name())
                 .email(userRequestDto.email())
@@ -31,19 +29,19 @@ public class UserService {
                 .nickname(userRequestDto.nickname())
                 .profilePic(userRequestDto.profilePic())
                 .build();
-        return convertToResponseDto(userRepository.save(user));
+        return UserResponse.from(userRepository.save(user));
     }
 
     @Transactional(readOnly = true)
-    public List<UserResponseDto> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(this::convertToResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto getUserById(Long userId) {
-        return convertToResponseDto(userRepository.findById(userId).orElse(null));
+    public UserResponse getUserById(Long userId) {
+        return UserResponse.from(Objects.requireNonNull(userRepository.findById(userId).orElse(null)));
     }
 
     @Transactional
@@ -53,8 +51,8 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    private UserResponseDto convertToResponseDto(User user) {
-        return new UserResponseDto(
+    private UserResponse convertToResponseDto(User user) {
+        return new UserResponse(
                 user.getUserId(),
                 user.getName(),
                 user.getEmail(),

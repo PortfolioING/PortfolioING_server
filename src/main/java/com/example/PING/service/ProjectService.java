@@ -6,6 +6,7 @@ import com.example.PING.dto.response.ProjectIdResponseDto;
 import com.example.PING.dto.response.ProjectResponseDto;
 import com.example.PING.entity.Portfolio;
 import com.example.PING.entity.Project;
+import com.example.PING.error.ResourceNotFoundException;
 import com.example.PING.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class ProjectService {
     @Transactional(readOnly = true)
     public ProjectResponseDto getProjectById(Long projectId) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + projectId));
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found with ID: " + projectId));
         return ProjectResponseDto.from(project);
     }
     @Transactional
