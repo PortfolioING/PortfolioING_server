@@ -1,6 +1,6 @@
 package com.example.PING.dto.request;
 
-public record PortfolioUpdateTemplateRequestDto (
+public record PortfolioUpdateTemplateRequest(
         Long templateId
 ){
 }

@@ -1,6 +1,6 @@
 package com.example.PING.dto.request;
 
-public record DomainRequestDto (
+public record DomainRequest(
         Long portfolio_id,
         String domain
 ){

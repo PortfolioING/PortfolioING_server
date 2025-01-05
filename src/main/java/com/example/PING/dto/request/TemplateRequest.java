@@ -1,6 +1,6 @@
 package com.example.PING.dto.request;
 
-public record TemplateRequestDto (
+public record TemplateRequest(
         String name,
         String description
 ){

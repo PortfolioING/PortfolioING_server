@@ -1,11 +1,11 @@
 package com.example.PING.controller;
 
-import com.example.PING.dto.request.PortfolioCreateRequestDto;
-import com.example.PING.dto.request.PortfolioRequestDto;
-import com.example.PING.dto.request.PortfolioUpdateTemplateRequestDto;
-import com.example.PING.dto.response.PortfolioCreateResponseDto;
-import com.example.PING.dto.response.PortfolioResponseDto;
-import com.example.PING.dto.response.PortfolioUpdateTemplateResponseDto;
+import com.example.PING.dto.request.PortfolioCreateRequest;
+import com.example.PING.dto.request.PortfolioRequest;
+import com.example.PING.dto.request.PortfolioUpdateTemplateRequest;
+import com.example.PING.dto.response.PortfolioCreateResponse;
+import com.example.PING.dto.response.PortfolioResponse;
+import com.example.PING.dto.response.PortfolioUpdateTemplateResponse;
 import com.example.PING.dto.response.UserPortfoliosResponse;
 import com.example.PING.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,8 @@ public class PortfolioController {
 
     // (포트폴리오 생성) 설문 기반 새 포트폴리오 생성
     @PostMapping
-    public ResponseEntity<PortfolioCreateResponseDto> createPortfolio(@RequestBody PortfolioCreateRequestDto portfolioRequestDto) {
-        PortfolioCreateResponseDto response = portfolioService.createPortfolio(portfolioRequestDto);
+    public ResponseEntity<PortfolioCreateResponse> createPortfolio(@RequestBody PortfolioCreateRequest portfolioRequestDto) {
+        PortfolioCreateResponse response = portfolioService.createPortfolio(portfolioRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -40,26 +40,26 @@ public class PortfolioController {
 
     // (포트폴리오 상세 조회) 특정 포트폴리오의 세부 내용 조회
     @GetMapping("/{portfolio_id}")
-    public ResponseEntity<PortfolioResponseDto> getPortfolioById(@PathVariable("portfolio_id") Long portfolioId) {
-        PortfolioResponseDto response = portfolioService.getPortfolioById(portfolioId);
+    public ResponseEntity<PortfolioResponse> getPortfolioById(@PathVariable("portfolio_id") Long portfolioId) {
+        PortfolioResponse response = portfolioService.getPortfolioById(portfolioId);
         return ResponseEntity.ok(response);
     }
 
     // (포트폴리오 수정) 포트폴리오 세부 내용 수정
     @PutMapping("/{portfolio_id}")
-    public ResponseEntity<PortfolioResponseDto> updatePortfolio(
+    public ResponseEntity<PortfolioResponse> updatePortfolio(
             @PathVariable("portfolio_id") Long portfolioId,
-            @RequestBody PortfolioRequestDto portfolioRequestDto) {
-        PortfolioResponseDto response = portfolioService.updatePortfolio(portfolioId, portfolioRequestDto);
+            @RequestBody PortfolioRequest portfolioRequest) {
+        PortfolioResponse response = portfolioService.updatePortfolio(portfolioId, portfolioRequest);
         return ResponseEntity.ok(response);
     }
 
     // (포트폴리오 수정) 포트폴리오 세부 내용 수정
     @PutMapping("/template/{portfolio_id}")
-    public ResponseEntity<PortfolioUpdateTemplateResponseDto> updateTemplate(
+    public ResponseEntity<PortfolioUpdateTemplateResponse> updateTemplate(
             @PathVariable("portfolio_id") Long portfolioId,
-            @RequestBody PortfolioUpdateTemplateRequestDto portfolioRequestDto) {
-        PortfolioUpdateTemplateResponseDto response = portfolioService.updateTemplate(portfolioId, portfolioRequestDto);
+            @RequestBody PortfolioUpdateTemplateRequest portfolioRequestDto) {
+        PortfolioUpdateTemplateResponse response = portfolioService.updateTemplate(portfolioId, portfolioRequestDto);
         return ResponseEntity.ok(response);
     }
 

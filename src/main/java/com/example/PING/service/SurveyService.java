@@ -1,10 +1,8 @@
 package com.example.PING.service;
 
-import com.example.PING.dto.request.SurveyRequestDto;
-import com.example.PING.dto.response.PortfolioResponseDto;
-import com.example.PING.dto.response.ProjectIdResponseDto;
-import com.example.PING.dto.response.SurveyCreateResponseDto;
-import com.example.PING.dto.response.SurveyResponseDto;
+import com.example.PING.dto.request.SurveyRequest;
+import com.example.PING.dto.response.SurveyCreateResponse;
+import com.example.PING.dto.response.SurveyResponse;
 import com.example.PING.entity.Project;
 import com.example.PING.entity.Survey;
 import com.example.PING.error.ResourceNotFoundException;
@@ -14,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +22,7 @@ public class SurveyService {
     private final ProjectRepository projectRepository;
 
     @Transactional
-    public SurveyCreateResponseDto createSurvey(SurveyRequestDto surveyRequest) { // 생성
+    public SurveyCreateResponse createSurvey(SurveyRequest surveyRequest) { // 생성
         Survey survey = new Survey();
 
         // 포트폴리오 설정
@@ -39,7 +36,7 @@ public class SurveyService {
                 .map(projectId -> {
                     // 기존 프로젝트 조회
                     Project project = projectRepository.findById(projectId)
-                            .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + projectId));
+                            .orElseThrow(() -> new ResourceNotFoundException("Project not found with ID: " + projectId));
                     project.setSurvey(survey); // 설문과 연결
                     return project;
                 })
@@ -51,19 +48,19 @@ public class SurveyService {
         projectRepository.saveAll(projects);
 
         // 응답 DTO 생성
-        return SurveyCreateResponseDto.from(survey);
+        return SurveyCreateResponse.from(survey);
     }
 
-    public SurveyResponseDto getSurvey(Long survey_id) { // 조회
+    public SurveyResponse getSurvey(Long survey_id) { // 조회
         Survey survey = surveyRepository.findById(survey_id)
                 .orElseThrow(() -> new ResourceNotFoundException("Survey not found with id " + survey_id));
 
         System.out.println(survey);
-        return SurveyResponseDto.from(survey);
+        return SurveyResponse.from(survey);
     }
 
     @Transactional
-    public SurveyResponseDto updateSurvey(Long survey_id, SurveyRequestDto surveyRequest) { // 수정
+    public SurveyResponse updateSurvey(Long survey_id, SurveyRequest surveyRequest) { // 수정
         Survey survey = surveyRepository.findById(survey_id)
                 .orElseThrow(() -> new ResourceNotFoundException("Survey not found with id " + survey_id));
 
@@ -75,14 +72,14 @@ public class SurveyService {
 
         // 설문조사 업데이트
         surveyRepository.save(survey);
-        return SurveyResponseDto.from(survey);
+        return SurveyResponse.from(survey);
     }
 
     private List<Project> getProjectsById(List<Long> projectsId) {
         List<Project> projects = projectsId.stream()
                 .map(projectId -> {
                     Project project = projectRepository.findById(projectId)
-                            .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + projectId));
+                            .orElseThrow(() -> new ResourceNotFoundException("Project not found with ID: " + projectId));
                     return project;
                 })
                 .collect(Collectors.toList());
@@ -113,17 +110,17 @@ public class SurveyService {
 //    }
 
     @Transactional(readOnly = true)
-    public List<SurveyResponseDto> getAllSurveys() {
+    public List<SurveyResponse> getAllSurveys() {
         return surveyRepository.findAll().stream()
-                .map(SurveyResponseDto::from)
+                .map(SurveyResponse::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public SurveyResponseDto getSurveyById(Long surveyId) {
-        return SurveyResponseDto.from(
+    public SurveyResponse getSurveyById(Long surveyId) {
+        return SurveyResponse.from(
                 surveyRepository.findById(surveyId)
-                        .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + surveyId))
+                        .orElseThrow(() -> new ResourceNotFoundException("Survey not found with ID: " + surveyId))
         );
     }
 

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-public record ProjectResponseDto(
+public record ProjectResponse(
         Long projectId,
         Long surveyId,
         String projectName,
@@ -21,8 +21,8 @@ public record ProjectResponseDto(
         Set<Role> roles,
         List<ProblemSolution> pns
 ) {
-    public static ProjectResponseDto from(Project project) {
-        return new ProjectResponseDto(
+    public static ProjectResponse from(Project project) {
+        return new ProjectResponse(
                 project.getProjectId(),
                 project.getSurvey().getSurveyId(),
                 project.getProjectName(),

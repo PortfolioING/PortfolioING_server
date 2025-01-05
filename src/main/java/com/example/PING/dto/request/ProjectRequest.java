@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-public record ProjectRequestDto (
+public record ProjectRequest(
         String projectName,
         String image,
         String projectDesc,

@@ -1,8 +1,6 @@
 package com.example.PING.dto.request;
 
-import lombok.Data;
-
-public record UserLoginRequestDto(
+public record UserLoginRequest(
         String email,
         String password
 ) {

@@ -1,16 +1,15 @@
 package com.example.PING.service;
 
-import com.example.PING.dto.request.UserLoginRequestDto;
-import com.example.PING.dto.request.UserUpdateRequestDto;
+import com.example.PING.dto.request.UserLoginRequest;
+import com.example.PING.dto.request.UserUpdateRequest;
 import com.example.PING.dto.response.*;
-import com.example.PING.dto.request.UserRequestDto;
+import com.example.PING.dto.request.UserRequest;
 import com.example.PING.entity.User;
+import com.example.PING.error.ResourceNotFoundException;
 import com.example.PING.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.ErrorResponse;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,49 +22,42 @@ public class UserService {
 //    private final HttpSession httpSession;
 
     @Transactional
-    public UserResponseDto createUser(UserRequestDto userRequestDto) {
+    public UserResponse createUser(UserRequest userRequest) {
         User user = User.builder()
-                .name(userRequestDto.name())
-                .email(userRequestDto.email())
-                .password(userRequestDto.password())
-                .nickname(userRequestDto.nickname())
-                .profilePic(userRequestDto.profilePic())
+                .name(userRequest.name())
+                .email(userRequest.email())
+                .password(userRequest.password())
+                .nickname(userRequest.nickname())
+                .profilePic(userRequest.profilePic())
                 .build();
-        return convertToResponseDto(userRepository.save(user));
+        return UserResponse.from(userRepository.save(user));
     }
 
     @Transactional(readOnly = true)
-    public List<UserResponseDto> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(this::convertToResponseDto)
+                .map(UserResponse::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto getUserById(Long userId) {
-        return convertToResponseDto(userRepository.findById(userId).orElse(null));
+    public UserResponse getUserById(Long userId) {
+        return UserResponse.from(
+                userRepository.findById(userId)
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId))
+        );
     }
 
     @Transactional
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         userRepository.delete(user);
     }
 
-    private UserResponseDto convertToResponseDto(User user) {
-        return new UserResponseDto(
-                user.getUserId(),
-                user.getName(),
-                user.getEmail(),
-                user.getNickname(),
-                user.getProfilePic()
-        );
-    }
-
-    public LoginResponseDto login(UserLoginRequestDto request) {
+    public LoginResponse login(UserLoginRequest request) {
         User targetUser = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new IllegalArgumentException("User not found with Email: " + request.email()));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with Email: " + request.email()));
         // 비밀번호 확인 로직 활성화
         if (!targetUser.getPassword().equals(request.password())) {
             new IllegalArgumentException("Password does not match. Your input: " + request.password());
@@ -76,7 +68,7 @@ public class UserService {
 //        long loginId = Long.parseLong(httpSession.getAttribute("user").toString());
 //        User loginUser = userRepository.findById(loginId)
 //                .orElseThrow(()-> new IllegalArgumentException("User not found with id: "+ loginId));
-        return new LoginResponseDto(
+        return new LoginResponse(
                 targetUser.getUserId());
 //                targetUser.getEmail(),
 //                targetUser.getName(),
@@ -88,7 +80,7 @@ public class UserService {
         return "jwt_token_here";  // JWT 토큰 생성 로직
     }
 
-    public SignUpResponseDto signUp(UserRequestDto request) {
+    public SignUpResponse signUp(UserRequest request) {
         // 이미 존재하는 이메일인지 확인
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");  // 이메일 중복 처리
@@ -100,14 +92,14 @@ public class UserService {
         // 사용자 저장
         userRepository.save(newUser);
 
-        return new SignUpResponseDto(newUser.getUserId(), newUser.getName(),
+        return new SignUpResponse(newUser.getUserId(), newUser.getName(),
                 newUser.getEmail(), newUser.getNickname(), newUser.getProfilePic(),
                 newUser.getCreatedAt(), newUser.getUpdatedAt());
     }
 
-    public Optional<UserDetailResponseDto> getUserDetail(Long userId) { //My page 정보 조회
+    public Optional<UserDetailResponse> getUserDetail(Long userId) { //My page 정보 조회
         return userRepository.findById(userId)
-                .map(user -> new UserDetailResponseDto(
+                .map(user -> new UserDetailResponse(
                         user.getUserId(),
                         user.getName(),
                         user.getEmail(),
@@ -120,9 +112,9 @@ public class UserService {
     }
 
     @Transactional
-    public UserUpdateResponseDto updateUser(Long userId, UserUpdateRequestDto userUpdateRequest) {
+    public UserUpdateResponse updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         user.setName(userUpdateRequest.name());
         user.setNickname(userUpdateRequest.nickname());
@@ -131,7 +123,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return new UserUpdateResponseDto(
+        return new UserUpdateResponse(
                 user.getName(),
                 user.getNickname(),
                 user.getPassword(),
