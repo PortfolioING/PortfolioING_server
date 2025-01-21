@@ -53,10 +53,6 @@ public class PortfolioService {
         Portfolio portfolio = Portfolio.builder()
 //                .user(loginUser)
                 .user(user)
-                .survey(survey)
-                .title(requestDto.title())
-                .description(requestDto.description())
-                .image(requestDto.image())
                 .build();
 
         Portfolio savedPortfolio = portfolioRepository.save(portfolio);
@@ -97,12 +93,12 @@ public class PortfolioService {
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
 
         // 포트폴리오 내용 필드 업데이트
-        if (portfolioRequest.title() != null) {
-            portfolio.setTitle(portfolioRequest.title());
-        }
-        if (portfolioRequest.description() != null) {
-            portfolio.setDescription(portfolioRequest.description());
-        }
+//        if (portfolioRequest.title() != null) {
+//            portfolio.setTitle(portfolioRequest.title());
+//        }
+//        if (portfolioRequest.description() != null) {
+//            portfolio.setDescription(portfolioRequest.description());
+//        }
 //        if (portfolioRequestDto.mainColor() != null) {
 //            portfolio.setMainColor(portfolioRequestDto.mainColor());
 //        }
