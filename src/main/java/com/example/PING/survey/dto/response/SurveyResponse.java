@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public record SurveyResponse(
         Long surveyId,
-        Long portfolioId,
+//        Long portfolioId,
         String name,
         String introduce,
         String profile,
@@ -20,7 +20,7 @@ public record SurveyResponse(
     public static SurveyResponse from(Survey survey) {
         return new SurveyResponse(
                 survey.getSurveyId(),
-                survey.getPortfolio().getPortfolioId(),
+//                survey.getPortfolio().getPortfolioId(),
                 survey.getName(),
                 survey.getIntroduce(),
                 survey.getProfile(),
