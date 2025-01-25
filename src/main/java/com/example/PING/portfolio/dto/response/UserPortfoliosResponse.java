@@ -1,6 +1,4 @@
-package com.example.PING.user.dto.response;
-
-import com.example.PING.portfolio.dto.response.PortfolioResponse;
+package com.example.PING.portfolio.dto.response;
 
 import java.util.List;
 

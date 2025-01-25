@@ -2,16 +2,14 @@ package com.example.PING.user.dto.response;
 
 import com.example.PING.user.entity.User;
 
-public record UserResponse(
-        Long userId,
+public record UserProfileResponse(
         String name,
         String email,
         String nickname,
         String userIcon
 ) {
-    public static UserResponse from(User user) {
-        return new UserResponse(
-                user.getUserId(),
+    public static UserProfileResponse from(User user) {
+        return new UserProfileResponse(
                 user.getName(),
                 user.getEmail(),
                 user.getNickname(),

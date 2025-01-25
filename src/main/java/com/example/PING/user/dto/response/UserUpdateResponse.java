@@ -4,6 +4,6 @@ public record UserUpdateResponse(
         String name,
         String nickname,
         String password,
-        String profilePic
+        String userIcon
 ) {
 }

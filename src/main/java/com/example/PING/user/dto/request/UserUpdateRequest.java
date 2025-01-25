@@ -4,6 +4,6 @@ public record UserUpdateRequest(
         String name,
         String password,
         String nickname,
-        String profilePic
+        String userIcon
 ) {
 }

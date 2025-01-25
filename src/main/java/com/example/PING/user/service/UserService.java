@@ -21,18 +21,6 @@ public class UserService {
     private final UserRepository userRepository;
 //    private final HttpSession httpSession;
 
-    @Transactional
-    public UserResponse createUser(UserSignUpRequest userSignUpRequest) {
-        User user = User.builder()
-                .name(userSignUpRequest.name())
-                .email(userSignUpRequest.email())
-                .password(userSignUpRequest.password())
-                .nickname(userSignUpRequest.nickname())
-                .profilePic(userSignUpRequest.profilePic())
-                .build();
-        return UserResponse.from(userRepository.save(user));
-    }
-
     @Transactional(readOnly = true)
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream()
@@ -87,7 +75,7 @@ public class UserService {
         }
 
         // 새 사용자 객체 생성
-        User newUser = new User(request.password(), request.name(), request.email(), request.nickname(), request.profilePic());
+        User newUser = new User(request.password(), request.name(), request.email(), request.nickname(), request.userIcon());
 
         // 사용자 저장
         userRepository.save(newUser);
@@ -95,18 +83,13 @@ public class UserService {
         return UserSignUpResponse.from(newUser);
     }
 
-    public Optional<UserDetailResponse> getUserDetail(Long userId) { //My page 정보 조회
+    public Optional<UserProfileResponse> getUserProfile(Long userId) { //My page 정보 조회
         return userRepository.findById(userId)
-                .map(user -> new UserDetailResponse(
-                        user.getUserId(),
-                        user.getName(),
-                        user.getEmail(),
-                        user.getNickname(),
-                        user.getProfilePic(),
-                        user.getPortfolioIds(),
-                        user.getCreatedAt(),
-                        user.getUpdatedAt()
-                ));
+                .map(UserProfileResponse :: from);
+    }
+
+    public Optional<UserPortfolioIdListResponse> getUserPortfolioIdList(Long userId) {
+        return userRepository.findById(userId).map(UserPortfolioIdListResponse::from);
     }
 
     @Transactional
@@ -116,7 +99,7 @@ public class UserService {
 
         user.setName(userUpdateRequest.name());
         user.setNickname(userUpdateRequest.nickname());
-        user.setProfilePic(userUpdateRequest.profilePic());
+        user.setUserIcon(userUpdateRequest.userIcon());
         user.setUpdatedAt(LocalDateTime.now());
 
         userRepository.save(user);
@@ -125,7 +108,7 @@ public class UserService {
                 user.getName(),
                 user.getNickname(),
                 user.getPassword(),
-                user.getProfilePic()
+                user.getUserIcon()
         );
     }
 }

@@ -5,6 +5,6 @@ public record UserSignUpRequest(
         String email,
         String password,
         String nickname,
-        String profilePic
+        String userIcon
 ) {
 }

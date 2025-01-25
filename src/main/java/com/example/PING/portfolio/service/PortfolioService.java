@@ -14,7 +14,7 @@ import com.example.PING.survey.repository.SurveyRepository;
 import com.example.PING.template.entity.Template;
 import com.example.PING.template.repository.TemplateRepository;
 import com.example.PING.user.entity.User;
-import com.example.PING.user.dto.response.UserPortfoliosResponse;
+import com.example.PING.portfolio.dto.response.UserPortfoliosResponse;
 import com.example.PING.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
