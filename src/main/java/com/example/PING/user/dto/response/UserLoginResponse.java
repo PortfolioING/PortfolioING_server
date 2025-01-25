@@ -5,7 +5,7 @@ public record UserLoginResponse(
 //        String name,
 //        String email,
 //        String nickname,
-//        String profilePic,
+//        String userIcon,
 //        String token
 ) {
 }

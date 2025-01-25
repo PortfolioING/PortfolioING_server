@@ -4,8 +4,8 @@ import com.example.PING.error.ResourceNotFoundException;
 import com.example.PING.user.dto.response.*;
 import com.example.PING.user.repository.UserRepository;
 import com.example.PING.user.dto.request.UserLoginRequest;
-import com.example.PING.user.dto.request.UserRequest;
-import com.example.PING.user.dto.request.UserUpdateRequest;
+import com.example.PING.user.dto.request.UserSignUpRequest;
+import com.example.PING.user.dto.request.UserProfileUpdateRequest;
 import com.example.PING.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,18 +20,6 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
 //    private final HttpSession httpSession;
-
-    @Transactional
-    public UserResponse createUser(UserRequest userRequest) {
-        User user = User.builder()
-                .name(userRequest.name())
-                .email(userRequest.email())
-                .password(userRequest.password())
-                .nickname(userRequest.nickname())
-                .profilePic(userRequest.profilePic())
-                .build();
-        return UserResponse.from(userRepository.save(user));
-    }
 
     @Transactional(readOnly = true)
     public List<UserResponse> getAllUsers() {
@@ -80,54 +68,43 @@ public class UserService {
         return "jwt_token_here";  // JWT 토큰 생성 로직
     }
 
-    public UserSignUpResponse signUp(UserRequest request) {
+    public UserSignUpResponse signUp(UserSignUpRequest request) {
         // 이미 존재하는 이메일인지 확인
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");  // 이메일 중복 처리
         }
 
         // 새 사용자 객체 생성
-        User newUser = new User(request.password(), request.name(), request.email(), request.nickname(), request.profilePic());
+        User newUser = new User(request.password(), request.name(), request.email(), request.nickname(), request.userIcon());
 
         // 사용자 저장
         userRepository.save(newUser);
 
-        return new UserSignUpResponse(newUser.getUserId(), newUser.getName(),
-                newUser.getEmail(), newUser.getNickname(), newUser.getProfilePic(),
-                newUser.getCreatedAt(), newUser.getUpdatedAt());
+        return UserSignUpResponse.from(newUser);
     }
 
-    public Optional<UserDetailResponse> getUserDetail(Long userId) { //My page 정보 조회
+    public Optional<UserProfileResponse> getUserProfile(Long userId) { //My page 정보 조회
         return userRepository.findById(userId)
-                .map(user -> new UserDetailResponse(
-                        user.getUserId(),
-                        user.getName(),
-                        user.getEmail(),
-                        user.getNickname(),
-                        user.getProfilePic(),
-                        user.getPortfolioIds(),
-                        user.getCreatedAt(),
-                        user.getUpdatedAt()
-                ));
+                .map(UserProfileResponse :: from);
+    }
+
+    public Optional<UserPortfolioIdListResponse> getUserPortfolioIdList(Long userId) {
+        return userRepository.findById(userId).map(UserPortfolioIdListResponse::from);
     }
 
     @Transactional
-    public UserUpdateResponse updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
+    public UserUpdateResponse updateUserProfile(Long userId, UserProfileUpdateRequest userProfileUpdateRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        user.setName(userUpdateRequest.name());
-        user.setNickname(userUpdateRequest.nickname());
-        user.setProfilePic(userUpdateRequest.profilePic());
+        user.changeName(userProfileUpdateRequest.name());
+        user.changeNickName(userProfileUpdateRequest.nickname());
+        user.changeUserIcon(userProfileUpdateRequest.userIcon());
+        user.changePassword(userProfileUpdateRequest.password());
         user.setUpdatedAt(LocalDateTime.now());
 
         userRepository.save(user);
 
-        return new UserUpdateResponse(
-                user.getName(),
-                user.getNickname(),
-                user.getPassword(),
-                user.getProfilePic()
-        );
+        return UserUpdateResponse.from(user);
     }
 }

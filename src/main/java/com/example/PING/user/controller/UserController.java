@@ -1,12 +1,9 @@
 package com.example.PING.user.controller;
 
 import com.example.PING.user.dto.request.UserLoginRequest;
-import com.example.PING.user.dto.request.UserRequest;
-import com.example.PING.user.dto.request.UserUpdateRequest;
-import com.example.PING.user.dto.response.UserLoginResponse;
-import com.example.PING.user.dto.response.UserSignUpResponse;
-import com.example.PING.user.dto.response.UserDetailResponse;
-import com.example.PING.user.dto.response.UserUpdateResponse;
+import com.example.PING.user.dto.request.UserSignUpRequest;
+import com.example.PING.user.dto.request.UserProfileUpdateRequest;
+import com.example.PING.user.dto.response.*;
 import com.example.PING.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,8 +33,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @PostMapping("/signup") // 회원가입 엔드포인트
-    public ResponseEntity<?> signup(@RequestBody UserRequest request) {
+    @PostMapping// 회원가입
+    public ResponseEntity<?> signup(@RequestBody UserSignUpRequest request) {
         try {
             UserSignUpResponse newUserResponse = userService.signUp(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(newUserResponse); // HTTP 201 Created
@@ -47,20 +44,27 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDetailResponse> getMyPage(@PathVariable("userId") Long userId) { // My page 정보 조회
-        Optional<UserDetailResponse> userResponse = userService.getUserDetail(userId);
+    public ResponseEntity<UserProfileResponse> getUserProfile(@PathVariable("userId") Long userId) { // My page 정보 조회
+        Optional<UserProfileResponse> userResponse = userService.getUserProfile(userId);
 
         return userResponse
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<UserUpdateResponse> updateUser( // My page 정보 수정
-                                                          @PathVariable("userId") Long userId,
-                                                          @RequestBody UserUpdateRequest userUpdateRequest) {
+    @GetMapping("{user_id}/portfolio")
+    public ResponseEntity<UserPortfolioIdListResponse> getUserPortfolioIdList(@PathVariable("user_id") Long userId) {
+        Optional<UserPortfolioIdListResponse> userResponse = userService.getUserPortfolioIdList(userId);
 
-        UserUpdateResponse updatedUser = userService.updateUser(userId, userUpdateRequest);
+        return userResponse.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserUpdateResponse> updateUserProfile( // My page 정보 수정
+                                                          @PathVariable("userId") Long userId,
+                                                          @RequestBody UserProfileUpdateRequest userProfileUpdateRequest) {
+
+        UserUpdateResponse updatedUser = userService.updateUserProfile(userId, userProfileUpdateRequest);
         return ResponseEntity.ok(updatedUser);
     }
 
