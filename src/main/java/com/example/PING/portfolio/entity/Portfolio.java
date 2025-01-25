@@ -37,19 +37,6 @@ public class Portfolio {
     @JoinColumn(name = "style_id")
     private Style style;
 
-    // DB 구조 개선안
-//    // CascadeType.ALL: Survey 영속성 전이
-//    @OneToOne (cascade = CascadeType.ALL)
-//    @JoinColumn(name = "survey_id")
-////    @JsonIgnore // 이 필드를 JSON 직렬화에서 제외
-//    private Survey survey;
-//
-//    @Column(nullable = false)
-//    private String title;
-//
-//    private String description;
-//
-//    private String image;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "portfolio_component_id")
