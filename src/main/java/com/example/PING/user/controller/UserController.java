@@ -1,7 +1,7 @@
 package com.example.PING.user.controller;
 
 import com.example.PING.user.dto.request.UserLoginRequest;
-import com.example.PING.user.dto.request.UserRequest;
+import com.example.PING.user.dto.request.UserSignUpRequest;
 import com.example.PING.user.dto.request.UserUpdateRequest;
 import com.example.PING.user.dto.response.UserLoginResponse;
 import com.example.PING.user.dto.response.UserSignUpResponse;
@@ -36,8 +36,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @PostMapping("/signup") // 회원가입 엔드포인트
-    public ResponseEntity<?> signup(@RequestBody UserRequest request) {
+    @PostMapping// 회원가입
+    public ResponseEntity<?> signup(@RequestBody UserSignUpRequest request) {
         try {
             UserSignUpResponse newUserResponse = userService.signUp(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(newUserResponse); // HTTP 201 Created

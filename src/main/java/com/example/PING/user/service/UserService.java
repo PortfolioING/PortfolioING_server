@@ -4,7 +4,7 @@ import com.example.PING.error.ResourceNotFoundException;
 import com.example.PING.user.dto.response.*;
 import com.example.PING.user.repository.UserRepository;
 import com.example.PING.user.dto.request.UserLoginRequest;
-import com.example.PING.user.dto.request.UserRequest;
+import com.example.PING.user.dto.request.UserSignUpRequest;
 import com.example.PING.user.dto.request.UserUpdateRequest;
 import com.example.PING.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +22,13 @@ public class UserService {
 //    private final HttpSession httpSession;
 
     @Transactional
-    public UserResponse createUser(UserRequest userRequest) {
+    public UserResponse createUser(UserSignUpRequest userSignUpRequest) {
         User user = User.builder()
-                .name(userRequest.name())
-                .email(userRequest.email())
-                .password(userRequest.password())
-                .nickname(userRequest.nickname())
-                .profilePic(userRequest.profilePic())
+                .name(userSignUpRequest.name())
+                .email(userSignUpRequest.email())
+                .password(userSignUpRequest.password())
+                .nickname(userSignUpRequest.nickname())
+                .profilePic(userSignUpRequest.profilePic())
                 .build();
         return UserResponse.from(userRepository.save(user));
     }
@@ -80,7 +80,7 @@ public class UserService {
         return "jwt_token_here";  // JWT 토큰 생성 로직
     }
 
-    public UserSignUpResponse signUp(UserRequest request) {
+    public UserSignUpResponse signUp(UserSignUpRequest request) {
         // 이미 존재하는 이메일인지 확인
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");  // 이메일 중복 처리
@@ -92,9 +92,7 @@ public class UserService {
         // 사용자 저장
         userRepository.save(newUser);
 
-        return new UserSignUpResponse(newUser.getUserId(), newUser.getName(),
-                newUser.getEmail(), newUser.getNickname(), newUser.getProfilePic(),
-                newUser.getCreatedAt(), newUser.getUpdatedAt());
+        return UserSignUpResponse.from(newUser);
     }
 
     public Optional<UserDetailResponse> getUserDetail(Long userId) { //My page 정보 조회
