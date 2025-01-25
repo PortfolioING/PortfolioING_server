@@ -61,4 +61,22 @@ public class User {
                 .toList();
     }
 
+    public void changeName(String newName){
+        this.name = newName;
+    }
+
+    public void changeNickName(String newNickname){
+        this.nickname = newNickname;
+    }
+
+    public void changePassword(String newPassword){
+        this.password = newPassword;
+    }
+
+    public void changeUserIcon(String newUserIcon){
+        this.userIcon = newUserIcon;
+    }
+
+
+
 }

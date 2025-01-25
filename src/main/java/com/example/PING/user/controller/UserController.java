@@ -2,7 +2,7 @@ package com.example.PING.user.controller;
 
 import com.example.PING.user.dto.request.UserLoginRequest;
 import com.example.PING.user.dto.request.UserSignUpRequest;
-import com.example.PING.user.dto.request.UserUpdateRequest;
+import com.example.PING.user.dto.request.UserProfileUpdateRequest;
 import com.example.PING.user.dto.response.*;
 import com.example.PING.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -60,11 +60,11 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserUpdateResponse> updateUser( // My page 정보 수정
+    public ResponseEntity<UserUpdateResponse> updateUserProfile( // My page 정보 수정
                                                           @PathVariable("userId") Long userId,
-                                                          @RequestBody UserUpdateRequest userUpdateRequest) {
+                                                          @RequestBody UserProfileUpdateRequest userProfileUpdateRequest) {
 
-        UserUpdateResponse updatedUser = userService.updateUser(userId, userUpdateRequest);
+        UserUpdateResponse updatedUser = userService.updateUserProfile(userId, userProfileUpdateRequest);
         return ResponseEntity.ok(updatedUser);
     }
 

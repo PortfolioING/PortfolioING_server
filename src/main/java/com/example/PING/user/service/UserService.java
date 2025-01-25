@@ -5,7 +5,7 @@ import com.example.PING.user.dto.response.*;
 import com.example.PING.user.repository.UserRepository;
 import com.example.PING.user.dto.request.UserLoginRequest;
 import com.example.PING.user.dto.request.UserSignUpRequest;
-import com.example.PING.user.dto.request.UserUpdateRequest;
+import com.example.PING.user.dto.request.UserProfileUpdateRequest;
 import com.example.PING.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -93,22 +93,18 @@ public class UserService {
     }
 
     @Transactional
-    public UserUpdateResponse updateUser(Long userId, UserUpdateRequest userUpdateRequest) {
+    public UserUpdateResponse updateUserProfile(Long userId, UserProfileUpdateRequest userProfileUpdateRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        user.setName(userUpdateRequest.name());
-        user.setNickname(userUpdateRequest.nickname());
-        user.setUserIcon(userUpdateRequest.userIcon());
+        user.changeName(userProfileUpdateRequest.name());
+        user.changeNickName(userProfileUpdateRequest.nickname());
+        user.changeUserIcon(userProfileUpdateRequest.userIcon());
+        user.changePassword(userProfileUpdateRequest.password());
         user.setUpdatedAt(LocalDateTime.now());
 
         userRepository.save(user);
 
-        return new UserUpdateResponse(
-                user.getName(),
-                user.getNickname(),
-                user.getPassword(),
-                user.getUserIcon()
-        );
+        return UserUpdateResponse.from(user);
     }
 }
