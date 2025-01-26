@@ -1,0 +1,49 @@
+package com.example.PING.component.controller;
+
+import com.example.PING.component.entity.Component;
+import com.example.PING.component.service.ComponentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/components")
+public class ComponentController {
+
+    private final ComponentService componentService;
+
+    @Autowired
+    public ComponentController(ComponentService componentService) {
+        this.componentService = componentService;
+    }
+
+    @GetMapping
+    public List<Component> getAllComponents() {
+        return componentService.getAllComponents();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Component> getComponentById(@PathVariable Long id) {
+        return componentService.getComponentById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public Component createComponent(@RequestBody Component component) {
+        return componentService.createComponent(component);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Component> updateComponent(@PathVariable Long id, @RequestBody Component componentDetails) {
+        return ResponseEntity.ok(componentService.updateComponent(id, componentDetails));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteComponent(@PathVariable Long id) {
+        componentService.deleteComponent(id);
+        return ResponseEntity.noContent().build();
+    }
+}

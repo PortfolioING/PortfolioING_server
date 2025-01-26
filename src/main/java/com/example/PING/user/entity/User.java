@@ -32,7 +32,7 @@ public class User {
     @Column(nullable = false)
     private String nickname;
 
-    private String profilePic;
+    private String userIcon;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -43,12 +43,12 @@ public class User {
     @Getter private LocalDateTime updatedAt;
 
     @Builder
-    public User(String password, String name, String email, String nickname, String profilePic) {
+    public User(String password, String name, String email, String nickname, String userIcon) {
         this.password = password;
         this.name = name;
         this.email = email;
         this.nickname = nickname;
-        this.profilePic = profilePic;
+        this.userIcon = userIcon;
     }
     public static User objectToUser(Object user) {
         if (user == null) new IllegalArgumentException("로그인된 User가 존재하지 않습니다.");
@@ -60,5 +60,23 @@ public class User {
                 .map(Portfolio::getId)
                 .toList();
     }
+
+    public void changeName(String newName){
+        this.name = newName;
+    }
+
+    public void changeNickName(String newNickname){
+        this.nickname = newNickname;
+    }
+
+    public void changePassword(String newPassword){
+        this.password = newPassword;
+    }
+
+    public void changeUserIcon(String newUserIcon){
+        this.userIcon = newUserIcon;
+    }
+
+
 
 }

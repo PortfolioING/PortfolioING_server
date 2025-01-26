@@ -1,5 +1,6 @@
 package com.example.PING.portfolio.entity;
 
+import com.example.PING.component.entity.Component;
 import com.example.PING.domain.entity.Domain;
 import com.example.PING.survey.entity.Survey;
 import com.example.PING.template.entity.Template;
@@ -36,18 +37,14 @@ public class Portfolio {
     @JoinColumn(name = "style_id")
     private Style style;
 
-    // CascadeType.ALL: Survey 영속성 전이
-    @OneToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name = "survey_id")
-//    @JsonIgnore // 이 필드를 JSON 직렬화에서 제외
-    private Survey survey;
 
-    @Column(nullable = false)
-    private String title;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "portfolio_component_id")
+    private Component portfolioComponent;
 
-    private String description;
-
-    private String image;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_component_id")
+    private Component projectComponent;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -70,21 +67,19 @@ public class Portfolio {
     }
 
     @Builder
-    public Portfolio(User user, Style style, Survey survey, String title, String description, String image) {
+    public Portfolio(User user) {
         this.user = user;
-        this.style = style;
-        this.survey = survey;
-        this.title = title;
-        this.description = description;
-        this.image = image;
     }
 
+//    @Builder
+//    public Portfolio(User user, Survey survey, String title, String description, String image) {
+//        this.user = user;
+//        this.survey = survey;
+//        this.title = title;
+//        this.description = description;
+//        this.image = image;
+//    }
 
-    // 내용 수정 method
-    public void updatePortfolioContents(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
 
     public void updatePortfolioTemplate(Template template) {
         this.template = template;

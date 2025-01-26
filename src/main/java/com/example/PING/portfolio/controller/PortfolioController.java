@@ -6,7 +6,7 @@ import com.example.PING.portfolio.dto.request.PortfolioUpdateTemplateRequest;
 import com.example.PING.portfolio.dto.response.PortfolioCreateResponse;
 import com.example.PING.portfolio.dto.response.PortfolioResponse;
 import com.example.PING.portfolio.dto.response.PortfolioUpdateTemplateResponse;
-import com.example.PING.user.dto.response.UserPortfoliosResponse;
+import com.example.PING.portfolio.dto.response.UserPortfoliosResponse;
 import com.example.PING.portfolio.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

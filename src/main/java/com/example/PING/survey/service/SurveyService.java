@@ -26,7 +26,7 @@ public class SurveyService {
         Survey survey = new Survey();
 
         // 포트폴리오 설정
-        survey.setPortfolioNull(); // Survey를 생성하기 위해 Portfolio 값을 임시로 null로 초기화함.
+//        survey.setPortfolioNull(); // Survey를 생성하기 위해 Portfolio 값을 임시로 null로 초기화함.
         survey.setName(surveyRequest.name());
         survey.setIntroduce(surveyRequest.introduce());
         survey.setProfile(surveyRequest.profile());

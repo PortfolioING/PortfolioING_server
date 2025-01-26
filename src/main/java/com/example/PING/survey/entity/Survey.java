@@ -20,8 +20,8 @@ public class Survey {
     private Long surveyId;
 
     // optional = true: request에서 제외 가능
-    @OneToOne (optional = true, mappedBy = "survey")
-    private Portfolio portfolio;
+//    @OneToOne (optional = true, mappedBy = "survey")
+//    private Portfolio portfolio;
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Project> projects = new ArrayList<>();
@@ -43,13 +43,13 @@ public class Survey {
     @Column(name = "updated_at")
     @Getter private LocalDateTime updatedAt;
 
-    public void savePortfolioToSurvey(Portfolio portfolio) {
-        this.portfolio = portfolio;
-    }
+//    public void savePortfolioToSurvey(Portfolio portfolio) {
+//        this.portfolio = portfolio;
+//    }
 
-    public void setPortfolioNull() {
-        this.portfolio = null;
-    }
+//    public void setPortfolioNull() {
+//        this.portfolio = null;
+//    }
 
     @Builder
     public Survey() {
