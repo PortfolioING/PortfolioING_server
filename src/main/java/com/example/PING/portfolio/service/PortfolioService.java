@@ -5,7 +5,6 @@ import com.example.PING.component.repository.ComponentRepository;
 import com.example.PING.domain.repository.DomainRepository;
 import com.example.PING.portfolio.dto.request.PortfolioCreateRequest;
 import com.example.PING.portfolio.dto.request.PortfolioUpdateRequest;
-import com.example.PING.portfolio.dto.request.PortfolioUpdateTemplateRequest;
 import com.example.PING.portfolio.dto.response.*;
 import com.example.PING.portfolio.entity.Portfolio;
 import com.example.PING.portfolio.repository.PortfolioRepository;

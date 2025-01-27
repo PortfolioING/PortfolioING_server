@@ -2,7 +2,6 @@ package com.example.PING.portfolio.entity;
 
 import com.example.PING.component.entity.Component;
 import com.example.PING.domain.entity.Domain;
-import com.example.PING.survey.entity.Survey;
 import com.example.PING.template.entity.Template;
 import com.example.PING.user.entity.User;
 import jakarta.persistence.*;
@@ -69,9 +68,9 @@ public class Portfolio {
         this.component = component;
     }
 
-    public void updatePortfolioTemplate(Template template) {
-        this.template = template;
-    }
+//    public void updatePortfolioTemplate(Template template) {
+//        this.template = template;
+//    }
 
     public void updatePortfolioTitleImg(String titleImg) {
         this.titleImg = titleImg;
