@@ -1,10 +1,11 @@
 package com.example.PING.portfolio.controller;
 
 import com.example.PING.portfolio.dto.request.PortfolioCreateRequest;
-import com.example.PING.portfolio.dto.request.PortfolioRequest;
+import com.example.PING.portfolio.dto.request.PortfolioUpdateRequest;
 import com.example.PING.portfolio.dto.response.PortfolioCreateResponse;
 import com.example.PING.portfolio.dto.response.PortfolioResponse;
 import com.example.PING.portfolio.dto.response.PortfolioDemoResponse;
+import com.example.PING.portfolio.dto.response.PortfolioUpdateResponse;
 import com.example.PING.portfolio.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,10 +46,10 @@ public class PortfolioController {
 
     // (포트폴리오 수정) 포트폴리오 타이틀 이미지 변경
     @PutMapping("/title_img/{portfolio_id}")
-    public ResponseEntity<PortfolioResponse> updatePortfolio(
+    public ResponseEntity<PortfolioUpdateResponse> updatePortfolio(
             @PathVariable("portfolio_id") Long portfolioId,
-            @RequestBody PortfolioRequest portfolioRequest) {
-        PortfolioResponse response = portfolioService.updatePortfolio(portfolioId, portfolioRequest);
+            @RequestBody PortfolioUpdateRequest portfolioUpdateRequest) {
+        PortfolioUpdateResponse response = portfolioService.updatePortfolio(portfolioId, portfolioUpdateRequest);
         return ResponseEntity.ok(response);
     }
 
