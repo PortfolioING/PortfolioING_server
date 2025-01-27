@@ -11,12 +11,10 @@ import com.example.PING.portfolio.dto.response.PortfolioUpdateTemplateResponse;
 import com.example.PING.portfolio.dto.response.PortfolioResponse;
 import com.example.PING.portfolio.entity.Portfolio;
 import com.example.PING.portfolio.repository.PortfolioRepository;
-import com.example.PING.survey.entity.Survey;
-import com.example.PING.survey.repository.SurveyRepository;
 import com.example.PING.template.entity.Template;
 import com.example.PING.template.repository.TemplateRepository;
 import com.example.PING.user.entity.User;
-import com.example.PING.portfolio.dto.response.UserPortfoliosResponse;
+import com.example.PING.portfolio.dto.response.PortfolioDemoResponse;
 import com.example.PING.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,15 +61,23 @@ public class PortfolioService {
 
     // 특정 사용자의 포트폴리오 리스트 조회
     @Transactional(readOnly = true)
-    public UserPortfoliosResponse getAllPortfolios(Long userId) {
-
-        List<PortfolioResponse> portfolios = portfolioRepository.findAll().stream()
-                .filter(portfolio -> portfolio.getUser().getUserId().equals(userId))
-                .map(PortfolioResponse::from)
-                .collect(Collectors.toList());
-
-        return new UserPortfoliosResponse(userId, portfolios);
+    public PortfolioDemoResponse getPortfolioDemo(Long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findById(portfolioId)
+                .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
+        return PortfolioDemoResponse.from(portfolio);
     }
+
+//    // 특정 사용자의 포트폴리오 리스트 조회
+//    @Transactional(readOnly = true)
+//    public UserPortfoliosResponse getUserPortfolios(Long userId) {
+//
+//        List<PortfolioResponse> portfolios = portfolioRepository.findAll().stream()
+//                .filter(portfolio -> portfolio.getUser().getUserId().equals(userId))
+//                .map(PortfolioResponse::from)
+//                .collect(Collectors.toList());
+//
+//        return new UserPortfoliosResponse(userId, portfolios);
+//    }
 
 
     @Transactional(readOnly = true)
