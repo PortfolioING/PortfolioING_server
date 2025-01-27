@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -33,19 +34,6 @@ public class Portfolio {
     @JoinColumn(name = "template_id")
     private Template template;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "style_id")
-    private Style style;
-
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "portfolio_component_id")
-    private Component portfolioComponent;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "project_component_id")
-    private Component projectComponent;
-
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -53,6 +41,14 @@ public class Portfolio {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "component_id")
+    private Component component;
+
+    private String title_img;
+
+    private List<TechStack> techStack;
 
     public Long getId() {
         return portfolioId;
@@ -71,14 +67,6 @@ public class Portfolio {
         this.user = user;
     }
 
-//    @Builder
-//    public Portfolio(User user, Survey survey, String title, String description, String image) {
-//        this.user = user;
-//        this.survey = survey;
-//        this.title = title;
-//        this.description = description;
-//        this.image = image;
-//    }
 
 
     public void updatePortfolioTemplate(Template template) {
