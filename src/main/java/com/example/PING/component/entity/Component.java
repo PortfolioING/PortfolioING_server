@@ -22,14 +22,8 @@ public class Component {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio; // 연관된 포트폴리오
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "project_id")
-    private Project project; // 연관된 프로젝트
-
     @Enumerated(EnumType.STRING)
     private ComponentTag tag; // Component 유형에 대한 태그
-
-    private Long arrangeId; // 컴포넌트 배치 조합 아이디
 
     @ManyToOne
     @JoinColumn(name = "parent_component_id")
@@ -39,27 +33,34 @@ public class Component {
     private List<Component> childComponents = new ArrayList<>(); // 자식 컴포넌트
 
     @Column(length = 255)
-    private String content; // 글 내용
+    private String text; // 글 내용
+
+    @Column(name = "componentStyleId")
+    private Long componentStyleId; // 컴포넌트 스타일
 
     @Builder
     public Component(Portfolio portfolio, Project project, ComponentTag tag,
-                     Long arrangeId, Component parentComponent, List<Component> childComponents, String content) {
+                     Component parentComponent, Long componentStyleId) {
         this.portfolio = portfolio;
-        this.project = project;
         this.tag = tag;
-        this.arrangeId = arrangeId;
         this.parentComponent = parentComponent;
-        this.childComponents = childComponents;
-        this.content = content;
+        this.componentStyleId = componentStyleId;
     }
 
     // ComponentTag Enum 정의
     public enum ComponentTag {
-        BOARD,
-        PORTFOLIO_TITLE,
+        TITLE,
+        INTRODUCE,
+        CAREER_TITLE,
+        CAREER_DESC,
+        CAREER_LINK,
+        IMG,
+        STACK,
         PROJECT_TITLE,
-        DESC,
-        FULL_DESC
+        PROJECT_DESC,
+        PROJECT_LINK,
+        TEXT,
+        PARENT
 
     }
 }
