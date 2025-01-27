@@ -72,4 +72,8 @@ public class Portfolio {
     public void updatePortfolioTemplate(Template template) {
         this.template = template;
     }
+
+    public void updatePortfolioTitleImg(String titleImg) {
+        this.titleImg = titleImg;
+    }
 }
