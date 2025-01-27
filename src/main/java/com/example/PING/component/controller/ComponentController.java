@@ -1,7 +1,9 @@
 package com.example.PING.component.controller;
 
 import com.example.PING.component.dto.request.ComponentCreateRequest;
+import com.example.PING.component.dto.request.ComponentUpdateRequest;
 import com.example.PING.component.dto.response.ComponentCreateResponse;
+import com.example.PING.component.dto.response.ComponentUpdateResponse;
 import com.example.PING.component.entity.Component;
 import com.example.PING.component.service.ComponentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +36,20 @@ public class ComponentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // (컴포넌트 생성) 새 컴포넌트 생성
     @PostMapping
     public ResponseEntity<ComponentCreateResponse> createComponent(@RequestBody ComponentCreateRequest requestDto) {
         ComponentCreateResponse response = componentService.createComponent(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Component> updateComponent(@PathVariable Long id, @RequestBody Component componentDetails) {
-        return ResponseEntity.ok(componentService.updateComponent(id, componentDetails));
+    // (컴포넌트 수정) 컴포넌트 수정
+    @PutMapping("/{component_id}")
+    public ResponseEntity<ComponentUpdateResponse> updateComponent(
+            @PathVariable("component_id") Long componentId,
+            @RequestBody ComponentUpdateRequest requestDto) {
+        ComponentUpdateResponse response = componentService.updateComponent(componentId, requestDto);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
