@@ -1,5 +1,7 @@
 package com.example.PING.portfolio.service;
 
+import com.example.PING.component.entity.Component;
+import com.example.PING.component.repository.ComponentRepository;
 import com.example.PING.domain.repository.DomainRepository;
 import com.example.PING.portfolio.dto.request.PortfolioCreateRequest;
 import com.example.PING.portfolio.dto.request.PortfolioRequest;
@@ -29,7 +31,7 @@ public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
     private final UserRepository userRepository;
     private final TemplateRepository templateRepository;
-    private final SurveyRepository surveyRepository;
+    private final ComponentRepository componentRepository;
     private final DomainRepository domainRepository;
 //    private final HttpSession httpSession;
 
@@ -40,30 +42,22 @@ public class PortfolioService {
         // User, Survey, Template 엔티티 조회
         User user = userRepository.findById(requestDto.user_id())
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + requestDto.user_id()));
-        Survey survey = surveyRepository.findById(requestDto.survey_id())
-                .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + requestDto.survey_id()));
-//        Template template = templateRepository.findById(requestDto.getTemplate_id())
-//                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + requestDto.getTemplate_id()));
-
-//        long loginId = Long.parseLong(httpSession.getAttribute("user").toString());
-//        User loginUser = userRepository.findById(loginId)
-//                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + loginId));
+        Component component = componentRepository.findById(requestDto.component_id())
+                .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + requestDto.component_id()));
+        Template template = templateRepository.findById(requestDto.template_id())
+                .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + requestDto.template_id()));
 
         // Portfolio 생성 및 설정
         Portfolio portfolio = Portfolio.builder()
-//                .user(loginUser)
                 .user(user)
+                .template(template)
+                .component(component)
                 .build();
 
         Portfolio savedPortfolio = portfolioRepository.save(portfolio);
 
-        // Survey 에도 Portfolio 설정
-//        survey.savePortfolioToSurvey(savedPortfolio); // 생성한 Portfolio 값을 survey에 저장
-        surveyRepository.save(survey);
-
         return new PortfolioCreateResponse(
-                savedPortfolio.getPortfolioId(),
-                savedPortfolio.getCreatedAt()
+                savedPortfolio.getPortfolioId()
         );
     }
 
