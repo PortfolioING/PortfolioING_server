@@ -46,7 +46,7 @@ public class Portfolio {
     @JoinColumn(name = "component_id")
     private Component component;
 
-    private String title_img;
+    private String titleImg;
 
     private List<TechStack> techStack;
 
