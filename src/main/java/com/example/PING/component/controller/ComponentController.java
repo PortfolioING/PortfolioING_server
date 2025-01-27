@@ -1,8 +1,11 @@
 package com.example.PING.component.controller;
 
+import com.example.PING.component.dto.request.ComponentCreateRequest;
+import com.example.PING.component.dto.response.ComponentCreateResponse;
 import com.example.PING.component.entity.Component;
 import com.example.PING.component.service.ComponentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +35,9 @@ public class ComponentController {
     }
 
     @PostMapping
-    public Component createComponent(@RequestBody Component component) {
-        return componentService.createComponent(component);
+    public ResponseEntity<ComponentCreateResponse> createComponent(@RequestBody ComponentCreateRequest requestDto) {
+        ComponentCreateResponse response = componentService.createComponent(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
