@@ -63,11 +63,11 @@ public class Portfolio {
     }
 
     @Builder
-    public Portfolio(User user) {
+    public Portfolio(User user, Template template, Component component) {
         this.user = user;
+        this.template = template;
+        this.component = component;
     }
-
-
 
     public void updatePortfolioTemplate(Template template) {
         this.template = template;
