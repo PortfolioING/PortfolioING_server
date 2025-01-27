@@ -4,7 +4,7 @@ import com.example.PING.component.entity.Component;
 
 import java.util.List;
 
-public record ComponentUpdateRequest(
+public record ComponentRequest(
 
         Long portfolio_id,
 

@@ -1,9 +1,9 @@
 package com.example.PING.component.controller;
 
 import com.example.PING.component.dto.request.ComponentCreateRequest;
-import com.example.PING.component.dto.request.ComponentUpdateRequest;
+import com.example.PING.component.dto.request.ComponentRequest;
 import com.example.PING.component.dto.response.ComponentCreateResponse;
-import com.example.PING.component.dto.response.ComponentUpdateResponse;
+import com.example.PING.component.dto.response.ComponentResponse;
 import com.example.PING.component.entity.Component;
 import com.example.PING.component.service.ComponentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +29,6 @@ public class ComponentController {
         return componentService.getAllComponents();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Component> getComponentById(@PathVariable Long id) {
-        return componentService.getComponentById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     // (컴포넌트 생성) 새 컴포넌트 생성
     @PostMapping
     public ResponseEntity<ComponentCreateResponse> createComponent(@RequestBody ComponentCreateRequest requestDto) {
@@ -45,11 +38,17 @@ public class ComponentController {
 
     // (컴포넌트 수정) 컴포넌트 수정
     @PutMapping("/{component_id}")
-    public ResponseEntity<ComponentUpdateResponse> updateComponent(
+    public ResponseEntity<ComponentResponse> updateComponent(
             @PathVariable("component_id") Long componentId,
-            @RequestBody ComponentUpdateRequest requestDto) {
-        ComponentUpdateResponse response = componentService.updateComponent(componentId, requestDto);
+            @RequestBody ComponentRequest requestDto) {
+        ComponentResponse response = componentService.updateComponent(componentId, requestDto);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<ComponentResponse> getComponentById(@RequestParam("component_id") Long componentId) {
+
+        return componentService.getComponentById(componentId);
     }
 
     @DeleteMapping("/{id}")

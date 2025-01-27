@@ -1,12 +1,10 @@
 package com.example.PING.component.service;
 
-import com.example.PING.component.dto.request.ComponentCreateRequest;
-import com.example.PING.component.dto.request.ComponentUpdateRequest;
-import com.example.PING.component.dto.response.ComponentCreateResponse;
-import com.example.PING.component.dto.response.ComponentUpdateResponse;
+import com.example.PING.component.dto.request.*;
+import com.example.PING.component.dto.response.*;
 import com.example.PING.component.entity.Component;
-import com.example.PING.component.repository.ComponentRepository;
 import com.example.PING.portfolio.entity.Portfolio;
+import com.example.PING.component.repository.ComponentRepository;
 import com.example.PING.portfolio.repository.PortfolioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,10 +28,6 @@ public class ComponentService {
 
     public List<Component> getAllComponents() {
         return componentRepository.findAll();
-    }
-
-    public Optional<Component> getComponentById(Long id) {
-        return componentRepository.findById(id);
     }
 
     @Transactional
@@ -63,7 +57,8 @@ public class ComponentService {
         );
     }
 
-    public ComponentUpdateResponse updateComponent(Long id, ComponentUpdateRequest requestDto) {
+    @Transactional
+    public ComponentResponse updateComponent(Long id, ComponentRequest requestDto) {
 
         Component component = componentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Component not found with id " + id));
@@ -87,15 +82,14 @@ public class ComponentService {
 
         Component savedComponent = componentRepository.save(component);
 
-        return new ComponentUpdateResponse(
-                savedComponent.getPortfolio().getPortfolioId(),
-                savedComponent.getTag(),
-                savedComponent.getParentComponent().getComponentId(),
-                savedComponent.getChildComponents().stream()
-                                .map(Component::getComponentId)// Component 객체에서 ID만 추출
-                                        .collect(Collectors.toList()), // 결과를 List<Long>으로 수집
-                savedComponent.getComponentStyleId()
-        );
+        return ComponentResponse.from(savedComponent);
+    }
+
+    @Transactional
+    public ComponentResponse getComponentById(Long componentId) {
+        Component component = componentRepository.findById(componentId)
+                .orElseThrow(() -> new IllegalArgumentException("Component not found with ID : " + componentId));
+        return ComponentResponse.from(component);
     }
 
     public void deleteComponent(Long id) {
