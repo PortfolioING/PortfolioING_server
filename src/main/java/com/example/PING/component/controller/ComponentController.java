@@ -47,8 +47,8 @@ public class ComponentController {
 
     @GetMapping
     public ResponseEntity<ComponentResponse> getComponentById(@RequestParam("component_id") Long componentId) {
-
-        return componentService.getComponentById(componentId);
+        ComponentResponse response = componentService.getComponentById(componentId);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
