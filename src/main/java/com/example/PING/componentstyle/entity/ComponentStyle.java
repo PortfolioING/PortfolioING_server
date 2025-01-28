@@ -48,23 +48,4 @@ public class ComponentStyle {
         this.backgroundColor = backgroundColor;
     }
 
-    // 색상 코드 유효성 검증 메소드
-    private boolean validateColorCode (String colorCode) {
-        return colorCode.matches("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$");
-    }
-
-    // 색상 코드 설정 시 유효성 검사 로직
-    public void setTextColor (String textColor) {
-        if (validateColorCode(textColor))
-            this.textColor = textColor;
-        else
-            throw new IllegalArgumentException("Invalid color code: " + textColor);
-    }
-
-    public void setBackgroundColor (String backgroundColor) {
-        if (validateColorCode(backgroundColor))
-            this.backgroundColor = backgroundColor;
-        else
-            throw new IllegalArgumentException("Invalid color code: " + backgroundColor);
-    }
 }

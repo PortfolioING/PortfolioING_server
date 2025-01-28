@@ -1,7 +1,12 @@
 package com.example.PING.componentstyle.controller;
 
+import com.example.PING.componentstyle.dto.ComponentStyleDto;
+import com.example.PING.componentstyle.entity.ComponentStyle;
 import com.example.PING.componentstyle.service.ComponentStyleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,5 +19,12 @@ public class ComponentStyleController {
     @Autowired
     public ComponentStyleController(ComponentStyleService componentStyleService) {
         this.componentStyleService = componentStyleService;
+    }
+
+    // (컴포넌트 스타일 생성)
+    @PostMapping
+    public ResponseEntity<ComponentStyle> createComponentStyle(@RequestBody ComponentStyleDto requestDto) {
+        ComponentStyle response = componentStyleService.createComponentStyle(requestDto);
+        return ResponseEntity.ok(response);
     }
 }
