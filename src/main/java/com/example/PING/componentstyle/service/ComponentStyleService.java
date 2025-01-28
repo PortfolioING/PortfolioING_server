@@ -1,6 +1,7 @@
 package com.example.PING.componentstyle.service;
 
 import com.example.PING.componentstyle.dto.ComponentStyleDto;
+import com.example.PING.componentstyle.dto.ComponentStyleResponse;
 import com.example.PING.componentstyle.entity.ComponentStyle;
 import com.example.PING.componentstyle.repository.ComponentStyleRepository;
 import jakarta.transaction.Transactional;
@@ -20,7 +21,7 @@ public class ComponentStyleService {
     }
 
     @Transactional
-    public ComponentStyle createComponentStyle(ComponentStyleDto requestDto) {
+    public ComponentStyleResponse createComponentStyle(ComponentStyleDto requestDto) {
 
         if (requestDto.textColor() != null)
             validateColorCode(requestDto.textColor());
@@ -37,7 +38,9 @@ public class ComponentStyleService {
         componentStyle.setTextColor(requestDto.textColor() != null ? requestDto.textColor() : "#000000"); // 디폴트 값으로 검정색 설정
         componentStyle.setBackgroundColor(requestDto.backgroundColor());
 
-        return componentStyleRepository.save(componentStyle);
+        componentStyle = componentStyleRepository.save(componentStyle);
+
+        return ComponentStyleResponse.from(componentStyle);
 
     }
 
