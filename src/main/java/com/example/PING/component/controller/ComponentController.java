@@ -26,10 +26,10 @@ public class ComponentController {
         this.componentService = componentService;
     }
 
-    @GetMapping
-    public List<Component> getAllComponents() {
-        return componentService.getAllComponents();
-    }
+//    @GetMapping
+//    public List<Component> getAllComponents() {
+//        return componentService.getAllComponents();
+//    }
 
     // (컴포넌트 생성) 새 컴포넌트 생성
     @PostMapping
