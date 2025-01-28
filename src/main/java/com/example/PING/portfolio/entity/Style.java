@@ -1,10 +1,14 @@
 package com.example.PING.portfolio.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 @Entity
 @Data
+@Builder
+@Getter
 public class Style {
 
     @Id
