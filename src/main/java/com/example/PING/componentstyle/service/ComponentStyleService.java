@@ -1,14 +1,12 @@
 package com.example.PING.componentstyle.service;
 
-import com.example.PING.componentstyle.dto.ComponentStyleDto;
-import com.example.PING.componentstyle.dto.ComponentStyleResponse;
+import com.example.PING.componentstyle.dto.request.ComponentStyleRequest;
+import com.example.PING.componentstyle.dto.response.ComponentStyleResponse;
 import com.example.PING.componentstyle.entity.ComponentStyle;
 import com.example.PING.componentstyle.repository.ComponentStyleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.beans.Transient;
 
 @Service
 public class ComponentStyleService {
@@ -21,7 +19,7 @@ public class ComponentStyleService {
     }
 
     @Transactional
-    public ComponentStyleResponse createComponentStyle(ComponentStyleDto requestDto) {
+    public ComponentStyleResponse createComponentStyle(ComponentStyleRequest requestDto) {
 
         if (requestDto.textColor() != null)
             validateColorCode(requestDto.textColor());

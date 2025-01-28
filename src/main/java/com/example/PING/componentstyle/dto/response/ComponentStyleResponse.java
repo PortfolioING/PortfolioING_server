@@ -1,7 +1,6 @@
-package com.example.PING.componentstyle.dto;
+package com.example.PING.componentstyle.dto.response;
 
 import com.example.PING.componentstyle.entity.ComponentStyle;
-import jakarta.validation.constraints.NotNull;
 
 public record ComponentStyleResponse(
 

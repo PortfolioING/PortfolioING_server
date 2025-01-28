@@ -1,8 +1,8 @@
-package com.example.PING.componentstyle.dto;
+package com.example.PING.componentstyle.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
-public record ComponentStyleDto(
+public record ComponentStyleRequest(
         Boolean bold,
 
         Boolean italic,
