@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/components")
@@ -45,15 +47,19 @@ public class ComponentController {
         return ResponseEntity.ok(response);
     }
 
+    // (컴포넌트 조회) 컴포넌트 조회
     @GetMapping
     public ResponseEntity<ComponentResponse> getComponentById(@RequestParam("component_id") Long componentId) {
         ComponentResponse response = componentService.getComponentById(componentId);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComponent(@PathVariable Long id) {
-        componentService.deleteComponent(id);
-        return ResponseEntity.noContent().build();
+    // (컴포넌트 삭제) 컴포넌트 삭제
+    @DeleteMapping("/{component_id}")
+    public ResponseEntity<Map<String, String>> deleteComponent(@PathVariable("component_id") Long componentId) {
+        componentService.deleteComponent(componentId);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Component deleted successfully");
+        return ResponseEntity.ok(response);
     }
 }

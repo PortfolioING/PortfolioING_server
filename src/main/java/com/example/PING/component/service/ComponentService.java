@@ -92,7 +92,12 @@ public class ComponentService {
         return ComponentResponse.from(component);
     }
 
-    public void deleteComponent(Long id) {
-        componentRepository.deleteById(id);
+    @Transactional
+    public void deleteComponent(Long componentId) {
+        // findbyid -> delete 보다 deletebyid를 사용하는 것이 성능 최적화
+        componentRepository.deleteById(componentId);
     }
 }
+
+
+
