@@ -39,7 +39,7 @@ public class ComponentStyleService {
         componentStyle.setItalic(requestDto.italic() != null ? requestDto.italic() : Boolean.FALSE); // 디폴트 값으로 false 설정
         componentStyle.setUnderscore(requestDto.underscore() != null ? requestDto.underscore() : Boolean.FALSE); // 디폴트 값으로 false 설정
         componentStyle.setStrikethrough(requestDto.strikethrough() != null ? requestDto.strikethrough() : Boolean.FALSE); // 디폴트 값으로 false 설정
-        componentStyle.setSize(requestDto.size());
+        componentStyle.setSize(requestDto.size() != null ? requestDto.size() : Long.valueOf(10)); //디폴트 값으로 10pt 설정
         componentStyle.setTextColor(requestDto.textColor() != null ? requestDto.textColor() : "#000000"); // 디폴트 값으로 검정색 설정
         componentStyle.setBackgroundColor(requestDto.backgroundColor());
 
@@ -63,7 +63,7 @@ public class ComponentStyleService {
         componentStyle.setItalic(requestDto.italic() != null ? requestDto.italic() : Boolean.FALSE); // 디폴트 값으로 false 설정
         componentStyle.setUnderscore(requestDto.underscore() != null ? requestDto.underscore() : Boolean.FALSE); // 디폴트 값으로 false 설정
         componentStyle.setStrikethrough(requestDto.strikethrough() != null ? requestDto.strikethrough() : Boolean.FALSE); // 디폴트 값으로 false 설정
-        componentStyle.setSize(requestDto.size());
+        componentStyle.setSize(requestDto.size() != null ? requestDto.size() : Long.valueOf(10));
         componentStyle.setTextColor(requestDto.textColor() != null ? requestDto.textColor() : "#000000"); // 디폴트 값으로 검정색 설정
         componentStyle.setBackgroundColor(requestDto.backgroundColor());
 
