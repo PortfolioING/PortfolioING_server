@@ -77,4 +77,8 @@ public class ComponentStyleService {
                 .orElseThrow(() -> new IllegalArgumentException("Component style not found with id: " + id));
         return ComponentStyleResponse.from(componentStyle);
     }
+
+    public void deleteComponentStyleId(Long componentStyleId) {
+        componentStyleRepository.deleteById(componentStyleId);
+    }
 }

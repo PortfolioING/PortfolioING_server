@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/component_styles/")
 public class ComponentStyleController {
@@ -38,6 +41,15 @@ public class ComponentStyleController {
     public ResponseEntity<ComponentStyleResponse> getComponentStyle(
             @PathVariable("component_style_id") Long componentStyleId) {
         ComponentStyleResponse response = componentStyleService.getComponentStyleById(componentStyleId);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{component_style_id}")
+    public ResponseEntity<Map<String, String>> deleteComponentStyle(
+            @PathVariable("component_style_id") Long componentStyleId) {
+        componentStyleService.deleteComponentStyleId(componentStyleId);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "ComponentStyle deleted successfully");
         return ResponseEntity.ok(response);
     }
 }
