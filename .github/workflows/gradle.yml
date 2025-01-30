@@ -43,7 +43,7 @@ jobs:
 
       # 4. Docker 이미지 빌드
       - name: Docker image build
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }} .
 
       # 5. DockerHub 로그인
       - name: Docker login
@@ -70,14 +70,27 @@ jobs:
       
       # 2. 기존의 컨테이너를 중지시킵니다
       - name: docker stop container
-        run: sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
+        run: |
+          if [ "$(sudo docker ps -q -f name=ping-backend-actions)" ]; then
+            sudo docker stop ping-backend-actions
+          else
+            echo "No running container found"
+          fi
 
-      # 3. 최신 이미지를 컨테이너화하여 실행시킵니다 
+      # 3. 기존의 컨테이너를 제거합니다
+      - name: docker remove container
+        run: |
+          if [ "$(sudo docker ps -aq -f name=ping-backend-actions)" ]; then
+            sudo docker rm ping-backend-actions
+          else
+            echo "No stopped container found"
+          fi
+
+      # 4. 최신 이미지를 컨테이너화하여 실행시킵니다
       - name: docker run new container
         run: |
           docker run \
             --name ping-backend-actions \
-            --rm \
             -d \
             -e SPRING_DATASOURCE_URL=${{ secrets.RDS_URL }} \
             -e SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USERNAME }} \
@@ -88,6 +101,6 @@ jobs:
 
             
             
-      # 4. 미사용 이미지를 정리합니다
+      # 5. 미사용 이미지를 정리합니다
       - name: delete old docker image
         run: sudo docker system prune -f
