@@ -11,7 +11,6 @@ public record ComponentStyleRequest(
 
         Boolean strikethrough,
 
-        @NotNull(message = "User ID is required.")
         Long size,
 
         String textColor,
