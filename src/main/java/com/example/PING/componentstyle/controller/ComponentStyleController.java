@@ -5,10 +5,7 @@ import com.example.PING.componentstyle.dto.response.ComponentStyleResponse;
 import com.example.PING.componentstyle.service.ComponentStyleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/component_styles/")
@@ -25,6 +22,15 @@ public class ComponentStyleController {
     @PostMapping
     public ResponseEntity<ComponentStyleResponse> createComponentStyle(@RequestBody ComponentStyleRequest requestDto) {
         ComponentStyleResponse response = componentStyleService.createComponentStyle(requestDto);
+        return ResponseEntity.ok(response);
+    }
+
+    // (컴포넌트 스타일 수정)
+    @PutMapping("/{component_style_id}")
+    public ResponseEntity<ComponentStyleResponse> updateComponentStyle(
+            @PathVariable("component_style_id") Long componentStyleId,
+            @RequestBody ComponentStyleRequest requestDto) {
+        ComponentStyleResponse response = componentStyleService.updateComponentStyle(componentStyleId, requestDto);
         return ResponseEntity.ok(response);
     }
 }

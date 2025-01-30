@@ -18,6 +18,13 @@ public class ComponentStyleService {
         this.componentStyleRepository = componentStyleRepository;
     }
 
+    // 색상 코드 유효성 검증 메소드
+    private void validateColorCode(String colorCode) {
+        if (!colorCode.matches("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")) {
+            throw new IllegalArgumentException("Invalid color code: " + colorCode);
+        }
+    }
+
     @Transactional
     public ComponentStyleResponse createComponentStyle(ComponentStyleRequest requestDto) {
 
@@ -39,13 +46,29 @@ public class ComponentStyleService {
         componentStyle = componentStyleRepository.save(componentStyle);
 
         return ComponentStyleResponse.from(componentStyle);
-
     }
 
-    // 색상 코드 유효성 검증 메소드
-    private void validateColorCode(String colorCode) {
-        if (!colorCode.matches("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")) {
-            throw new IllegalArgumentException("Invalid color code: " + colorCode);
-        }
+    @Transactional
+    public ComponentStyleResponse updateComponentStyle(Long id, ComponentStyleRequest requestDto) {
+
+        ComponentStyle componentStyle = componentStyleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Component style not found with id: " + id));
+
+        if (requestDto.textColor() != null)
+            validateColorCode(requestDto.textColor());
+        if (requestDto.backgroundColor() != null)
+            validateColorCode(requestDto.backgroundColor());
+
+        componentStyle.setBold(requestDto.bold() != null ? requestDto.bold() : Boolean.FALSE); // 디폴트 값으로 false 설정
+        componentStyle.setItalic(requestDto.italic() != null ? requestDto.italic() : Boolean.FALSE); // 디폴트 값으로 false 설정
+        componentStyle.setUnderscore(requestDto.underscore() != null ? requestDto.underscore() : Boolean.FALSE); // 디폴트 값으로 false 설정
+        componentStyle.setStrikethrough(requestDto.strikethrough() != null ? requestDto.strikethrough() : Boolean.FALSE); // 디폴트 값으로 false 설정
+        componentStyle.setSize(requestDto.size());
+        componentStyle.setTextColor(requestDto.textColor() != null ? requestDto.textColor() : "#000000"); // 디폴트 값으로 검정색 설정
+        componentStyle.setBackgroundColor(requestDto.backgroundColor());
+
+        componentStyle = componentStyleRepository.save(componentStyle);
+
+        return ComponentStyleResponse.from(componentStyle);
     }
 }
