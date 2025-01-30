@@ -71,4 +71,10 @@ public class ComponentStyleService {
 
         return ComponentStyleResponse.from(componentStyle);
     }
+
+    public ComponentStyleResponse getComponentStyleById(Long id) {
+        ComponentStyle componentStyle = componentStyleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Component style not found with id: " + id));
+        return ComponentStyleResponse.from(componentStyle);
+    }
 }

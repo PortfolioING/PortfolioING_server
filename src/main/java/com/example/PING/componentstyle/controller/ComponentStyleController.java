@@ -33,4 +33,11 @@ public class ComponentStyleController {
         ComponentStyleResponse response = componentStyleService.updateComponentStyle(componentStyleId, requestDto);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{component_style_id}")
+    public ResponseEntity<ComponentStyleResponse> getComponentStyle(
+            @PathVariable("component_style_id") Long componentStyleId) {
+        ComponentStyleResponse response = componentStyleService.getComponentStyleById(componentStyleId);
+        return ResponseEntity.ok(response);
+    }
 }
