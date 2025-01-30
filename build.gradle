@@ -31,6 +31,8 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.33'
     // Swagger(Spring 3.x.x 이상부터 SpringFox 대신, SpringDoc)
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+	// S3 파일 업로드
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	runtimeOnly 'mysql:mysql-connector-java'
 	compileOnly 'org.projectlombok:lombok'
