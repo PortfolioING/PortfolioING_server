@@ -9,8 +9,8 @@ name: Java CI with Gradle
 
 # 동작 조건 설정 : main 브랜치에 push 혹은 pull request가 발생할 경우 동작한다.
 on:
-  #  push:
-  #    branches: [ "main" ]
+  push:
+    branches: [ "deploy" ]
   pull_request:
     branches: [ "main" ]
 
@@ -92,13 +92,6 @@ jobs:
           docker run \
             --name ping-backend-actions \
             -d \
-            -e SPRING_DATASOURCE_URL=${{ secrets.RDS_URL }} \
-            -e SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USERNAME }} \
-            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }} \
-            -e AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} \
-            -e AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }} \
-            -e AWS_REGION=${{ secrets.AWS_REGION }} \
-            -e S3_BUCKET_NAME=${{ secrets.AWS_S3_IMAGE_BUCKET_NAME }} \
             -p 8080:8080 \
             ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }}
       
