@@ -43,19 +43,18 @@ jobs:
 
       # 4. Docker 이미지 빌드
       - name: Docker image build
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }} .
+        run: docker build -t ${{ DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }} .
 
       # 5. DockerHub 로그인
       - name: Docker login
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          username: ${{ DOCKERHUB_USERNAME }}
+          password: ${{ DOCKERHUB_PASSWORD }}
 
       # 6. Docker Hub 이미지 푸시
       - name: Docker Hub push
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }}
-
+        run: docker push ${{ DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }}
 
   # 위 과정에서 푸시한 이미지를 ec2에서 풀받아서 실행시키는 과정
   run-docker-image-on-ec2:
@@ -64,40 +63,67 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # 1. 최신 이미지를 풀받습니다
-      - name: docker pull
-        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }}
-      
-      # 2. 기존의 컨테이너를 중지시킵니다
-      - name: docker stop container
-        run: |
-          if [ "$(sudo docker ps -q -f name=ping-backend-actions)" ]; then
-            sudo docker stop ping-backend-actions
-          else
-            echo "No running container found"
-          fi
 
-      # 3. 기존의 컨테이너를 제거합니다
-      - name: docker remove container
-        run: |
-          if [ "$(sudo docker ps -aq -f name=ping-backend-actions)" ]; then
-            sudo docker rm ping-backend-actions
-          else
-            echo "No stopped container found"
-          fi
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/
+            
+          # .env 파일을 생성합니다.
+            echo "${{ secrets.ENV_VARS }}" | sudo tee .env > /dev/null
+            
+          # docker-compose.yml 파일을 생성합니다.
+            echo "${{ vars.DOCKER_COMPOSE }}" | sudo tee docker-compose.yml > /dev/null
+            
+          # Docker 그룹에 사용자 추가
+            sudo usermod -aG docker ubuntu
+      
+          # Docker Compose를 실행하기 전에 기존 컨테이너 중지 및 제거
+            existing_containers=$(sudo docker ps -q)
+            if [ -n "$existing_containers" ]; then
+                sudo docker stop $existing_containers
+                sudo docker rm -f $existing_containers
+            fi
+      
+          # 최신 이미지를 Pull합니다.
+            sudo docker pull my-repo/my-web-image
+      
+          # Docker Compose 실행
+            sudo docker-compose -f docker-compose.yml --env-file ./.env up -d
+            
+          # 불필요한 도커 이미지 제거
+            sudo docker image prune -f
 
-      # 4. 최신 이미지를 컨테이너화하여 실행시킵니다
-      - name: docker run new container
-        run: |
-          docker run \
-            --name ping-backend-actions \
-            -d \
-            -p 8080:8080 \
-            ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }}
-      
-      
-      
-
-      # 5. 미사용 이미지를 정리합니다
-      - name: delete old docker image
-        run: sudo docker system prune -f
+#      - name: docker pull
+#        run: sudo docker pull ${{ DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }}
+#
+#      - name: docker stop container
+#        run: |
+#          if [ "$(sudo docker ps -q -f name=ping-backend-actions)" ]; then
+#            sudo docker stop ping-backend-actions
+#          else
+#            echo "No running container found"
+#          fi
+#
+#      - name: docker remove container
+#        run: |
+#          if [ "$(sudo docker ps -aq -f name=ping-backend-actions)" ]; then
+#            sudo docker rm ping-backend-actions
+#          else
+#            echo "No stopped container found"
+#          fi
+#
+#      - name: docker-compose up new container
+#        run: |
+#          docker-compose run \
+#            --name ping-backend-actions \
+#            -d \
+#            -p 8080:8080 \
+#            ${{ DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }}
+#
+#      - name: delete old docker image
+#        run: sudo docker system prune -f

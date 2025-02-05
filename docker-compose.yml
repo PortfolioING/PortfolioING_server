@@ -7,10 +7,19 @@ services:
       dockerfile: Dockerfile
     working_dir: /app
     container_name: spring
-    environment:
-      SPRING_DATASOURCE_URL: ${RDS_URL}
-      SPRING_DATASOURCE_USERNAME: ${RDS_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${RDS_PASSWORD}
+#    env_file: # .env 파일 사용
+#      - .env
     ports:
       - "8080:8080"
+    image: "${DOCKER_HUB_USERNAME}/celebee-server:v3"
+    environment:
+      AWS_ACCESS_KEY: ${ AWS_ACCESS_KEY }
+      AWS_SECRET_KEY: ${ AWS_SECRET_KEY }
+      AWS_REGION: ${ AWS_REGION }
+      S3_BUCKET_NAME: ${ AWS_S3_IMAGE_BUCKET_NAME }
+      RDS_URL: ${ RDS_URL }
+      RDS_USERNAME: ${ RDS_USERNAME }
+      RDS_PASSWORD: ${ RDS_PASSWORD }
+      DOCKERHUB_USERNAME: ${ DOCKERHUB_USERNAME }
+      DOCKERHUB_PASSWORD: ${ DOCKERHUB_PASSWORD }
     restart: always
