@@ -86,33 +86,3 @@ jobs:
             
             # 불필요한 도커 이미지 제거
             sudo docker image prune -f
-
-#      - name: docker pull
-#        run: sudo docker pull ${{ DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }}
-#
-#      - name: docker stop container
-#        run: |
-#          if [ "$(sudo docker ps -q -f name=ping-backend-actions)" ]; then
-#            sudo docker stop ping-backend-actions
-#          else
-#            echo "No running container found"
-#          fi
-#
-#      - name: docker remove container
-#        run: |
-#          if [ "$(sudo docker ps -aq -f name=ping-backend-actions)" ]; then
-#            sudo docker rm ping-backend-actions
-#          else
-#            echo "No stopped container found"
-#          fi
-#
-#      - name: docker-compose up new container
-#        run: |
-#          docker-compose run \
-#            --name ping-backend-actions \
-#            -d \
-#            -p 8080:8080 \
-#            ${{ DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }}
-#
-#      - name: delete old docker image
-#        run: sudo docker system prune -f
