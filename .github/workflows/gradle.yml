@@ -73,7 +73,10 @@ jobs:
 #          target: /home/ubuntu/docker-compose.yml
 
       - name: Set environment variables
-        run: echo "GITHUB_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          echo "GITHUB_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
