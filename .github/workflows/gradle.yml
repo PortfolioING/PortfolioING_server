@@ -63,6 +63,23 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Send .env file to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          source: .env
+          target: /home/ubuntu/.env
+
+      - name: Send docker-compose.yml to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          source: docker-compose.yml
+          target: /home/ubuntu/docker-compose.yml
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
@@ -73,29 +90,10 @@ jobs:
           script: |
             cd /home/ubuntu/
             
-          # .env 파일을 생성합니다.
-            echo "${{ secrets.ENV_VARS }}" | sudo tee .env > /dev/null
-            
-          # docker-compose.yml 파일을 생성합니다.
-            echo "${{ vars.DOCKER_COMPOSE }}" | sudo tee docker-compose.yml > /dev/null
-            
-          # Docker 그룹에 사용자 추가
-            sudo usermod -aG docker ubuntu
-      
-          # Docker Compose를 실행하기 전에 기존 컨테이너 중지 및 제거
-            existing_containers=$(sudo docker ps -q)
-            if [ -n "$existing_containers" ]; then
-                sudo docker stop $existing_containers
-                sudo docker rm -f $existing_containers
-            fi
-      
-          # 최신 이미지를 Pull합니다.
-            sudo docker pull my-repo/my-web-image
-      
-          # Docker Compose 실행
+            # Docker Compose 실행
             sudo docker-compose -f docker-compose.yml --env-file ./.env up -d
             
-          # 불필요한 도커 이미지 제거
+            # 불필요한 도커 이미지 제거
             sudo docker image prune -f
 
 #      - name: docker pull
