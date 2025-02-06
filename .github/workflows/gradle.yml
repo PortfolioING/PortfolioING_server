@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # 모든 커밋을 가져옵니다.
 
       # 1. Java 17 세팅
       - name: Set up JDK 17
@@ -40,12 +42,6 @@ jobs:
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: clean bootJar
-
-      - name: Make directory for deliver
-        run: mkdir deploy
-
-      - name: Copy jar
-        run: cp ./build/libs/*.jar ./deploy/
 
       # 4. Docker 이미지 빌드
       - name: Docker image build
