@@ -1,4 +1,4 @@
-package com.example.PING.security;
+package com.example.PING.global.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

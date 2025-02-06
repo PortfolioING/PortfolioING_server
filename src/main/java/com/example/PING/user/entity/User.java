@@ -17,6 +17,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Embedded //소셜로그인
+    private OauthInfo oauthInfo;
+
     @OneToMany(mappedBy = "user")
     private List<Portfolio> portfolios = new ArrayList<>();
 
@@ -42,16 +45,27 @@ public class User {
     @Column(name = "updated_at")
     @Getter private LocalDateTime updatedAt;
 
-    @Builder
-    public User(String password, String name, String email, String nickname, String userIcon) {
+    @Builder // Todo 소셜로그인
+    public User(String password, String name, String email, String nickname, String userIcon, OauthInfo oauthInfo) {
         this.password = password;
         this.name = name;
         this.email = email;
         this.nickname = nickname;
         this.userIcon = userIcon;
+        this.oauthInfo = oauthInfo;
     }
+
+    public static User createDefaultUser(OauthInfo oauthInfo) { // 소셜로그인으로 인해 생성되는 유저
+        return User.builder()
+                .nickname(null) // 사용자가 입력할 닉네임 (초기에는 null)
+                // Todo 닉네임 null로 해놓는 게 가능한 건지 확인해야 함. 닉네임 설정 로직 어떻게 할지
+                .userIcon("default") // 기본 프로필 아이콘 (임시)
+                .oauthInfo(oauthInfo)
+                .build();
+    }
+
     public static User objectToUser(Object user) {
-        if (user == null) new IllegalArgumentException("로그인된 User가 존재하지 않습니다.");
+        if (user == null) throw new IllegalArgumentException("로그인된 User가 존재하지 않습니다.");
         return (User) user;
     }
 
@@ -76,7 +90,5 @@ public class User {
     public void changeUserIcon(String newUserIcon){
         this.userIcon = newUserIcon;
     }
-
-
 
 }

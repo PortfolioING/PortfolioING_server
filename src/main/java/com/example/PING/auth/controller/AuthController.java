@@ -65,3 +65,4 @@ public class AuthController {
         return new ResponseEntity<>(SocialLoginResponse.of(response), headers,
                 HttpStatus.OK);
     }
+}

@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient;
 import java.time.Duration;
 
 @Configuration
-public class RestClientConfig {
+public class RestClientConfig { //Todo 채현이가 탐구해야 하는 클래스
 
     @Bean
     public RestClient restClient() {

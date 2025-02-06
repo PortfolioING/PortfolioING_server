@@ -1,4 +1,4 @@
-package com.example.PING.security.utils;
+package com.example.PING.global.security.utils;
 
 import com.example.PING.auth.dto.response.TokenPairResponse;
 import com.example.PING.auth.entity.RefreshToken;

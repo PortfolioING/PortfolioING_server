@@ -1,10 +1,14 @@
-package com.example.PING.security.utils;
+package com.example.PING.global.security.utils;
 
 import com.example.PING.global.properties.JwtProperties;
-import com.example.PING.security.token.JwtAuthenticationToken;
+import com.example.PING.global.security.token.JwtAuthenticationToken;
 import com.example.PING.user.entity.User;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -13,18 +17,17 @@ import java.util.Date;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JwtUtil { // Todo spring security 의존성 추가해야 함
+public class JwtUtil {
 
-    public static final String TOKEN_ROLE_NAME = "role"; //Todo 이게 뭐노?
     private final JwtProperties jwtProperties;
 
     public String generateAccessToken(User user) {
         Date issuedAt = new Date();
         Date expiredAt = new Date(issuedAt.getTime() + jwtProperties.accessTokenExpirationMilliTime());
+
         return Jwts.builder()
                 .setIssuer(jwtProperties.issuer())
-                .setSubject(user.getUserId().toString())
-                .claim(TOKEN_ROLE_NAME, user.getRole().getValue())
+                .setSubject(user.getUserId().toString()) // 사용자 ID만 저장
                 .setIssuedAt(issuedAt)
                 .setExpiration(expiredAt)
                 .signWith(getAccessTokenKey())
@@ -37,8 +40,7 @@ public class JwtUtil { // Todo spring security 의존성 추가해야 함
 
         return Jwts.builder()
                 .setIssuer(jwtProperties.issuer())
-                .setSubject(user.getUserId().toString())
-                .claim(TOKEN_ROLE_NAME, user.getRole().getValue())
+                .setSubject(user.getUserId().toString()) // 사용자 ID만 저장
                 .setIssuedAt(issuedAt)
                 .setExpiration(expiredAt)
                 .signWith(getRefreshTokenKey())
@@ -46,7 +48,6 @@ public class JwtUtil { // Todo spring security 의존성 추가해야 함
     }
 
     public Claims getAccessTokenClaims(Authentication authentication) {
-
         return Jwts.parserBuilder()
                 .requireIssuer(jwtProperties.issuer())
                 .setSigningKey(getAccessTokenKey())

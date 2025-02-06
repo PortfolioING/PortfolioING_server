@@ -1,9 +1,13 @@
-package com.example.PING.security.token;
+package com.example.PING.global.security.token;
+
+import lombok.Getter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
+@Getter
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
-// Todo 의존성 추가해야 함
     private String jsonWebToken;
     private Object principal;
     private Object credentials;
@@ -20,17 +24,5 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         this.principal = principal;
         this.credentials = credentials;
         super.setAuthenticated(true);
-    }
-
-    public Object getCredentials() {
-        return credentials;
-    }
-
-    public Object getPrincipal() {
-        return this.principal;
-    }
-
-    public String getJsonWebToken() {
-        return this.jsonWebToken;
     }
 }

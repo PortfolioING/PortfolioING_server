@@ -2,6 +2,7 @@ package com.example.PING.user.service;
 
 import com.example.PING.error.ResourceNotFoundException;
 import com.example.PING.user.dto.response.*;
+import com.example.PING.user.entity.OauthInfo;
 import com.example.PING.user.repository.UserRepository;
 import com.example.PING.user.dto.request.UserLoginRequest;
 import com.example.PING.user.dto.request.UserSignUpRequest;
@@ -36,6 +37,18 @@ public class UserService {
         );
     }
 
+    public User getUserByOAuthInfo(OauthInfo oauthInfo) { // 소셜로그인 유저 찾기
+        return userRepository.findByOauthInfo(oauthInfo)
+                .orElseGet(() -> createSocialLoginUser(oauthInfo));
+    }
+
+
+    public User createSocialLoginUser(OauthInfo oauthInfo) { // 소셜로그인 회원 가입
+        // 새 사용자 객체 생성
+        User newUser = User.createDefaultUser(oauthInfo);
+        return userRepository.save(newUser);
+    }
+
     @Transactional
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
@@ -43,19 +56,13 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public UserLoginResponse login(UserLoginRequest request) {
+    public UserLoginResponse login(UserLoginRequest request) { // 일반 로그인
         User targetUser = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with Email: " + request.email()));
         // 비밀번호 확인 로직 활성화
         if (!targetUser.getPassword().equals(request.password())) {
-            new IllegalArgumentException("Password does not match. Your input: " + request.password());
+            throw new IllegalArgumentException("Password does not match. Your input: " + request.password());
         }
-//            String token = generateToken(targetUser);  // JWT 토큰 생성 로직 (모의)
-//            return new UserResponseDto(targetUser.getUserId(), targetUser.getName(), targetUser.getEmail(), token, targetUser.getProfilePic());
-//        httpSession.setAttribute("user", targetUser.getUserId());
-//        long loginId = Long.parseLong(httpSession.getAttribute("user").toString());
-//        User loginUser = userRepository.findById(loginId)
-//                .orElseThrow(()-> new IllegalArgumentException("User not found with id: "+ loginId));
         return new UserLoginResponse(
                 targetUser.getUserId());
 //                targetUser.getEmail(),
@@ -64,24 +71,20 @@ public class UserService {
 //                targetUser.getProfilePic());
     }
 
-    private String generateToken(User user) {
-        return "jwt_token_here";  // JWT 토큰 생성 로직
-    }
-
-    public UserSignUpResponse signUp(UserSignUpRequest request) {
-        // 이미 존재하는 이메일인지 확인
-        if (userRepository.findByEmail(request.email()).isPresent()) {
-            throw new IllegalArgumentException("Email already in use");  // 이메일 중복 처리
-        }
-
-        // 새 사용자 객체 생성
-        User newUser = new User(request.password(), request.name(), request.email(), request.nickname(), request.userIcon());
-
-        // 사용자 저장
-        userRepository.save(newUser);
-
-        return UserSignUpResponse.from(newUser);
-    }
+//    public UserSignUpResponse signUp(UserSignUpRequest request) { // 일반 회원가입
+//        // 이미 존재하는 이메일인지 확인
+//        if (userRepository.findByEmail(request.email()).isPresent()) {
+//            throw new IllegalArgumentException("Email already in use");  // 이메일 중복 처리
+//        }
+//
+//        // 새 사용자 객체 생성
+//        User newUser = new User(request.password(), request.name(), request.email(), request.nickname(), request.userIcon());
+//
+//        // 사용자 저장
+//        userRepository.save(newUser);
+//
+//        return UserSignUpResponse.from(newUser);
+//    }
 
     public Optional<UserProfileResponse> getUserProfile(Long userId) { //My page 정보 조회
         return userRepository.findById(userId)
