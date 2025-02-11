@@ -43,7 +43,7 @@ jobs:
 
       # 4. Docker 이미지 빌드
       - name: Docker image build
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }} .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions .
 
       # 5. DockerHub 로그인
       - name: Docker login
@@ -54,7 +54,7 @@ jobs:
 
       # 6. Docker Hub 이미지 푸시
       - name: Docker Hub push
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions:${{ github.sha }}
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions
 
   # 위 과정에서 푸시한 이미지를 ec2에서 풀받아서 실행시키는 과정
   run-docker-image-on-ec2:
@@ -71,12 +71,6 @@ jobs:
 #          key: ${{ secrets.SSH_KEY }}
 #          source: ./docker-compose.yml
 #          target: /home/ubuntu/docker-compose.yml
-
-      - name: Set environment variables
-        env:
-          GITHUB_SHA: ${{ github.sha }}
-        run: |
-          echo "GITHUB_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
