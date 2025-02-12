@@ -80,12 +80,17 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/
-
+            
+            ## docker-compose.yaml 파일을 생성합니다.
+                    sudo touch docker-compose.yml
+                    echo "${{ vars.DOCKER_COMPOSE }}" | sudo tee docker-compose.yml > /dev/null
+            
             # 이전 컨테이너 제거
             sudo docker-compose down
             
             # Docker Compose 실행
-            sudo docker-compose -f docker-compose.yml --env-file ./.env up -d --build            
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions
+            sudo docker-compose -f docker-compose.yml --env-file ./.env up -d --build       
             
             # 컨테이너 로그 확인
             sudo docker-compose logs
