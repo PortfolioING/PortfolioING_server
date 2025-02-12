@@ -86,7 +86,7 @@ jobs:
             
             # Docker Compose 실행
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/ping-backend-actions
-            sudo docker-compose -f docker-compose.yml --env-file ./.env up -d --build       
+            sudo docker-compose -f docker-compose.yml --env-file ./.env up -d
             
             # 컨테이너 로그 확인
             sudo docker-compose logs
