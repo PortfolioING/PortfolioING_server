@@ -80,10 +80,13 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/
+
+            # 이전 컨테이너 제거
+            sudo docker-compose down
             
             # Docker Compose 실행
-            sudo docker-compose -f docker-compose.yml --env-file ./.env up -d
-      
+            sudo docker-compose -f docker-compose.yml --env-file ./.env up -d --build            
+            
             # 컨테이너 로그 확인
             sudo docker-compose logs
             
