@@ -81,9 +81,9 @@ jobs:
           script: |
             cd /home/ubuntu/
             
-            ## docker-compose.yaml 파일을 생성합니다.
-                    sudo touch docker-compose.yml
-                    echo "${{ vars.DOCKER_COMPOSE }}" | sudo tee docker-compose.yml > /dev/null
+#            ## docker-compose.yaml 파일을 생성합니다.
+#                    sudo touch docker-compose.yml
+#                    echo "${{ vars.DOCKER_COMPOSE }}" | sudo tee docker-compose.yml > /dev/null
             
             # 이전 컨테이너 제거
             sudo docker-compose down
