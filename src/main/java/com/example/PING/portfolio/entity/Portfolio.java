@@ -2,6 +2,7 @@ package com.example.PING.portfolio.entity;
 
 import com.example.PING.component.entity.Component;
 import com.example.PING.domain.entity.Domain;
+import com.example.PING.like.entity.Like;
 import com.example.PING.template.entity.Template;
 import com.example.PING.user.entity.User;
 import jakarta.persistence.*;
@@ -33,6 +34,14 @@ public class Portfolio {
     @JoinColumn(name = "template_id")
     private Template template;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "component_id")
+    private Component component;
+
+    @ManyToOne
+    @JoinColumn(name = "like_id")
+    private Like like;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -40,10 +49,6 @@ public class Portfolio {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "component_id")
-    private Component component;
 
     private String titleImg;
 

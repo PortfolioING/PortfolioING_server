@@ -1,4 +1,5 @@
 package com.example.PING.user.entity;
+import com.example.PING.like.entity.Like;
 import com.example.PING.portfolio.entity.Portfolio;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,6 +20,10 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Portfolio> portfolios = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "like_id")
+    private Like like;
 
     @Column(nullable = false)
     private String password;
