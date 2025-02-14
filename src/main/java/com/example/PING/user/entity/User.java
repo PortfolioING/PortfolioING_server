@@ -22,13 +22,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Portfolio> portfolios = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "like_id")
-    private Like like;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "scrap_id")
-    private Scrap scrap;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Scrap> scraps = new ArrayList<>();
 
     @Column(nullable = false)
     private String password;

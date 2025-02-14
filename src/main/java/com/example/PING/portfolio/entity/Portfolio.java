@@ -12,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,13 +40,11 @@ public class Portfolio {
     @JoinColumn(name = "component_id")
     private Component component;
 
-    @ManyToOne
-    @JoinColumn(name = "like_id")
-    private Like like;
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "scrap_id")
-    private Scrap scrap;
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    private List<Scrap> scraps = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

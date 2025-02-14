@@ -20,13 +20,13 @@ public class Scrap {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scrapId;
 
-    @OneToMany(mappedBy = "scrap", cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "portfolio_id")
-    private List<Portfolio> portfolios = new ArrayList<>();
+    private Portfolio portfolio;
 
-    @OneToMany(mappedBy = "scrap", cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private List<User> users = new ArrayList<>();
+    private User user;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

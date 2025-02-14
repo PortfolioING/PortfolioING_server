@@ -31,8 +31,8 @@ public class ScrapService {
 
         // Scrap 객체 생성 및 설정
         Scrap scrap = new Scrap();
-        scrap.getPortfolios().add(portfolio);
-        scrap.getUsers().add(user);
+        scrap.setPortfolio(portfolio);
+        scrap.setUser(user);
         scrap.setCreatedAt(LocalDateTime.now());
 
         Scrap savedScrap = scrapRepository.save(scrap);

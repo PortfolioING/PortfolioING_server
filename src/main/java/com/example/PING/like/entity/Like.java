@@ -20,13 +20,13 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
 
-    @OneToMany(mappedBy = "like", cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "portfolio_id")
-    private List<Portfolio> portfolios = new ArrayList<>();
+    private Portfolio portfolio;
 
-    @OneToMany(mappedBy = "like", cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private List<User> users = new ArrayList<>();
+    private User user;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

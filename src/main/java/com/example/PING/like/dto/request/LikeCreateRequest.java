@@ -8,9 +8,9 @@ import java.util.List;
 
 public record LikeCreateRequest(
         @NotNull(message = "Portfolio ID is required.")
-        List<Portfolio> portfolios,
+        Long portfolioId,
 
         @NotNull(message = "User ID is required.")
-        List<User> users
+        Long userId
 ) {
 }
