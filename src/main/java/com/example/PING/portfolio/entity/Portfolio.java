@@ -3,6 +3,7 @@ package com.example.PING.portfolio.entity;
 import com.example.PING.component.entity.Component;
 import com.example.PING.domain.entity.Domain;
 import com.example.PING.like.entity.Like;
+import com.example.PING.scrap.entity.Scrap;
 import com.example.PING.template.entity.Template;
 import com.example.PING.user.entity.User;
 import jakarta.persistence.*;
@@ -41,6 +42,10 @@ public class Portfolio {
     @ManyToOne
     @JoinColumn(name = "like_id")
     private Like like;
+
+    @ManyToOne
+    @JoinColumn(name = "scrap_id")
+    private Scrap scrap;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

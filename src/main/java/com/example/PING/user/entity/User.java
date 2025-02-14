@@ -1,6 +1,7 @@
 package com.example.PING.user.entity;
 import com.example.PING.like.entity.Like;
 import com.example.PING.portfolio.entity.Portfolio;
+import com.example.PING.scrap.entity.Scrap;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,6 +25,10 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "like_id")
     private Like like;
+
+    @ManyToOne
+    @JoinColumn(name = "scrap_id")
+    private Scrap scrap;
 
     @Column(nullable = false)
     private String password;
