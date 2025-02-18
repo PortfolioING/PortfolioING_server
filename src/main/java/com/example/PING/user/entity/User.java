@@ -1,5 +1,7 @@
 package com.example.PING.user.entity;
+import com.example.PING.like.entity.Like;
 import com.example.PING.portfolio.entity.Portfolio;
+import com.example.PING.scrap.entity.Scrap;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,6 +21,12 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Portfolio> portfolios = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Scrap> scraps = new ArrayList<>();
 
     @Column(nullable = false)
     private String password;

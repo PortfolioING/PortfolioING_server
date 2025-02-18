@@ -2,6 +2,8 @@ package com.example.PING.portfolio.entity;
 
 import com.example.PING.component.entity.Component;
 import com.example.PING.domain.entity.Domain;
+import com.example.PING.like.entity.Like;
+import com.example.PING.scrap.entity.Scrap;
 import com.example.PING.template.entity.Template;
 import com.example.PING.user.entity.User;
 import jakarta.persistence.*;
@@ -10,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,6 +36,16 @@ public class Portfolio {
     @JoinColumn(name = "template_id")
     private Template template;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "component_id")
+    private Component component;
+
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    private List<Scrap> scraps = new ArrayList<>();
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -40,10 +53,6 @@ public class Portfolio {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "component_id")
-    private Component component;
 
     private String titleImg;
 
