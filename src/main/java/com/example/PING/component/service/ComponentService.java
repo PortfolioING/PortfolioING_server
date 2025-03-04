@@ -99,10 +99,15 @@ public class ComponentService {
     }
 
     @Transactional(readOnly = true)
-    public ComponentTreeResponse getComponentTree(Long componentId) {
-        Component component = componentRepository.findById(componentId)
-                .orElseThrow(() -> new RuntimeException("Component not found"));
-        return buildComponentTree(component);
+    public ComponentTreeResponse getComponentTree(Long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findById(portfolioId)
+                .orElseThrow(() -> new RuntimeException("Portfolio not found with id " + portfolioId));
+        Component rootComponent = portfolio.getComponent();
+        if (rootComponent == null) {
+            throw new RuntimeException("Root component not found for portfolio id " + portfolioId);
+        }
+
+        return buildComponentTree(rootComponent);
     }
 
     private ComponentTreeResponse buildComponentTree(Component component) {
@@ -113,6 +118,7 @@ public class ComponentService {
         return ComponentTreeResponse.from(component, children);
 
     }
+
 }
 
 
