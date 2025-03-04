@@ -97,6 +97,22 @@ public class ComponentService {
         // findbyid -> delete 보다 deletebyid를 사용하는 것이 성능 최적화
         componentRepository.deleteById(componentId);
     }
+
+    @Transactional(readOnly = true)
+    public ComponentTreeResponse getComponentTree(Long componentId) {
+        Component component = componentRepository.findById(componentId)
+                .orElseThrow(() -> new RuntimeException("Component not found"));
+        return buildComponentTree(component);
+    }
+
+    private ComponentTreeResponse buildComponentTree(Component component) {
+        List<ComponentTreeResponse> children = component.getChildComponents().stream()
+                .map(this::buildComponentTree)  // 재귀적으로 자식 컴포넌트 처리
+                .collect(Collectors.toList());
+
+        return ComponentTreeResponse.from(component, children);
+
+    }
 }
 
 

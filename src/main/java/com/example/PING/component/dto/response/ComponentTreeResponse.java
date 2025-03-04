@@ -3,7 +3,6 @@ package com.example.PING.component.dto.response;
 import com.example.PING.component.entity.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public record ComponentTreeResponse(
 
