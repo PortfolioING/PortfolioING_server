@@ -13,7 +13,7 @@ public record ComponentResponse(
 
         Long parent_component_id,
 
-        List<Long> child_component_id,
+        List<ComponentResponse> children,
 
         Long component_style_id
 
@@ -22,11 +22,21 @@ public record ComponentResponse(
         return new ComponentResponse (
                 component.getPortfolio().getPortfolioId(),
                 component.getTag(),
-                component.getParentComponent().getComponentId(),
+                component.getParentComponent() != null ? component.getParentComponent().getComponentId() : null,
                 component.getChildComponents().stream()
-                        .map(Component::getComponentId)// Component 객체에서 ID만 추출
-                        .collect(Collectors.toList()), // 결과를 List<Long>으로 수집
+                        .map(ComponentResponse::from)  // ComponentResponse 객체로 변환
+                        .collect(Collectors.toList()),
                 component.getComponentStyleId()
         );
     }
 }
+/*
+* component.getComponentId(),
+                component.getPortfolio().getPortfolioId(),
+                component.getTag(),
+                component.getParentComponent() != null ? component.getParentComponent().getComponentId() : null,
+                component.getChildComponents().stream()
+                        .map(ComponentResponse::from)  // ComponentResponse 객체로 변환
+                        .collect(Collectors.toList()),
+                component.getComponentStyleId()
+* */
