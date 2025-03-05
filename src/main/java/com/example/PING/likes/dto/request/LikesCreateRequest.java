@@ -1,12 +1,8 @@
-package com.example.PING.like.dto.request;
+package com.example.PING.likes.dto.request;
 
-import com.example.PING.portfolio.entity.Portfolio;
-import com.example.PING.user.entity.User;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.List;
-
-public record LikeCreateRequest(
+public record LikesCreateRequest(
         @NotNull(message = "Portfolio ID is required.")
         Long portfolioId,
 

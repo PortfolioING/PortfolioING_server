@@ -2,7 +2,7 @@ package com.example.PING.portfolio.entity;
 
 import com.example.PING.component.entity.Component;
 import com.example.PING.domain.entity.Domain;
-import com.example.PING.like.entity.Like;
+import com.example.PING.likes.entity.Likes;
 import com.example.PING.scrap.entity.Scrap;
 import com.example.PING.template.entity.Template;
 import com.example.PING.user.entity.User;
@@ -41,7 +41,7 @@ public class Portfolio {
     private Component component;
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
-    private List<Like> likes = new ArrayList<>();
+    private List<Likes> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<Scrap> scraps = new ArrayList<>();

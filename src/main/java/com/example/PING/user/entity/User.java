@@ -1,5 +1,5 @@
 package com.example.PING.user.entity;
-import com.example.PING.like.entity.Like;
+import com.example.PING.likes.entity.Likes;
 import com.example.PING.portfolio.entity.Portfolio;
 import com.example.PING.scrap.entity.Scrap;
 import jakarta.persistence.*;
@@ -23,7 +23,7 @@ public class User {
     private List<Portfolio> portfolios = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Like> likes = new ArrayList<>();
+    private List<Likes> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Scrap> scraps = new ArrayList<>();

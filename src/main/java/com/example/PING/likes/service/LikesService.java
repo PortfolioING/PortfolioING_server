@@ -1,9 +1,9 @@
-package com.example.PING.like.service;
+package com.example.PING.likes.service;
 
-import com.example.PING.like.dto.request.LikeCreateRequest;
-import com.example.PING.like.dto.response.LikeResponse;
-import com.example.PING.like.entity.Like;
-import com.example.PING.like.repository.LikeRepository;
+import com.example.PING.likes.dto.request.LikesCreateRequest;
+import com.example.PING.likes.dto.response.LikesResponse;
+import com.example.PING.likes.entity.Likes;
+import com.example.PING.likes.repository.LikesRepository;
 import com.example.PING.portfolio.entity.Portfolio;
 import com.example.PING.portfolio.repository.PortfolioRepository;
 import com.example.PING.user.entity.User;
@@ -16,27 +16,27 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class LikeService {
-    private final LikeRepository likeRepository;
+public class LikesService {
+    private final LikesRepository likesRepository;
     private final PortfolioRepository portfolioRepository;
     private final UserRepository userRepository;
 
 
     @Transactional
-    public LikeResponse createLike(LikeCreateRequest request) {
+    public LikesResponse createLike(LikesCreateRequest request) {
         // 포트폴리오와 사용자 조회
         Portfolio portfolio = portfolioRepository.findById(request.portfolioId())
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + request.portfolioId()));
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + request.userId()));
 
-        Like like = new Like();
-        like.setPortfolio(portfolio);
-        like.setUser(user);
-        like.setCreatedAt(LocalDateTime.now());
+        Likes likes = new Likes();
+        likes.setPortfolio(portfolio);
+        likes.setUser(user);
+        likes.setCreatedAt(LocalDateTime.now());
 
-        Like savedLike = likeRepository.save(like);
-        return new LikeResponse(savedLike.getLikeId());
+        Likes savedLikes = likesRepository.save(likes);
+        return new LikesResponse(savedLikes.getLikesId());
     }
 
     // 추가적인 메서드 정의 가능
