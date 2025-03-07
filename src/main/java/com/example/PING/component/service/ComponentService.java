@@ -97,6 +97,28 @@ public class ComponentService {
         // findbyid -> delete 보다 deletebyid를 사용하는 것이 성능 최적화
         componentRepository.deleteById(componentId);
     }
+
+    @Transactional(readOnly = true)
+    public ComponentTreeResponse getComponentTree(Long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findById(portfolioId)
+                .orElseThrow(() -> new RuntimeException("Portfolio not found with id " + portfolioId));
+        Component rootComponent = portfolio.getComponent();
+        if (rootComponent == null) {
+            throw new RuntimeException("Root component not found for portfolio id " + portfolioId);
+        }
+
+        return buildComponentTree(rootComponent);
+    }
+
+    private ComponentTreeResponse buildComponentTree(Component component) {
+        List<ComponentTreeResponse> children = component.getChildComponents().stream()
+                .map(this::buildComponentTree)  // 재귀적으로 자식 컴포넌트 처리
+                .collect(Collectors.toList());
+
+        return ComponentTreeResponse.from(component, children);
+
+    }
+
 }
 
 

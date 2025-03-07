@@ -1,5 +1,7 @@
 package com.example.PING.portfolio.controller;
 
+import com.example.PING.component.dto.response.ComponentTreeResponse;
+import com.example.PING.component.service.ComponentService;
 import com.example.PING.portfolio.dto.request.PortfolioCreateRequest;
 import com.example.PING.portfolio.dto.request.PortfolioUpdateRequest;
 import com.example.PING.portfolio.dto.response.PortfolioCreateResponse;
@@ -21,6 +23,7 @@ import java.util.Map;
 public class PortfolioController {
 
     private final PortfolioService portfolioService;
+    private final ComponentService componentService;
 
 
     // (포트폴리오 생성) 새 포트폴리오 생성
@@ -50,9 +53,13 @@ public class PortfolioController {
 
     // (포트폴리오 상세 조회) 특정 포트폴리오의 세부 내용 조회
     @GetMapping("/{portfolio_id}")
-    public ResponseEntity<PortfolioResponse> getPortfolioById(@PathVariable("portfolio_id") Long portfolioId) {
-        PortfolioResponse response = portfolioService.getPortfolioById(portfolioId);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ComponentTreeResponse> getPortfolioComponentTree(@PathVariable("portfolio_id") Long portfolioId) {
+        try {
+            ComponentTreeResponse tree = componentService.getComponentTree(portfolioId);
+            return ResponseEntity.ok(tree);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // (포트폴리오 수정) 포트폴리오 타이틀 이미지 변경
@@ -72,5 +79,7 @@ public class PortfolioController {
         response.put("message", "Portfolio deleted successfully");
         return ResponseEntity.ok(response);
     }
+
+
 
 }
