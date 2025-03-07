@@ -4,7 +4,7 @@ import com.example.PING.project.dto.request.ProjectRequest;
 import com.example.PING.project.dto.response.ProjectIdResponse;
 import com.example.PING.project.dto.response.ProjectResponse;
 import com.example.PING.project.entity.Project;
-import com.example.PING.error.ResourceNotFoundException;
+import com.example.PING.error.exception.ResourceNotFoundException;
 import com.example.PING.project.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

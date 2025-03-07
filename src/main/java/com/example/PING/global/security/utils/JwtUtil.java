@@ -47,6 +47,22 @@ public class JwtUtil {
                 .compact();
     }
 
+    /**
+     * 임시 토큰 생성
+     */
+    public String generateTemporaryToken(User user) {
+        Date issuedAt = new Date();
+        Date expiredAt = new Date(issuedAt.getTime() + jwtProperties.temporaryTokenExpirationMilliTime());
+
+        return Jwts.builder()
+                .setIssuer(jwtProperties.issuer())
+                .setSubject(user.getUserId().toString()) // 사용자 ID만 저장
+                .setIssuedAt(issuedAt)
+                .setExpiration(expiredAt)
+                .signWith(getTemporaryTokenKey())
+                .compact();
+    }
+
     public Claims getAccessTokenClaims(Authentication authentication) {
         return Jwts.parserBuilder()
                 .requireIssuer(jwtProperties.issuer())
@@ -62,5 +78,12 @@ public class JwtUtil {
 
     private Key getRefreshTokenKey() {
         return Keys.hmacShaKeyFor(jwtProperties.refreshTokenSecret().getBytes());
+    }
+
+    /**
+     * 임시 토큰의 서명 키 (이거는 JwtProperties에서 관리해야 함)
+     */
+    private Key getTemporaryTokenKey() {
+        return Keys.hmacShaKeyFor(jwtProperties.temporaryTokenSecret().getBytes());
     }
 }

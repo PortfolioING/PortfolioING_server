@@ -1,6 +1,6 @@
 package com.example.PING.user.service;
 
-import com.example.PING.error.ResourceNotFoundException;
+import com.example.PING.error.exception.ResourceNotFoundException;
 import com.example.PING.user.dto.response.*;
 import com.example.PING.user.entity.OauthInfo;
 import com.example.PING.user.repository.UserRepository;
@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-//    private final HttpSession httpSession;
 
     @Transactional(readOnly = true)
     public List<UserResponse> getAllUsers() {
@@ -30,23 +29,30 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserResponse getUserById(Long userId) {
-        return UserResponse.from(
-                userRepository.findById(userId)
-                        .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId))
-        );
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+    }
+
+    @Transactional(readOnly = true)
+    public User getUserByEmail(String userEmail) {
+        return userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + userEmail));
     }
 
     public User getUserByOAuthInfo(OauthInfo oauthInfo) { // 소셜로그인 유저 찾기
         return userRepository.findByOauthInfo(oauthInfo)
-                .orElseGet(() -> createSocialLoginUser(oauthInfo));
+                .orElseGet(() -> createTempUser(oauthInfo));
     }
 
 
-    public User createSocialLoginUser(OauthInfo oauthInfo) { // 소셜로그인 회원 가입
-        // 새 사용자 객체 생성
-        User newUser = User.createDefaultUser(oauthInfo);
-        return userRepository.save(newUser);
+    public User createTempUser(OauthInfo oauthInfo) { // 임시 회원 생성
+        User tempUser = User.createTemporalUser(oauthInfo);
+        return tempUser;
+    }
+
+    public User saveTempUser(User user) {
+        return userRepository.save(user);
     }
 
     @Transactional
@@ -71,20 +77,20 @@ public class UserService {
 //                targetUser.getProfilePic());
     }
 
-//    public UserSignUpResponse signUp(UserSignUpRequest request) { // 일반 회원가입
-//        // 이미 존재하는 이메일인지 확인
-//        if (userRepository.findByEmail(request.email()).isPresent()) {
-//            throw new IllegalArgumentException("Email already in use");  // 이메일 중복 처리
-//        }
-//
-//        // 새 사용자 객체 생성
-//        User newUser = new User(request.password(), request.name(), request.email(), request.nickname(), request.userIcon());
-//
-//        // 사용자 저장
-//        userRepository.save(newUser);
-//
-//        return UserSignUpResponse.from(newUser);
-//    }
+    public UserSignUpResponse signUp(UserSignUpRequest request) { // 일반 회원가입
+        // 이미 존재하는 이메일인지 확인
+        if (userRepository.findByEmail(request.email()).isPresent()) {
+            throw new IllegalArgumentException("Email already in use");  // 이메일 중복 처리
+        }
+
+        // 새 사용자 객체 생성
+        User newUser = new User(request.password(), request.name(), request.email(), request.nickname(), request.userIcon(), null);
+
+        // 사용자 저장
+        userRepository.save(newUser);
+
+        return UserSignUpResponse.from(newUser);
+    }
 
     public Optional<UserProfileResponse> getUserProfile(Long userId) { //My page 정보 조회
         return userRepository.findById(userId)

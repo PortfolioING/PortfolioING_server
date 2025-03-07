@@ -5,7 +5,7 @@ import com.example.PING.survey.dto.response.SurveyCreateResponse;
 import com.example.PING.survey.dto.response.SurveyResponse;
 import com.example.PING.project.entity.Project;
 import com.example.PING.survey.entity.Survey;
-import com.example.PING.error.ResourceNotFoundException;
+import com.example.PING.error.exception.ResourceNotFoundException;
 import com.example.PING.project.repository.ProjectRepository;
 import com.example.PING.survey.repository.SurveyRepository;
 import lombok.RequiredArgsConstructor;

@@ -13,12 +13,11 @@ public record OAuthUserInfoResponse( // 받은 json 타입을 자바로 변환�
                                      OAuthProvider provider
 
 ) {
-
     public OauthInfo toEntity() {
         return OauthInfo.builder()
                 .oauthId(this.oauthId())
                 .oauthEmail(this.email())
-                .name(this.name())
+                .oauthName(this.name())
                 .oauthProvider(this.provider().name())
                 .build();
     }

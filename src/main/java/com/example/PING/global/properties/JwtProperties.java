@@ -6,8 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record JwtProperties(
         String accessTokenSecret,
         String refreshTokenSecret,
+        String temporaryTokenSecret,
         Long accessTokenExpirationTime,
         Long refreshTokenExpirationTime,
+        Long temporaryTokenExpirationTime,
         String issuer
 ) {
 
@@ -18,4 +20,6 @@ public record JwtProperties(
     public Long refreshTokenExpirationMilliTime() {
         return refreshTokenExpirationTime * 1000;
     }
+
+    public Long temporaryTokenExpirationMilliTime() {return temporaryTokenExpirationTime * 1000;}
 }

@@ -1,6 +1,6 @@
 package com.example.PING.auth.dto.response;
 
-public record SocialLoginResponse(Long memberId,
+public record SocialLoginResponse(Long userId,
                                   String nickname,
                                   String email) {
     public static SocialLoginResponse of(LoginResponse loginResponse) {

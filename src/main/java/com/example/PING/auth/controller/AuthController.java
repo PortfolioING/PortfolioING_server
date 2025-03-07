@@ -1,7 +1,9 @@
 package com.example.PING.auth.controller;
 
+import com.example.PING.auth.dto.request.SocialSignUpRequest;
 import com.example.PING.auth.dto.response.LoginResponse;
 import com.example.PING.auth.dto.response.SocialLoginResponse;
+import com.example.PING.auth.dto.response.SocialSignUpResponse;
 import com.example.PING.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,7 +25,7 @@ public class AuthController {
     private final AuthService authService;
 
     @Operation(
-            summary = "소셜 로그인으로 회원가입",
+            summary = "소셜 로그인",
             description = "소셜 로그인 후 Authorization 토큰과 회원 정보를 발급합니다.",
             responses = {
                     @ApiResponse(
@@ -58,11 +60,29 @@ public class AuthController {
             String provider
     ) {
         LoginResponse response = authService.socialLogin(accessToken, provider);
+        // Todo 정상토큰이면 로그인 완료
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", response.accessToken());
+        headers.set("RefreshToken", response.refreshToken());
+        headers.set("TemporaryToken", response.temporaryToken());
+
+        return new ResponseEntity<>(SocialLoginResponse.of(response), headers,
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/oauth/social-signUp") // 닉네임 받아서 유저 등록 및 회원 가입 완료
+    public ResponseEntity<SocialSignUpResponse> socialSignUp(
+            @RequestHeader("temporary_token") String temporaryToken,
+            @RequestBody SocialSignUpRequest request // 바디에 닉네임 들어있도록
+    ){
+        // 받은 닉네임이랑 캐시메모리에 있는 정보 넣어서 정식 user 저장.
+        // 정상토큰 발급
+        LoginResponse response = authService.registerSocialSignUpUser(temporaryToken, request.nickname());
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", response.accessToken());
         headers.set("RefreshToken", response.refreshToken());
 
-        return new ResponseEntity<>(SocialLoginResponse.of(response), headers,
-                HttpStatus.OK);
+        return new ResponseEntity<>(SocialSignUpResponse.of(response), headers, HttpStatus.OK);
     }
 }

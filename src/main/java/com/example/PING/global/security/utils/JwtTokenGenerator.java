@@ -1,6 +1,7 @@
 package com.example.PING.global.security.utils;
 
-import com.example.PING.auth.dto.response.TokenPairResponse;
+import com.example.PING.auth.dto.response.TokenSetResponse;
+import com.example.PING.auth.dto.response.TemporaryTokenResponse;
 import com.example.PING.auth.entity.RefreshToken;
 import com.example.PING.auth.repository.RefreshTokenRepository;
 import com.example.PING.user.entity.User;
@@ -14,10 +15,14 @@ public class JwtTokenGenerator {
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public TokenPairResponse generateTokenPair(User user) {
+    /**
+     * 액세스 토큰 & 리프레시 토큰 생성
+     */
+    public TokenSetResponse generateTokenPair(User user) { // 정상 토큰 발급의 경우
         String accessToken = createAccessToken(user);
         String refreshToken = createRefreshToken(user);
-        return TokenPairResponse.of(accessToken, refreshToken);
+        String temporaryToken = null;
+        return TokenSetResponse.of(accessToken, refreshToken, temporaryToken);
     }
 
     private String createAccessToken(User user) {
@@ -38,5 +43,19 @@ public class JwtTokenGenerator {
                 .memberId(memberId)
                 .token(refreshToken)
                 .build());
+    }
+
+    /**
+     * 임시 토큰 생성
+     */
+    public TokenSetResponse generateTemporaryToken(User user) {
+        String accessToken = null;
+        String refreshToken = null;
+        String temporaryToken = createTemporaryToken(user);
+        return TokenSetResponse.of(accessToken, refreshToken, temporaryToken);
+    }
+
+    private String createTemporaryToken(User user) {
+        return jwtUtil.generateTemporaryToken(user);
     }
 }

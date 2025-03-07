@@ -45,6 +45,10 @@ public class User {
     @Column(name = "updated_at")
     @Getter private LocalDateTime updatedAt;
 
+    public boolean isMatchingPassword(String password) {
+        return this.password.equals(password);
+    }
+
     @Builder // Todo 소셜로그인
     public User(String password, String name, String email, String nickname, String userIcon, OauthInfo oauthInfo) {
         this.password = password;
@@ -55,11 +59,11 @@ public class User {
         this.oauthInfo = oauthInfo;
     }
 
-    public static User createDefaultUser(OauthInfo oauthInfo) { // 소셜로그인으로 인해 생성되는 유저
+    public static User createTemporalUser(OauthInfo oauthInfo) { // 소셜로그인으로 인해 생성되는 유저
         return User.builder()
                 .nickname(null) // 사용자가 입력할 닉네임 (초기에는 null)
                 // Todo 닉네임 null로 해놓는 게 가능한 건지 확인해야 함. 닉네임 설정 로직 어떻게 할지
-                .userIcon("default") // 기본 프로필 아이콘 (임시)
+                .userIcon("default") // Todo 기본 프로필 아이콘 (임시)
                 .oauthInfo(oauthInfo)
                 .build();
     }
