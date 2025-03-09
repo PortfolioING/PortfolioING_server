@@ -4,7 +4,6 @@ import com.example.PING.component.entity.Component;
 import com.example.PING.component.repository.ComponentRepository;
 import com.example.PING.domain.repository.DomainRepository;
 import com.example.PING.portfolio.dto.request.PortfolioCreateRequest;
-import com.example.PING.portfolio.dto.request.PortfolioUpdateRequest;
 import com.example.PING.portfolio.dto.response.*;
 import com.example.PING.portfolio.entity.Portfolio;
 import com.example.PING.portfolio.repository.PortfolioRepository;
@@ -81,12 +80,12 @@ public class PortfolioService {
     }
 
     @Transactional
-    public PortfolioUpdateResponse updatePortfolio(Long portfolioId, PortfolioUpdateRequest portfolioUpdateRequest) {
+    public PortfolioUpdateResponse updatePortfolioTitleImg(Long portfolioId, String imageURL) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + portfolioId));
 
         // @Transactional의 DirtyChecking으로 save 없이 수정 사항 DB에 반영
-        portfolio.updatePortfolioTitleImg(portfolioUpdateRequest.titleImg());
+        portfolio.updatePortfolioTitleImg(imageURL);
         return PortfolioUpdateResponse.from(portfolio);
     }
 
