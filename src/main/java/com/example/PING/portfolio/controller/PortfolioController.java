@@ -4,12 +4,16 @@ import com.example.PING.component.dto.response.ComponentTreeResponse;
 import com.example.PING.component.service.ComponentService;
 import com.example.PING.image.S3ImageService;
 import com.example.PING.portfolio.dto.request.PortfolioCreateRequest;
+import com.example.PING.portfolio.dto.request.PortfolioPageRequest;
 import com.example.PING.portfolio.dto.response.PortfolioCreateResponse;
 import com.example.PING.portfolio.dto.response.PortfolioDemoResponse;
+import com.example.PING.portfolio.dto.response.PortfolioPageResponse;
 import com.example.PING.portfolio.dto.response.PortfolioUpdateResponse;
 import com.example.PING.portfolio.service.PortfolioService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,21 +40,19 @@ public class PortfolioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-//    @RequestBody(content = @Content(
-//            encoding = @Encoding(name = "request", contentType = MediaType.APPLICATION_JSON_VALUE)))
-//    @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public Test.Response uploadFile(
-//            @RequestPart("files") @NotEmpty List<MultipartFile> files,
-//            @RequestPart("request") @Valid Test.Request request
-//    ) {
-//        mockFileUploadService.upload(files, request);
-//        return new Test.Response("success");
-//    }
-
     // (마이페이지_포트폴리오 조회) 특정 포트폴리오의 (내워크스페이스) 데모 조회
     @GetMapping("/demo/{portfolio_id}")
     public ResponseEntity<PortfolioDemoResponse> getPortfolioDemo(@PathVariable("portfolio_id") Long portfolioId) {
         PortfolioDemoResponse response = portfolioService.getPortfolioDemo(portfolioId);
+        return ResponseEntity.ok(response);
+    }
+
+    // (전체 포트폴리오 조회) 포트폴리오의 특정 페이지 조회 (최신순 / 좋아요순)
+    @GetMapping("/page")
+    public ResponseEntity<PortfolioPageResponse> getSortedPortfolios(@RequestBody PortfolioPageRequest request) {
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+        PortfolioPageResponse response = portfolioService.getPortfoliosSorted(pageable, request.getSort());
+
         return ResponseEntity.ok(response);
     }
 
