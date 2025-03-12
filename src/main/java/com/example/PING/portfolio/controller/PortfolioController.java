@@ -49,9 +49,9 @@ public class PortfolioController {
     // (전체 포트폴리오 조회) 포트폴리오의 특정 페이지 조회 (최신순 / 좋아요순)
     @GetMapping("/page")
     public ResponseEntity<PortfolioPageResponse> getSortedPortfolios(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "50") int size,
-            @RequestParam(defaultValue = "latest") String sort) {
+            @RequestParam(defaultValue = "0") int page,     // 페이지 번호
+            @RequestParam(defaultValue = "50") int size,    // 한 페이지에서 가져올 Portfolio 개수
+            @RequestParam(defaultValue = "latest") String sort) {   // "latest" or "likes"
         Pageable pageable = PageRequest.of(page, size);
         PortfolioPageResponse response = portfolioService.getPortfoliosSorted(pageable, sort);
 
