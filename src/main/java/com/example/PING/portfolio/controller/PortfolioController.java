@@ -4,7 +4,6 @@ import com.example.PING.component.dto.response.ComponentTreeResponse;
 import com.example.PING.component.service.ComponentService;
 import com.example.PING.image.S3ImageService;
 import com.example.PING.portfolio.dto.request.PortfolioCreateRequest;
-import com.example.PING.portfolio.dto.request.PortfolioPageRequest;
 import com.example.PING.portfolio.dto.response.PortfolioCreateResponse;
 import com.example.PING.portfolio.dto.response.PortfolioDemoResponse;
 import com.example.PING.portfolio.dto.response.PortfolioPageResponse;
@@ -49,9 +48,12 @@ public class PortfolioController {
 
     // (전체 포트폴리오 조회) 포트폴리오의 특정 페이지 조회 (최신순 / 좋아요순)
     @GetMapping("/page")
-    public ResponseEntity<PortfolioPageResponse> getSortedPortfolios(@RequestBody PortfolioPageRequest request) {
-        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
-        PortfolioPageResponse response = portfolioService.getPortfoliosSorted(pageable, request.getSort());
+    public ResponseEntity<PortfolioPageResponse> getSortedPortfolios(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(defaultValue = "latest") String sort) {
+        Pageable pageable = PageRequest.of(page, size);
+        PortfolioPageResponse response = portfolioService.getPortfoliosSorted(pageable, sort);
 
         return ResponseEntity.ok(response);
     }
