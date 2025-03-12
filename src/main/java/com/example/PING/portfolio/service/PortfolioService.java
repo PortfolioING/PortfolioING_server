@@ -66,7 +66,7 @@ public class PortfolioService {
 
     // 전체 포트폴리오의 특정 페이지 조회 (최신순 / 좋아요순)
     @Transactional(readOnly = true)
-    public PortfolioPageResponse getPortfoliosSortedByDate(Pageable pageable, String sort) {
+    public PortfolioPageResponse getPortfoliosSorted(Pageable pageable, String sort) {
         Page<Portfolio> portfolioPage;
         if (sort.equals("likes")) {    // 좋아요순
             portfolioPage = portfolioRepository.findAllByOrderByLikesDesc(pageable);
