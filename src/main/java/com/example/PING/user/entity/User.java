@@ -23,22 +23,16 @@ public class User {
     private OauthInfo oauthInfo;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<Portfolio> portfolios = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Likes> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Scrap> scraps = new ArrayList<>();
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false, unique = true)
-    private String email;
 
     @Column(nullable = false)
     private String nickname;
@@ -53,15 +47,8 @@ public class User {
     @Column(name = "updated_at")
     @Getter private LocalDateTime updatedAt;
 
-    public boolean isMatchingPassword(String password) {
-        return this.password.equals(password);
-    }
-
     @Builder // Todo 소셜로그인
-    public User(String password, String name, String email, String nickname, String userIcon, OauthInfo oauthInfo) {
-        this.password = password;
-        this.name = name;
-        this.email = email;
+    public User(String nickname, String userIcon, OauthInfo oauthInfo) {
         this.nickname = nickname;
         this.userIcon = userIcon;
         this.oauthInfo = oauthInfo;
@@ -70,7 +57,6 @@ public class User {
     public static User createTemporalUser(OauthInfo oauthInfo) { // 소셜로그인으로 인해 생성되는 유저
         return User.builder()
                 .nickname(null) // 사용자가 입력할 닉네임 (초기에는 null)
-                // Todo 닉네임 null로 해놓는 게 가능한 건지 확인해야 함. 닉네임 설정 로직 어떻게 할지
                 .userIcon("default") // Todo 기본 프로필 아이콘 (임시)
                 .oauthInfo(oauthInfo)
                 .build();
@@ -87,16 +73,8 @@ public class User {
                 .toList();
     }
 
-    public void changeName(String newName){
-        this.name = newName;
-    }
-
     public void changeNickName(String newNickname){
         this.nickname = newNickname;
-    }
-
-    public void changePassword(String newPassword){
-        this.password = newPassword;
     }
 
     public void changeUserIcon(String newUserIcon){

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -28,6 +29,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setIssuer(jwtProperties.issuer())
                 .setSubject(user.getUserId().toString()) // 사용자 ID만 저장
+                .claim("tokenType", "access") // 클레임으로 토큰 유형 저장
                 .setIssuedAt(issuedAt)
                 .setExpiration(expiredAt)
                 .signWith(getAccessTokenKey())
@@ -41,6 +43,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setIssuer(jwtProperties.issuer())
                 .setSubject(user.getUserId().toString()) // 사용자 ID만 저장
+                .claim("tokenType", "refresh") // 클레임으로 토큰 유형 저장
                 .setIssuedAt(issuedAt)
                 .setExpiration(expiredAt)
                 .signWith(getRefreshTokenKey())
@@ -56,11 +59,13 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setIssuer(jwtProperties.issuer())
-                .setSubject(user.getUserId().toString()) // 사용자 ID만 저장
+                .setSubject(UUID.randomUUID().toString())  // 임시 고유 값 사용
+                .claim("tokenType", "temporary") // 클레임으로 토큰 유형 저장
                 .setIssuedAt(issuedAt)
                 .setExpiration(expiredAt)
                 .signWith(getTemporaryTokenKey())
                 .compact();
+
     }
 
     public Claims getAccessTokenClaims(Authentication authentication) {

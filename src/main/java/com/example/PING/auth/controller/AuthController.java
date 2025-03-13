@@ -7,10 +7,6 @@ import com.example.PING.auth.dto.response.SocialSignUpResponse;
 import com.example.PING.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.headers.Header;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,31 +22,7 @@ public class AuthController {
 
     @Operation(
             summary = "소셜 로그인",
-            description = "소셜 로그인 후 Authorization 토큰과 회원 정보를 발급합니다.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "회원가입 성공",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = SocialLoginResponse.class)
-                            ),
-                            headers = {
-                                    @Header(name = "Authorization", description = "Access Token", schema = @Schema(type = "string")),
-                                    @Header(name = "RefreshToken", description = "Refresh Token", schema = @Schema(type = "string"))
-                            }
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "잘못된 요청",
-                            content = @Content(mediaType = "application/json")
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "서버 오류",
-                            content = @Content(mediaType = "application/json")
-                    )
-            }
+            description = "소셜 로그인 후 Authorization 토큰과 회원 정보를 발급합니다."
     )
     @PostMapping("/oauth/social-login")
     public ResponseEntity<SocialLoginResponse> socialLogin(
@@ -62,7 +34,7 @@ public class AuthController {
         LoginResponse response = authService.socialLogin(accessToken, provider);
         // Todo 정상토큰이면 로그인 완료
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", response.accessToken());
+        headers.set("AccessToken", response.accessToken());
         headers.set("RefreshToken", response.refreshToken());
         headers.set("TemporaryToken", response.temporaryToken());
 
@@ -70,6 +42,10 @@ public class AuthController {
                 HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "소셜 회원가입",
+            description = "Temporary 토큰을 통해 확인 후, 정식 회원으로 등록합니다."
+    )
     @PostMapping("/oauth/social-signUp") // 닉네임 받아서 유저 등록 및 회원 가입 완료
     public ResponseEntity<SocialSignUpResponse> socialSignUp(
             @RequestHeader("temporary_token") String temporaryToken,
@@ -80,7 +56,7 @@ public class AuthController {
         LoginResponse response = authService.registerSocialSignUpUser(temporaryToken, request.nickname());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", response.accessToken());
+        headers.set("AccessToken", response.accessToken());
         headers.set("RefreshToken", response.refreshToken());
 
         return new ResponseEntity<>(SocialSignUpResponse.of(response), headers, HttpStatus.OK);

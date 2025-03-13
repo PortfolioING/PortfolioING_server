@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -21,7 +19,7 @@ public class AuthService {
     private final KakaoClient kakaoClient;
     private final UserService userService;
     private final JwtTokenGenerator jwtTokenGenerator;
-    private final CacheService cacheService;
+    private final TemporalUserCacheService temporalUserCacheService;
 
     @Transactional
     public LoginResponse socialLogin(String socialAccessToken, String provider) {
@@ -33,7 +31,7 @@ public class AuthService {
 
         if(user.getNickname() == null) { // 임시 토큰을 발급해야 하는 경우
             TokenSetResponse tokenSetResponse = jwtTokenGenerator.generateTemporaryToken(user);
-            cacheService.set(tokenSetResponse.temporaryToken(), user, Duration.ofMinutes(30));// 30분 후 자동 삭제
+            temporalUserCacheService.set(tokenSetResponse.temporaryToken(), user);
             return LoginResponse.of(user, tokenSetResponse);
         }
 
@@ -42,7 +40,7 @@ public class AuthService {
     }
 
     public LoginResponse registerSocialSignUpUser(String tempToken, String nickname) {
-        User tempUser = cacheService.get(tempToken, User.class);
+        User tempUser = temporalUserCacheService.get(tempToken, User.class);
         if (tempUser == null) {
             throw new RuntimeException("인증 정보가 만료되었습니다.");
         }
@@ -50,7 +48,7 @@ public class AuthService {
         tempUser.setNickname(nickname); // 닉네임 설정
         User savedNewUser = userService.saveTempUser(tempUser); // DB에 새로운 회원으로 저장
 
-        cacheService.delete(tempToken); // 캐시에서 삭제
+        temporalUserCacheService.delete(tempToken); // 캐시에서 삭제
         // Todo 임시토큰 무효화해야 하나?
         return LoginResponse.of(savedNewUser, jwtTokenGenerator.generateTokenPair(savedNewUser));
     }

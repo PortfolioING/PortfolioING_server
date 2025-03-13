@@ -1,8 +1,6 @@
 package com.example.PING.global.config.security;
 
 import com.example.PING.global.security.filter.JwtAuthenticationFilter;
-import com.example.PING.global.security.handler.EmailPasswordSuccessHandler;
-import com.example.PING.global.security.provider.EmailPasswordAuthenticationProvider;
 import com.example.PING.global.security.provider.JwtProvider;
 import com.example.PING.global.security.utils.JwtUtil;
 import com.example.PING.user.service.UserService;
@@ -18,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -33,7 +30,6 @@ import java.util.List;
 public class SecurityConfig { //Todo 채현이가 탐구해야 하는 클래스
 
     private final UserService userService;
-    private final EmailPasswordSuccessHandler emailPasswordSuccessHandler;
     private final JwtUtil jwtUtil;
 
     // Todo allowUrls 수정해야 함. 현재 끼니 기준으로 되어 있음.
@@ -42,18 +38,6 @@ public class SecurityConfig { //Todo 채현이가 탐구해야 하는 클래스
 
     @Value("${cors-allowed-origins}")
     private List<String> corsAllowedOrigins;
-
-    // 1. Password encoder
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    // 2. AuthenticationProvider
-    @Bean
-    public EmailPasswordAuthenticationProvider emailPasswordAuthenticationProvider() {
-        return new EmailPasswordAuthenticationProvider(userService);
-    }
 
     @Bean
     public JwtProvider jwtTokenProvider() {
@@ -66,7 +50,6 @@ public class SecurityConfig { //Todo 채현이가 탐구해야 하는 클래스
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder
-                .authenticationProvider(emailPasswordAuthenticationProvider())
                 .authenticationProvider(jwtTokenProvider());
         authenticationManagerBuilder.parentAuthenticationManager(null);
         return authenticationManagerBuilder.build();
@@ -111,24 +94,10 @@ public class SecurityConfig { //Todo 채현이가 탐구해야 하는 클래스
 
         http.authenticationManager(authenticationManager(http));
 
-        http
-//                .addFilterAt(emailPasswordAuthenticationFilter(authenticationManager(http)), UsernamePasswordAuthenticationFilter.class)
-                // Todo 이거 나중에 일반 로그인 용도로 사용할 코드입니다. 지우지 말아주세요!
-                .addFilterBefore(jwtAuthenticationFilter(authenticationManager(http)), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(authenticationManager(http)), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
-    // Todo 7. EmailPasswordAuthenticationFilter 이거 나중에 일반로그인 용도로 사용할 것임. 3월 5일 기준 아직 사용 안 하는 파일입니다.
-    // Todo 그래도 지우지 말고 남겨주세요~!!
-//    @Bean
-//    public EmailPasswordAuthenticationFilter emailPasswordAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
-//        EmailPasswordAuthenticationFilter filter = new EmailPasswordAuthenticationFilter(authenticationManager);
-//        filter.setFilterProcessesUrl("/api/v1/auth/admin/login");
-//        filter.setAuthenticationSuccessHandler(emailPasswordSuccessHandler);
-//        filter.afterPropertiesSet();
-//        return filter;
-//    }
 
     // 8. JwtAuthenticationFilter
     public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {

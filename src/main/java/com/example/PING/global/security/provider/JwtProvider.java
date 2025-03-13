@@ -33,7 +33,7 @@ public class JwtProvider implements AuthenticationProvider {
         return new JwtAuthenticationToken(
                 user,
                 "",
-                List.of(new SimpleGrantedAuthority(null) // Todo 우리 코드에는 role이 없으므로, 일단 null로 넣고 문제 생기면 roll 생성
+                List.of(new SimpleGrantedAuthority("ROLE_USER") // Todo 우리 코드에는 role이 따로 없으므로, 디폴트값으로 "ROLE_USER" 넣어줌
                 ));
     }
 
