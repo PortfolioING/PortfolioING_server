@@ -3,7 +3,7 @@ package com.example.PING.template.service;
 import com.example.PING.template.dto.request.TemplateRequest;
 import com.example.PING.template.dto.response.TemplateResponse;
 import com.example.PING.template.entity.Template;
-import com.example.PING.error.ResourceNotFoundException;
+import com.example.PING.error.exception.ResourceNotFoundException;
 import com.example.PING.template.repository.TemplateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

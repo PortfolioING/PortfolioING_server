@@ -1,14 +1,11 @@
 package com.example.PING.user.controller;
 
-import com.example.PING.user.dto.request.UserLoginRequest;
-import com.example.PING.user.dto.request.UserSignUpRequest;
 import com.example.PING.user.dto.request.UserProfileUpdateRequest;
 import com.example.PING.user.dto.response.*;
 import com.example.PING.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -22,27 +19,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginRequest request) {
-        Object response = userService.login(request);
-        if (response instanceof UserLoginResponse userLoginResponse) {
-            return ResponseEntity.ok(userLoginResponse);  // HTTP 200 OK
-        } else if (response instanceof ErrorResponse errorResponse) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);  // HTTP 401 Unauthorized
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-
-    @PostMapping// 회원가입
-    public ResponseEntity<?> signup(@RequestBody UserSignUpRequest request) {
-        try {
-            UserSignUpResponse newUserResponse = userService.signUp(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newUserResponse); // HTTP 201 Created
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage())); // HTTP 400 Bad Request
-        }
-    }
-
+    @Operation(
+            summary = "My page 정보 조회"
+    )
     @GetMapping("/{userId}")
     public ResponseEntity<UserProfileResponse> getUserProfile(@PathVariable("userId") Long userId) { // My page 정보 조회
         Optional<UserProfileResponse> userResponse = userService.getUserProfile(userId);
@@ -52,6 +31,10 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(
+            summary = "포트폴리오 id List",
+            description = "특정 user의 포트폴리오 id 리스트 get"
+    )
     @GetMapping("{user_id}/portfolio")
     public ResponseEntity<UserPortfolioIdListResponse> getUserPortfolioIdList(@PathVariable("user_id") Long userId) {
         Optional<UserPortfolioIdListResponse> userResponse = userService.getUserPortfolioIdList(userId);
@@ -59,6 +42,9 @@ public class UserController {
         return userResponse.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(
+            summary = "My page 정보 수정"
+    )
     @PutMapping("/{userId}")
     public ResponseEntity<UserUpdateResponse> updateUserProfile( // My page 정보 수정
                                                           @PathVariable("userId") Long userId,
@@ -68,6 +54,9 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @Operation(
+            summary = "user 삭제"
+    )
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable("userId") Long userId) { // User 삭제
         userService.deleteUser(userId);

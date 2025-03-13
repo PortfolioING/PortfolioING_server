@@ -4,7 +4,7 @@ import com.example.PING.domain.dto.request.DomainRequest;
 import com.example.PING.domain.dto.response.DomainResponse;
 import com.example.PING.domain.entity.Domain;
 import com.example.PING.portfolio.entity.Portfolio;
-import com.example.PING.error.ResourceNotFoundException;
+import com.example.PING.error.exception.ResourceNotFoundException;
 import com.example.PING.domain.repository.DomainRepository;
 import com.example.PING.portfolio.repository.PortfolioRepository;
 import lombok.RequiredArgsConstructor;

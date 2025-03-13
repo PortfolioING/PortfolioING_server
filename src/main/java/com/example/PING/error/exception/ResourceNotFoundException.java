@@ -1,4 +1,4 @@
-package com.example.PING.error;
+package com.example.PING.error.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
