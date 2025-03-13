@@ -2,17 +2,22 @@ package com.example.PING.portfolio.controller;
 
 import com.example.PING.component.dto.response.ComponentTreeResponse;
 import com.example.PING.component.service.ComponentService;
+import com.example.PING.image.S3ImageService;
 import com.example.PING.portfolio.dto.request.PortfolioCreateRequest;
-import com.example.PING.portfolio.dto.request.PortfolioUpdateRequest;
 import com.example.PING.portfolio.dto.response.PortfolioCreateResponse;
-import com.example.PING.portfolio.dto.response.PortfolioResponse;
 import com.example.PING.portfolio.dto.response.PortfolioDemoResponse;
+import com.example.PING.portfolio.dto.response.PortfolioPageResponse;
 import com.example.PING.portfolio.dto.response.PortfolioUpdateResponse;
 import com.example.PING.portfolio.service.PortfolioService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +29,7 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
     private final ComponentService componentService;
+    private final S3ImageService s3ImageService;
 
 
     // (포트폴리오 생성) 새 포트폴리오 생성
@@ -33,21 +39,22 @@ public class PortfolioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-//    @RequestBody(content = @Content(
-//            encoding = @Encoding(name = "request", contentType = MediaType.APPLICATION_JSON_VALUE)))
-//    @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public Test.Response uploadFile(
-//            @RequestPart("files") @NotEmpty List<MultipartFile> files,
-//            @RequestPart("request") @Valid Test.Request request
-//    ) {
-//        mockFileUploadService.upload(files, request);
-//        return new Test.Response("success");
-//    }
-
     // (마이페이지_포트폴리오 조회) 특정 포트폴리오의 (내워크스페이스) 데모 조회
     @GetMapping("/demo/{portfolio_id}")
     public ResponseEntity<PortfolioDemoResponse> getPortfolioDemo(@PathVariable("portfolio_id") Long portfolioId) {
         PortfolioDemoResponse response = portfolioService.getPortfolioDemo(portfolioId);
+        return ResponseEntity.ok(response);
+    }
+
+    // (전체 포트폴리오 조회) 포트폴리오의 특정 페이지 조회 (최신순 / 좋아요순)
+    @GetMapping("/page")
+    public ResponseEntity<PortfolioPageResponse> getSortedPortfolios(
+            @RequestParam(defaultValue = "0") int page,     // 페이지 번호
+            @RequestParam(defaultValue = "50") int size,    // 한 페이지에서 가져올 Portfolio 개수
+            @RequestParam(defaultValue = "latest") String sort) {   // "latest" or "likes"
+        Pageable pageable = PageRequest.of(page, size);
+        PortfolioPageResponse response = portfolioService.getPortfoliosSorted(pageable, sort);
+
         return ResponseEntity.ok(response);
     }
 
@@ -63,11 +70,13 @@ public class PortfolioController {
     }
 
     // (포트폴리오 수정) 포트폴리오 타이틀 이미지 변경
-    @PutMapping("/title_img/{portfolio_id}")
-    public ResponseEntity<PortfolioUpdateResponse> updatePortfolio(
+    @PutMapping(value = "/title_img/{portfolio_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "포트폴리오 타이틀 이미지 변경")
+    public ResponseEntity<PortfolioUpdateResponse> updatePortfolioTitleImg(
             @PathVariable("portfolio_id") Long portfolioId,
-            @RequestBody PortfolioUpdateRequest portfolioUpdateRequest) {
-        PortfolioUpdateResponse response = portfolioService.updatePortfolio(portfolioId, portfolioUpdateRequest);
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        String imageURL = s3ImageService.upload(image);
+        PortfolioUpdateResponse response = portfolioService.updatePortfolioTitleImg(portfolioId, imageURL);
         return ResponseEntity.ok(response);
     }
 
