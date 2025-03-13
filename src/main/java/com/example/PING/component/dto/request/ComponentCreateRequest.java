@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record ComponentCreateRequest(
 
-        @NotNull(message = "User ID is required.")
+        @NotNull(message = "Portfolio ID is required.")
         Long portfolio_id,
 
         Component.ComponentTag tag,
