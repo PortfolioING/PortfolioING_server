@@ -7,6 +7,7 @@ import com.example.PING.portfolio.entity.Portfolio;
 import com.example.PING.component.repository.ComponentRepository;
 import com.example.PING.portfolio.repository.PortfolioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +37,11 @@ public class ComponentService {
         Portfolio portfolio = portfolioRepository.findById(requestDto.portfolio_id())
                 .orElseThrow(() -> new IllegalArgumentException("Portfolio not found with ID: " + requestDto.portfolio_id()));
 
-        Component parentComponent = componentRepository.findById(requestDto.parent_component_id())
-                .orElseThrow(() -> new IllegalArgumentException("Parent component not found with ID: " + requestDto.parent_component_id()));
+        Component parentComponent = null;
+        if (requestDto.parent_component_id() != null)  {
+            parentComponent = componentRepository.findById(requestDto.parent_component_id())
+                    .orElseThrow(() -> new IllegalArgumentException("Parent component not found with ID: " + requestDto.parent_component_id()));
+        }
 
         Component component = Component.builder()
                 .portfolio(portfolio)
@@ -48,13 +52,28 @@ public class ComponentService {
 
         Component savedComponent = componentRepository.save(component);
 
-        return new ComponentCreateResponse(
-                savedComponent.getComponentId(),
-                savedComponent.getPortfolio().getPortfolioId(),
-                savedComponent.getTag(),
-                savedComponent.getParentComponent().getComponentId(),
-                savedComponent.getComponentStyleId()
-        );
+        // 새 포트폴리오 생성 시에 null로 비어있던 component_id 필드 채우기
+        portfolio.setComponent(component);
+
+        if (parentComponent != null) {
+            return new ComponentCreateResponse(
+                    savedComponent.getComponentId(),
+                    savedComponent.getPortfolio().getPortfolioId(),
+                    savedComponent.getTag(),
+                    savedComponent.getParentComponent().getComponentId(),
+                    savedComponent.getComponentStyleId()
+            );
+        }
+        else {
+            return new ComponentCreateResponse(
+                    savedComponent.getComponentId(),
+                    savedComponent.getPortfolio().getPortfolioId(),
+                    savedComponent.getTag(),
+                    null,
+                    savedComponent.getComponentStyleId()
+            );
+        }
+
     }
 
     @Transactional
