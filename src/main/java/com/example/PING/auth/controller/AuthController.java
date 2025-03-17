@@ -21,8 +21,8 @@ public class AuthController {
     private final AuthService authService;
 
     @Operation(
-            summary = "소셜 로그인",
-            description = "소셜 로그인 후 Authorization 토큰과 회원 정보를 발급합니다."
+            summary = "토큰 발급(Access token/ Temporary token)",
+            description = "소셜 로그인 후 Access token과 회원 정보를 발급합니다. 등록된 회원이 아닐 경우 Temporary token 발급"
     )
     @PostMapping("/oauth/social-login")
     public ResponseEntity<SocialLoginResponse> socialLogin(
@@ -43,8 +43,8 @@ public class AuthController {
     }
 
     @Operation(
-            summary = "소셜 회원가입",
-            description = "Temporary 토큰을 통해 확인 후, 정식 회원으로 등록합니다."
+            summary = "Temporary token을 통한 가입",
+            description = "Temporary 토큰을 통해 임시 회원 확인 후, 정식 회원으로 등록합니다."
     )
     @PostMapping("/oauth/social-signUp") // 닉네임 받아서 유저 등록 및 회원 가입 완료
     public ResponseEntity<SocialSignUpResponse> socialSignUp(
