@@ -10,7 +10,7 @@ public record PortfolioResponse(
         return new PortfolioResponse(
                 portfolio.getPortfolioId(),
                 portfolio.getTemplate().getTemplateId(),
-                portfolio.getComponent().getComponentId()
+                portfolio.getRootComponentId()
         );
     }
 }

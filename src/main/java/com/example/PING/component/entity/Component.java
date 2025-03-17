@@ -18,7 +18,7 @@ public class Component {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long componentId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio; // 연관된 포트폴리오
 
@@ -29,7 +29,7 @@ public class Component {
     @JoinColumn(name = "parent_component_id")
     private Component parentComponent; // 부모 컴포넌트
 
-    @OneToMany(mappedBy = "parentComponent", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentComponent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Component> childComponents = new ArrayList<>(); // 자식 컴포넌트
 
     @Column(length = 255)

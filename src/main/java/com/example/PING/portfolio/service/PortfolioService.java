@@ -37,8 +37,8 @@ public class PortfolioService {
         // User, Survey, Template 엔티티 조회
         User user = userRepository.findById(requestDto.user_id())
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + requestDto.user_id()));
-        Component component = componentRepository.findById(requestDto.component_id())
-                .orElseThrow(() -> new IllegalArgumentException("Survey not found with ID: " + requestDto.component_id()));
+//        Component component = componentRepository.findById(requestDto.component_id())
+//                .orElseThrow(() -> new IllegalArgumentException("co not found with ID: " + requestDto.component_id()));
         Template template = templateRepository.findById(requestDto.template_id())
                 .orElseThrow(() -> new IllegalArgumentException("Template not found with ID: " + requestDto.template_id()));
 
@@ -46,7 +46,7 @@ public class PortfolioService {
         Portfolio portfolio = Portfolio.builder()
                 .user(user)
                 .template(template)
-                .component(component)
+                .component(null)
                 .build();
 
         Portfolio savedPortfolio = portfolioRepository.save(portfolio);

@@ -19,14 +19,27 @@ public record ComponentResponse(
 
 ) {
     public static ComponentResponse from(Component component) {
-        return new ComponentResponse (
-                component.getPortfolio().getPortfolioId(),
-                component.getTag(),
-                component.getParentComponent().getComponentId(),
-                component.getChildComponents().stream()
-                        .map(Component::getComponentId)// Component 객체에서 ID만 추출
-                        .collect(Collectors.toList()), // 결과를 List<Long>으로 수집
-                component.getComponentStyleId()
-        );
+        if(component.getParentComponent() != null) {
+            return new ComponentResponse (
+                    component.getPortfolio().getPortfolioId(),
+                    component.getTag(),
+                    component.getParentComponent().getComponentId(),
+                    component.getChildComponents().stream()
+                            .map(Component::getComponentId)// Component 객체에서 ID만 추출
+                            .collect(Collectors.toList()), // 결과를 List<Long>으로 수집
+                    component.getComponentStyleId()
+            );
+        }
+        else {
+            return new ComponentResponse (
+                    component.getPortfolio().getPortfolioId(),
+                    component.getTag(),
+                    null,
+                    component.getChildComponents().stream()
+                            .map(Component::getComponentId)// Component 객체에서 ID만 추출
+                            .collect(Collectors.toList()), // 결과를 List<Long>으로 수집
+                    component.getComponentStyleId()
+            );
+        }
     }
 }
