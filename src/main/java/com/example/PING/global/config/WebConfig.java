@@ -1,4 +1,4 @@
-package com.example.PING;
+package com.example.PING.global.config;
 
 import com.example.PING.global.annotation.AuthenticationArgumentResolver;
 import lombok.RequiredArgsConstructor;
