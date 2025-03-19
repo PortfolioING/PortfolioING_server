@@ -28,6 +28,9 @@ public class JwtProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Claims claims = getClaims(authentication);
+        if (claims.getSubject() == null || claims.getSubject().isBlank()) {
+            throw new JwtInvalidException("JWT subject (user ID) is null or empty");
+        }
         final User user = getMemberById(claims.getSubject());
 
         return new JwtAuthenticationToken(
@@ -55,6 +58,9 @@ public class JwtProvider implements AuthenticationProvider {
 
     private User getMemberById(String id) {
         try {
+            if (id == null || id.isBlank()) {  // ID가 null이면 예외 발생
+                throw new BadCredentialsException("User ID is null or blank in JWT");
+            }
             return userService.getUserById(Long.parseLong(id));
         } catch (Exception e) {
             throw new BadCredentialsException(ErrorCode.BAD_CREDENTIALS.getMessage());
