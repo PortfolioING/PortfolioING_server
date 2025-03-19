@@ -25,6 +25,9 @@ public class JwtUtil {
     public String generateAccessToken(User user) {
         Date issuedAt = new Date();
         Date expiredAt = new Date(issuedAt.getTime() + jwtProperties.accessTokenExpirationMilliTime());
+        if (user.getUserId() == null) {
+            throw new IllegalStateException("User ID is null while generating JWT");
+        }
 
         return Jwts.builder()
                 .setIssuer(jwtProperties.issuer())

@@ -34,7 +34,7 @@ public class AuthController {
         LoginResponse response = authService.socialLogin(accessToken, provider);
         // Todo 정상토큰이면 로그인 완료
         HttpHeaders headers = new HttpHeaders();
-        headers.set("AccessToken", response.accessToken());
+        headers.set("Authorization", "Bearer " + response.accessToken());
         headers.set("RefreshToken", response.refreshToken());
         headers.set("TemporaryToken", response.temporaryToken());
 
@@ -56,7 +56,7 @@ public class AuthController {
         LoginResponse response = authService.registerSocialSignUpUser(temporaryToken, request.nickname());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("AccessToken", response.accessToken());
+        headers.set("Authorization", "Bearer " + response.accessToken());
         headers.set("RefreshToken", response.refreshToken());
 
         return new ResponseEntity<>(SocialSignUpResponse.of(response), headers, HttpStatus.OK);

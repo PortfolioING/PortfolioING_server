@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +20,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
-                        .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
     }
 
     public User getUserByOAuthInfo(OauthInfo oauthInfo) { // 소셜로그인 유저 찾기
@@ -31,8 +29,7 @@ public class UserService {
     }
 
     public User createTempUser(OauthInfo oauthInfo) { // 임시 회원 생성
-        User tempUser = User.createTemporalUser(oauthInfo);
-        return tempUser;
+        return User.createTemporalUser(oauthInfo);
     }
 
     public User saveTempUser(User user) {
@@ -41,25 +38,25 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = getUserById(userId);
         userRepository.delete(user);
     }
 
     @Transactional(readOnly = true)
-    public Optional<UserProfileResponse> getUserProfile(Long userId) { //My page 정보 조회
-        return userRepository.findById(userId)
-                .map(UserProfileResponse :: from);
+    public UserProfileResponse getUserProfile(Long userId) { //My page 정보 조회
+        User user = getUserById(userId);
+        return UserProfileResponse.from(user);
     }
 
-    public Optional<UserPortfolioIdListResponse> getUserPortfolioIdList(Long userId) {
-        return userRepository.findById(userId).map(UserPortfolioIdListResponse::from);
+    @Transactional(readOnly = true)
+    public UserPortfolioIdListResponse getUserPortfolioIdList(Long userId) {
+        User user = getUserById(userId);
+        return UserPortfolioIdListResponse.from(user);
     }
 
     @Transactional
     public UserUpdateResponse updateUserProfile(Long userId, UserProfileUpdateRequest userProfileUpdateRequest) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = getUserById(userId);
 
         user.changeNickName(userProfileUpdateRequest.nickname());
         user.changeUserIcon(userProfileUpdateRequest.userIcon());
